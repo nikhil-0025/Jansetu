@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Verification Portal — JanSetu (जनसेतु) | Officer Dashboard</title>
+  <meta name="description" content="JanSetu Government Officer Portal - Public Documentation Verification, Household Separation Approvals, and Duplicate Welfare Benefit Screening">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/officer.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body style="background: #f1f5f9;">
+
+  <!-- National Top Ribbon -->
+  <header class="gov-ribbon">
+    <div class="gov-ribbon-left">
+      <span class="gov-tricolor"></span>
+      <span>भारत सरकार | Government of India — JanSetu Welfare & Documentation Administration</span>
+    </div>
+    <div class="gov-ribbon-right">
+      <span style="color:#fed7aa; font-weight:700;">OFFICER ACCESS LEVEL 2</span>
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Portal Navigation Header -->
+  <header class="portal-header">
+    <div class="portal-header-inner" style="max-width: 1400px;">
+      <div class="brand-section">
+        <img src="/assets/logo.svg" alt="JanSetu Emblem" class="brand-logo-img">
+        <div class="brand-text">
+          <h1>JanSetu <span class="hindi" style="color:var(--accent-saffron);">सरकारी सत्यापन पोर्टल</span></h1>
+          <div class="brand-tagline">Authorized Government Verification & Duplicate Benefit Audit Console</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Officer Badge -->
+        <div class="account-pill" style="background:#fffbeb; border-color:#fcd34d;">
+          <i data-lucide="user-check" style="width: 20px; height: 20px; color: #b45309; flex-shrink: 0;"></i>
+          <div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Verified Officer:</div>
+            <strong id="headerOfficerName" style="color: #92400e;">Vikramaditya Verma (OFFICER-01)</strong>
+          </div>
+        </div>
+
+        <!-- Switch to Citizen Portal -->
+        <a href="/login.html?autologin=citizen" class="btn btn-secondary btn-sm" title="Switch to Citizen View">
+          <i data-lucide="user"></i> Citizen View (FAM-1001)
+        </a>
+
+        <!-- Logout -->
+        <button onclick="handleOfficerLogout()" class="btn btn-secondary btn-sm">
+          <i data-lucide="log-out"></i> Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="officer-container">
+
+    <!-- Officer Welcome Banner -->
+    <section class="officer-header-banner">
+      <div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+          <span class="officer-badge-tag">Block Verification Authority</span>
+          <span style="font-size: 0.8rem; color: #cbd5e1;">Jurisdiction: Sevapuri Block, Varanasi District</span>
+        </div>
+        <h2 style="color: #ffffff; font-size: 1.6rem; margin-bottom: 6px;">
+          Welfare Integrity & Document Review Console
+        </h2>
+        <p style="font-size: 0.9rem; color: #cbd5e1; max-width: 800px; line-height: 1.45;">
+          Review pending household separation requests, audit explainable duplicate benefit flags, verify citizen certificates, and approve welfare disbursements with full audit logging.
+        </p>
+      </div>
+      <div>
+        <button onclick="refreshOfficerData()" class="btn btn-saffron btn-sm">
+          <i data-lucide="refresh-cw"></i> Refresh Queues
+        </button>
+      </div>
+    </section>
+
+    <!-- High-Level KPI Counters Grid -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+          <i data-lucide="home"></i>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpiHouseholds">1</div>
+          <div class="kpi-label">Registered Households</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background: #faf5ff; color: #9333ea;">
+          <i data-lucide="users"></i>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpiCitizens">4</div>
+          <div class="kpi-label">Citizen Records</div>
+        </div>
+      </div>
+
+      <div class="kpi-card" style="border-left: 4px solid #ea580c; background: #fffaf0;">
+        <div class="kpi-icon-wrap" style="background: #fff7ed; color: #ea580c;">
+          <i data-lucide="git-branch"></i>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpiSeparations" style="color:#ea580c;">0</div>
+          <div class="kpi-label">Pending Separations</div>
+        </div>
+      </div>
+
+      <div class="kpi-card alert-card">
+        <div class="kpi-icon-wrap" style="background: #fef2f2; color: #ef4444;">
+          <i data-lucide="alert-triangle"></i>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpiDuplicates" style="color:#dc2626;">0</div>
+          <div class="kpi-label">Potential Duplicate Alerts</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background: #fffbeb; color: #d97706;">
+          <i data-lucide="clock"></i>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpiPendingApps">1</div>
+          <div class="kpi-label">Pending Applications</div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap" style="background: #f0fdf4; color: #16a34a;">
+          <i data-lucide="file-check"></i>
+        </div>
+        <div>
+          <div class="kpi-value" id="kpiPendingDocs">1</div>
+          <div class="kpi-label">Pending Documents</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Officer Navigation Tabs -->
+    <nav class="officer-tabs">
+      <button class="officer-tab-btn active" id="otabSeparations" onclick="switchOfficerTab('separations')">
+        <i data-lucide="split"></i>
+        <span>Household Separation Requests</span>
+        <span class="tab-count" id="countSepTab">0</span>
+      </button>
+
+      <button class="officer-tab-btn alert-tab" id="otabDuplicates" onclick="switchOfficerTab('duplicates')">
+        <i data-lucide="shield-alert"></i>
+        <span>Duplicate Claims Review Queue</span>
+        <span class="tab-count" id="countDupTab">0</span>
+      </button>
+
+      <button class="officer-tab-btn" id="otabApplications" onclick="switchOfficerTab('applications')">
+        <i data-lucide="file-text"></i>
+        <span>Scheme Applications Queue</span>
+        <span class="tab-count" id="countAppsTab">1</span>
+      </button>
+
+      <button class="officer-tab-btn" id="otabDocuments" onclick="switchOfficerTab('documents')">
+        <i data-lucide="folder-check"></i>
+        <span>Document Verification Queue</span>
+        <span class="tab-count" id="countDocsTab">1</span>
+      </button>
+
+      <button class="officer-tab-btn" id="otabCorrections" onclick="switchOfficerTab('corrections')">
+        <i data-lucide="edit-3"></i>
+        <span>Name & Profile Corrections</span>
+        <span class="tab-count" id="countCorrTab">0</span>
+      </button>
+
+      <button class="officer-tab-btn" id="otabSignups" onclick="switchOfficerTab('signups')">
+        <i data-lucide="user-plus"></i>
+        <span>Pending Registrations</span>
+        <span class="tab-count" id="countSignupsTab">0</span>
+      </button>
+
+      <button class="officer-tab-btn" id="otabAudit" onclick="switchOfficerTab('audit')">
+        <i data-lucide="activity"></i>
+        <span>System Audit Trail</span>
+      </button>
+
+      <button class="officer-tab-btn" id="otabGovapi" onclick="switchOfficerTab('govapi')">
+        <i data-lucide="server"></i>
+        <span>Gov API Gateway</span>
+        <span class="tab-count" style="background: #e0e7ff; color: #3730a3;" id="countGovTab">5 Services</span>
+      </button>
+    </nav>
+
+    <!-- QUEUE 1: HOUSEHOLD SEPARATION REQUESTS (Core Feature) -->
+    <div id="oviewSeparations" class="officer-view active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem; color: var(--primary);">Household Separation Requests Queue</h3>
+            <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 2px;">
+              Review separation requests, verify proposed independent dwelling and address, and issue new unique Family ID while preserving Citizen IDs and family relationships.
+            </p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="separationQueueContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 2: DUPLICATE CLAIMS REVIEW (Core Feature) -->
+    <div id="oviewDuplicates" class="officer-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem; color: #dc2626; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="alert-triangle"></i> Potential Duplicate Benefit Screening Queue
+            </h3>
+            <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 2px;">
+              These welfare claims were flagged by JanSetu's explainable duplicate engine due to prior benefits on the same household, dwelling reference overlap, or active parallel claims.
+            </p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="duplicateClaimsContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 3: ALL SCHEME APPLICATIONS -->
+    <div id="oviewApplications" class="officer-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h3 style="font-size: 1.15rem; color: var(--primary);">Scheme Applications Review Queue</h3>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>App ID</th>
+                <th>Scheme</th>
+                <th>Benefit Type</th>
+                <th>Applicant</th>
+                <th>Family ID</th>
+                <th>Dwelling</th>
+                <th>Eligibility Assessment</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="officerAppsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 4: DOCUMENT VERIFICATION -->
+    <div id="oviewDocuments" class="officer-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h3 style="font-size: 1.15rem; color: var(--primary);">Supporting Document Verification Queue</h3>
+        </div>
+        <div class="card-body">
+          <div id="officerDocsContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 5: PROFILE CORRECTIONS -->
+    <div id="oviewCorrections" class="officer-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h3 style="font-size: 1.15rem; color: var(--primary);">Citizen Profile & Name Change Verification Queue</h3>
+        </div>
+        <div class="card-body">
+          <div id="officerCorrectionsContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 6: AUDIT LOGS -->
+    <div id="oviewAudit" class="officer-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h3 style="font-size: 1.15rem; color: var(--primary);">System Audit Trail (Immutable Log)</h3>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Log ID</th>
+                <th>Timestamp</th>
+                <th>Actor</th>
+                <th>Role</th>
+                <th>Action</th>
+                <th>Target</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="auditLogsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 7: GOVERNMENT API GATEWAY & INTEGRATION CENTER -->
+    <div id="oviewGovapi" class="officer-view">
+      <!-- Legal & Governance Notice Banner -->
+      <div style="background: #eff6ff; border-left: 4px solid #2563eb; padding: 16px 20px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 14px;">
+        <i data-lucide="shield-check" style="color: #2563eb; width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px;"></i>
+        <div>
+          <div style="font-weight: 700; color: #1e3a8a; font-size: 0.95rem; margin-bottom: 4px;">
+            Indian Government Integration Architecture & Statutory Governance Rules
+          </div>
+          <div style="font-size: 0.825rem; color: #334155; line-height: 1.5;">
+            • <strong>Separation of Sensitive PII from Open Data:</strong> Citizen document & identity verifications require explicit Electronic Consent Artifacts (DPDP Act, 2023). Public scheme stats (data.gov.in) are queried without PII.<br>
+            • <strong>Authoritative vs Simulated Truth:</strong> Only responses from authorized live/sandbox government endpoints with cryptographic seals are marked <em>Authoritative</em>. Mock adapter responses are clearly tagged <em>Simulated (Non-Authoritative)</em>.<br>
+            • <strong>Local Identifier Disclaimer:</strong> JanSetu Family IDs (e.g. <code>FAM-1001</code>) are system household accounts, not official national identifiers.<br>
+            • <strong>No Automated Rejection:</strong> Incomplete API data or potential duplicate flags must never result in automatic disqualification without officer review.
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Connection States Grid -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="font-size: 1.15rem; color: var(--primary);">Authorized Indian Government Service Integrations</h3>
+        <button onclick="refreshGovServicesStatus()" class="btn btn-secondary btn-sm">
+          <i data-lucide="refresh-cw"></i> Check Gateway Health
+        </button>
+      </div>
+
+      <div class="kpi-grid" id="govServicesCardsGrid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 28px;">
+        <!-- Loaded dynamically from /api/government-services/status -->
+      </div>
+
+      <!-- Interactive Verification Test Console -->
+      <div class="card" style="margin-bottom: 28px;">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.1rem; color: var(--primary);">Interactive Government API Testing & Demonstration Console</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Trigger live or simulated calls across official endpoints with real-time audit logging and electronic consent generation.
+            </p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+            <button onclick="runGovTest('ration')" class="btn btn-primary btn-sm" id="btnTestRation">
+              <i data-lucide="check-circle"></i> Test e-PDS Ration Card (FCS UP)
+            </button>
+            <button onclick="runGovTest('electricity')" class="btn btn-primary btn-sm" id="btnTestElectricity">
+              <i data-lucide="zap"></i> Test DISCOM Electricity Dwelling Proof (UPPCL)
+            </button>
+            <button onclick="runGovTest('digilocker')" class="btn btn-primary btn-sm" id="btnTestDigiLocker">
+              <i data-lucide="file-check"></i> Test DigiLocker Document Pull
+            </button>
+            <button onclick="runGovTest('ogd')" class="btn btn-secondary btn-sm" id="btnTestOgd">
+              <i data-lucide="database"></i> Query Open Govt Data (data.gov.in)
+            </button>
+            <button onclick="runGovTest('myscheme')" class="btn btn-secondary btn-sm" id="btnTestMyScheme">
+              <i data-lucide="layers"></i> Discover myScheme National Catalog
+            </button>
+          </div>
+
+          <!-- Console Output Box -->
+          <div id="govConsoleOutputWrap" style="display: none; background: #0f172a; border-radius: 8px; padding: 18px; color: #f8fafc; font-family: monospace; font-size: 0.825rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 12px;">
+              <div id="govConsoleHeader" style="font-weight: 700; color: #38bdf8;">Gateway Test Result</div>
+              <span id="govConsoleBadge" class="badge" style="background: #334155; color: #f8fafc;">DEMO MODE</span>
+            </div>
+            <pre id="govConsolePre" style="margin: 0; max-height: 340px; overflow-y: auto; white-space: pre-wrap; word-break: break-all; color: #e2e8f0;"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Government API Inventory Table -->
+      <div class="card" style="margin-bottom: 28px;">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.1rem; color: var(--primary);">Government API Integration Inventory & Access Requirements</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Documented compliance, authentication, and consent requirements for candidate Indian government services.
+            </p>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Service ID</th>
+                <th>Service Name & Publisher</th>
+                <th>Classification</th>
+                <th>Authentication & Credentials</th>
+                <th>Consent Framework</th>
+                <th>Approval Process</th>
+              </tr>
+            </thead>
+            <tbody id="govInventoryTableBody">
+              <!-- Dynamically populated from /api/government-services/inventory -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Outbound Government API Audit Log -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.1rem; color: var(--primary);">Outbound Government Service Audit Trail</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Immutable log of outbound API requests, transaction IDs, latency, and cryptographic digests.
+            </p>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Log ID & Time</th>
+                <th>Service & Operation</th>
+                <th>Actor</th>
+                <th>Transaction ID</th>
+                <th>Status & Mode</th>
+                <th>Latency</th>
+                <th>Integrity Hash</th>
+              </tr>
+            </thead>
+            <tbody id="govAuditTableBody">
+              <!-- Dynamically populated from /api/government-services/audit-logs -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEUE 7: PENDING CITIZEN REGISTRATIONS -->
+    <div id="oviewSignups" class="officer-view" style="display: none;">
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 style="font-size: 1.15rem; color: var(--primary); display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="user-check"></i> Citizen Registration & Identity Verification Queue
+            </h3>
+            <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: 2px;">
+              Review citizen self-registrations submitted with synthetic government certificates. Approving activates the citizen account and household registry.
+            </p>
+          </div>
+          <button onclick="refreshOfficerData()" class="btn btn-secondary btn-sm">
+            <i data-lucide="refresh-cw"></i> Refresh Registrations
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Registration ID</th>
+                <th>Citizen Name & DOB</th>
+                <th>Location</th>
+                <th>Verified Certificate</th>
+                <th>Verification Source</th>
+                <th>Status</th>
+                <th>Officer Action</th>
+              </tr>
+            </thead>
+            <tbody id="signupsTableBody">
+              <!-- Dynamically populated from /api/admin/pending-registrations -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: Separation Review Modal -->
+  <div class="modal-overlay" id="reviewSeparationModal">
+    <div class="modal-dialog" style="max-width: 760px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="git-branch" style="color: var(--accent-saffron);"></i>
+          <span>Review Household Separation Request</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('reviewSeparationModal')">&times;</button>
+      </div>
+      <form id="reviewSeparationForm" onsubmit="submitSeparationReview(event)">
+        <div class="modal-body">
+          <div id="separationReviewDetails">
+            <!-- Loaded dynamically -->
+          </div>
+
+          <div class="form-group" style="margin-top: 16px;">
+            <label class="form-label" for="sepDecisionSelect">Official Decision</label>
+            <select id="sepDecisionSelect" class="form-control" required>
+              <option value="Approved">Approve Separation & Issue New Family ID</option>
+              <option value="Additional Information Required">Request Additional Information</option>
+              <option value="Rejected">Reject Separation Request</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sepMandatoryReason">
+              Mandatory Statutory Reason / Verification Notes <span class="mandatory-note">* Required</span>
+            </label>
+            <textarea id="sepMandatoryReason" class="form-control" rows="3" placeholder="Enter official findings from field verification, physical dwelling inspection, and partition review..." required>Verified independent dwelling and separate cooking hearth. Partition affidavit authenticated.</textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('reviewSeparationModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitSepReview" class="btn btn-saffron">
+            Record Official Decision
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Application Review Modal -->
+  <div class="modal-overlay" id="reviewAppModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="file-check" style="color: var(--primary);"></i>
+          <span>Review Scheme Welfare Application</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('reviewAppModal')">&times;</button>
+      </div>
+      <form id="reviewAppForm" onsubmit="submitAppReview(event)">
+        <div class="modal-body">
+          <div id="appReviewDetails" style="font-size: 0.85rem; margin-bottom: 16px;">
+            <!-- Dynamically loaded -->
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="appDecisionSelect">Official Decision</label>
+            <select id="appDecisionSelect" class="form-control" required>
+              <option value="Approved">Approve Application & Schedule Disbursement</option>
+              <option value="Additional Information Required">Request Additional Documents</option>
+              <option value="Rejected">Reject Application</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="appRemarks">
+              Officer Review Remarks <span class="mandatory-note">* Required</span>
+            </label>
+            <textarea id="appRemarks" class="form-control" rows="3" placeholder="State reason for decision..." required>Verified against land records and revenue records. Approved for welfare grant.</textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('reviewAppModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitAppReview" class="btn btn-primary">
+            Submit Decision
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Profile Correction Review & Evidence Inspection Modal -->
+  <div class="modal-overlay" id="reviewCorrectionModal">
+    <div class="modal-dialog" style="max-width: 780px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="shield-check" style="color: var(--primary);"></i>
+          <span id="ocorrModalTitle">Officer Profile Correction Review & Document Inspection</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('reviewCorrectionModal')">&times;</button>
+      </div>
+      <form id="reviewCorrectionForm" onsubmit="submitCorrectionDecision(event)" style="display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow: hidden; margin: 0;">
+        <input type="hidden" id="ocorrTargetRequestId" value="">
+        <div class="modal-body">
+          <!-- Request Header & Citizen Summary -->
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+              <div>
+                <span style="font-weight: 700; color: var(--primary); font-size: 1rem;" id="ocorrDisplayId">REQ-CORR-001</span>
+                <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;" id="ocorrSubmissionDate">Submitted 23 Oct 2026</span>
+              </div>
+              <span id="ocorrCurrentStatusBadge" class="badge badge-pending">Pending Review</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; font-size: 0.85rem;">
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Citizen Identity:</span>
+                <div style="font-weight: 600; color: #1e293b;" id="ocorrCitizenName">Citizen Name (CIT-1001)</div>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase;">Household / Family ID:</span>
+                <div style="font-weight: 600; color: #1e293b;" id="ocorrFamilyId">FAM-1001</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Correction Comparison Grid -->
+          <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; margin-bottom: 8px;">
+              Profile Field Modification Request
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; font-size: 0.875rem;">
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Target Field</span>
+                <strong style="color: var(--primary);" id="ocorrField">fullName</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Currently Recorded Value</span>
+                <span style="color: #64748b; text-decoration: line-through;" id="ocorrCurrentVal">Old Value</span>
+              </div>
+              <div>
+                <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Requested Legal Value</span>
+                <strong style="color: #15803d; font-size: 0.95rem;" id="ocorrRequestedVal">New Value</strong>
+              </div>
+            </div>
+            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8f0; font-size: 0.85rem;">
+              <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Citizen Stated Reason:</span>
+              <span style="color: #334155; font-style: italic;" id="ocorrReasonText">"Typographical error in school certificate."</span>
+            </div>
+          </div>
+
+          <!-- Supporting Evidence & PDF Inspection Section -->
+          <div style="background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="background: #ef4444; color: #fff; font-size: 0.725rem; font-weight: 700; padding: 3px 6px; border-radius: 4px;">PDF PROOF</span>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.9rem; color: #1e3a8a;" id="ocorrDocTypeDisplay">Aadhaar Card</div>
+                  <div style="font-size: 0.775rem; color: #64748b;" id="ocorrDocMetaDisplay">filename.pdf • 150 KB</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <a id="ocorrOpenPdfBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px;">
+                  <i data-lucide="external-link" style="width: 14px; height: 14px;"></i> Open Document in New Window
+                </a>
+              </div>
+            </div>
+
+            <!-- PDF Embedded Preview Frame -->
+            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; overflow: hidden; height: 300px; position: relative;">
+              <iframe id="ocorrPdfIframe" src="about:blank" style="width: 100%; height: 100%; border: none;" title="Supporting Document PDF Preview"></iframe>
+              <div id="ocorrPdfFallback" style="display: none; padding: 30px; text-align: center; color: var(--text-muted);">
+                <i data-lucide="file-text" style="width: 36px; height: 36px; color: var(--secondary); margin-bottom: 8px;"></i>
+                <div>Unable to inline preview this document.</div>
+                <a id="ocorrPdfDownloadLink" href="#" target="_blank" class="btn btn-secondary btn-sm" style="margin-top: 10px;">Download Document</a>
+              </div>
+            </div>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 6px;">
+              * Officers must examine the authenticity and date of the attached PDF certificate before rendering an official decision.
+            </div>
+          </div>
+
+          <!-- Previous Review History (if any) -->
+          <div id="ocorrReviewHistorySection" style="display: none; margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
+              Previous Verification History
+            </div>
+            <div id="ocorrReviewHistoryList" style="font-size: 0.8rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px;">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- Official Determination Form -->
+          <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="ocorrDecisionSelect">Official Review Decision <span class="mandatory-note">* Required</span></label>
+              <select id="ocorrDecisionSelect" class="form-control" required onchange="handleOcorrDecisionChange()">
+                <option value="Approved">1. Approved — Authenticate and update official JanSetu profile field</option>
+                <option value="Additional Evidence Required">2. Additional Evidence Required — Request clearer/authoritative evidence from citizen</option>
+                <option value="Rejected">3. Rejected — Disallow modification (preserves current profile record)</option>
+                <option value="Under Review">4. Under Review — Flag for district revenue review</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="ocorrRemarks">
+                Officer Remarks & Verification Findings <span id="ocorrRemarksMandatory" class="mandatory-note">* Mandatory</span>
+              </label>
+              <textarea id="ocorrRemarks" class="form-control" rows="3" placeholder="Provide detailed verification rationale (mandatory for Rejection and Additional Evidence requests)..." required></textarea>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;" id="ocorrRemarksHelper">
+                Remarks are recorded immutably in the system audit trail and shared with the citizen.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('reviewCorrectionModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitCorrReview" class="btn btn-primary">
+            Record Official Determination
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/scripts/api.js"></script>
+  <script src="/scripts/translations.js"></script>
+  <script src="/scripts/officer.js"></script>
+</body>
+</html>

@@ -1,0 +1,2580 @@
+[
+  {
+    "recordId": "6785042014",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Aarav Sharma",
+    "dateOfBirth": "1983-12-03",
+    "state": "Uttar Pradesh",
+    "district": "Gautam Buddha Nagar",
+    "address": "Ward 17, Gandhi Nagar, Gautam Buddha Nagar",
+    "familyReferenceId": "1080655113",
+    "contact": {
+      "mobile": "9913385760",
+      "email": "citizen001@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "5668213469",
+        "status": "EXPIRED",
+        "issuedOn": "2023-12-21",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5669938931",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Vivaan Pandey",
+    "dateOfBirth": "1983-08-14",
+    "state": "Uttar Pradesh",
+    "district": "Lucknow",
+    "address": "Ward 8, Shanti Nagar, Lucknow",
+    "familyReferenceId": "9148239709",
+    "contact": {
+      "mobile": "9991089594",
+      "email": "citizen002@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "1259954764",
+        "status": "VALID",
+        "issuedOn": "2025-06-11",
+        "expiresOn": null
+      },
+      {
+        "type": "EWS",
+        "certificateId": "5865982898",
+        "status": "VALID",
+        "issuedOn": "2025-12-17",
+        "expiresOn": "2026-12-16"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1749831766",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Aditya Saxena",
+    "dateOfBirth": "2007-05-11",
+    "state": "Uttar Pradesh",
+    "district": "Varanasi",
+    "address": "Ward 2, Saraswati Vihar, Varanasi",
+    "familyReferenceId": "2965672976",
+    "contact": {
+      "mobile": "9877059736",
+      "email": "citizen003@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "3408272744",
+        "status": "VALID",
+        "issuedOn": "2024-02-16",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "4103097111",
+        "status": "VALID",
+        "issuedOn": "2023-11-16",
+        "expiresOn": "2024-11-15",
+        "annualIncomeINR": 72000
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "5625283749",
+        "status": "VALID",
+        "issuedOn": "2023-09-01",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4446768974",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Arjun Ansari",
+    "dateOfBirth": "2005-03-20",
+    "state": "Uttar Pradesh",
+    "district": "Bareilly",
+    "address": "Ward 7, Gandhi Nagar, Bareilly",
+    "familyReferenceId": "6301496427",
+    "contact": {
+      "mobile": "9827922027",
+      "email": "citizen004@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "6418334483",
+        "status": "EXPIRED",
+        "issuedOn": "2024-01-18",
+        "expiresOn": "2027-01-18"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6846299434",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Krishna Kaur",
+    "dateOfBirth": "2005-09-22",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 21, Azad Nagar, East Champaran",
+    "familyReferenceId": "7707530174",
+    "contact": {
+      "mobile": "9680693166",
+      "email": "citizen005@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "7015184143",
+        "status": "VALID",
+        "issuedOn": "2024-09-16",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "6900642755",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-07-05",
+        "expiresOn": "2027-07-04",
+        "annualIncomeINR": 300000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5752419503",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ishaan Chaudhary",
+    "dateOfBirth": "1993-11-10",
+    "state": "Haryana",
+    "district": "Faridabad",
+    "address": "Ward 9, Shanti Nagar, Faridabad",
+    "familyReferenceId": "1426879480",
+    "contact": {
+      "mobile": "9865272220",
+      "email": "citizen006@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "9040899275",
+        "status": "VALID",
+        "issuedOn": "2023-12-03",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "2920116985",
+        "status": "VALID",
+        "issuedOn": "2026-01-23",
+        "expiresOn": "2029-01-23"
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "9300787495",
+        "status": "VALID",
+        "issuedOn": "2024-08-01",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "8379690652",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Rohan Kumar",
+    "dateOfBirth": "1978-12-08",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 18, Indira Nagar, Meerut",
+    "familyReferenceId": "2886003938",
+    "contact": {
+      "mobile": "9982452944",
+      "email": "citizen007@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "7105209447",
+        "status": "VALID",
+        "issuedOn": "2023-09-02",
+        "expiresOn": "2026-09-02"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3019261278",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ankit Patel",
+    "dateOfBirth": "2005-07-12",
+    "state": "Uttar Pradesh",
+    "district": "Varanasi",
+    "address": "Ward 22, Krishna Vihar, Varanasi",
+    "familyReferenceId": "2855269781",
+    "contact": {
+      "mobile": "9408543286",
+      "email": "citizen008@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "9134416473",
+        "status": "EXPIRED",
+        "issuedOn": "2024-06-04",
+        "expiresOn": "2025-06-03"
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "5932747278",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2025-08-20",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4558798883",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Aman Pal",
+    "dateOfBirth": "1983-12-28",
+    "state": "Uttar Pradesh",
+    "district": "Bareilly",
+    "address": "Ward 1, Indira Nagar, Bareilly",
+    "familyReferenceId": "2672479892",
+    "contact": {
+      "mobile": "9473083569",
+      "email": "citizen009@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "8146374750",
+        "status": "VALID",
+        "issuedOn": "2023-11-04",
+        "expiresOn": "2024-11-03",
+        "annualIncomeINR": 150000
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "1045524625",
+        "status": "VALID",
+        "issuedOn": "2025-04-25",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "9292922392",
+        "status": "VALID",
+        "issuedOn": "2026-05-10",
+        "expiresOn": "2029-05-10"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "9629564021",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Rahul Qureshi",
+    "dateOfBirth": "2006-01-22",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 19, Nehru Colony, East Champaran",
+    "familyReferenceId": "5907771385",
+    "contact": {
+      "mobile": "9195682783",
+      "email": "citizen010@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "1503167109",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2023-09-03",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3706433106",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Priya Rawat",
+    "dateOfBirth": "1974-12-22",
+    "state": "Haryana",
+    "district": "Faridabad",
+    "address": "Ward 5, Azad Nagar, Faridabad",
+    "familyReferenceId": "2335385409",
+    "contact": {
+      "mobile": "9317666186",
+      "email": "citizen011@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "2523781605",
+        "status": "EXPIRED",
+        "issuedOn": "2025-11-23",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "7501321367",
+        "status": "VALID",
+        "issuedOn": "2023-01-07",
+        "expiresOn": "2026-01-07"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7706746775",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ananya Nishad",
+    "dateOfBirth": "2003-08-14",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 10, Shanti Nagar, Meerut",
+    "familyReferenceId": "4160722699",
+    "contact": {
+      "mobile": "9798793240",
+      "email": "citizen012@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "8162430445",
+        "status": "EXPIRED",
+        "issuedOn": "2024-02-26",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "2058275398",
+        "status": "VALID",
+        "issuedOn": "2025-06-24",
+        "expiresOn": null
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "6778015601",
+        "status": "EXPIRED",
+        "issuedOn": "2024-09-22",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3187230716",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Aditi Mishra",
+    "dateOfBirth": "1986-02-10",
+    "state": "Uttar Pradesh",
+    "district": "Prayagraj",
+    "address": "Ward 24, Gandhi Nagar, Prayagraj",
+    "familyReferenceId": "4970585208",
+    "contact": {
+      "mobile": "9930715322",
+      "email": "citizen013@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "7482525350",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2025-11-05",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1860547741",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Sneha Agarwal",
+    "dateOfBirth": "1991-06-25",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 8, Gandhi Nagar, Gorakhpur",
+    "familyReferenceId": "7748253074",
+    "contact": {
+      "mobile": "9961818508",
+      "email": "citizen014@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "7924919984",
+        "status": "VALID",
+        "issuedOn": "2025-05-25",
+        "expiresOn": "2026-05-24",
+        "annualIncomeINR": 420000
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "7715466036",
+        "status": "VALID",
+        "issuedOn": "2023-09-02",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2423720585",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Neha Khan",
+    "dateOfBirth": "2001-05-15",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 14, Gandhi Nagar, East Champaran",
+    "familyReferenceId": "3855981835",
+    "contact": {
+      "mobile": "9366576961",
+      "email": "citizen015@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "6367737846",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-10-22",
+        "expiresOn": "2027-10-21"
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "8148058988",
+        "status": "VALID",
+        "issuedOn": "2026-02-07",
+        "expiresOn": null
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "6816447389",
+        "status": "EXPIRED",
+        "issuedOn": "2023-04-01",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7183339965",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Pooja Kaur",
+    "dateOfBirth": "1982-05-24",
+    "state": "Haryana",
+    "district": "Faridabad",
+    "address": "Ward 1, Gandhi Nagar, Faridabad",
+    "familyReferenceId": "6901346974",
+    "contact": {
+      "mobile": "9365129480",
+      "email": "citizen016@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "2219434374",
+        "status": "EXPIRED",
+        "issuedOn": "2024-05-06",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2571286975",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Kavya Thakur",
+    "dateOfBirth": "1995-08-08",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 17, Azad Nagar, Meerut",
+    "familyReferenceId": "9769397931",
+    "contact": {
+      "mobile": "9537709904",
+      "email": "citizen017@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "1122854855",
+        "status": "EXPIRED",
+        "issuedOn": "2026-04-15",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "1430346984",
+        "status": "EXPIRED",
+        "issuedOn": "2025-11-24",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5863123926",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Sakshi Singh",
+    "dateOfBirth": "1991-02-10",
+    "state": "Uttar Pradesh",
+    "district": "Prayagraj",
+    "address": "Ward 22, Azad Nagar, Prayagraj",
+    "familyReferenceId": "5082949518",
+    "contact": {
+      "mobile": "9580887471",
+      "email": "citizen018@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "6012187010",
+        "status": "VALID",
+        "issuedOn": "2023-04-04",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "2012507988",
+        "status": "VALID",
+        "issuedOn": "2023-08-19",
+        "expiresOn": "2026-08-19"
+      },
+      {
+        "type": "EWS",
+        "certificateId": "3248050030",
+        "status": "VALID",
+        "issuedOn": "2026-09-10",
+        "expiresOn": "2027-09-09"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4954056913",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Simran Chauhan",
+    "dateOfBirth": "1992-01-26",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 21, Krishna Vihar, Gorakhpur",
+    "familyReferenceId": "1038846404",
+    "contact": {
+      "mobile": "9190094803",
+      "email": "citizen019@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "1475866654",
+        "status": "VALID",
+        "issuedOn": "2023-07-18",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7227153080",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Riya Maurya",
+    "dateOfBirth": "1989-03-28",
+    "state": "Uttar Pradesh",
+    "district": "Aligarh",
+    "address": "Ward 8, Shanti Nagar, Aligarh",
+    "familyReferenceId": "3837686924",
+    "contact": {
+      "mobile": "9840381955",
+      "email": "citizen020@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "7501783408",
+        "status": "VALID",
+        "issuedOn": "2025-04-15",
+        "expiresOn": null
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "7269925912",
+        "status": "VALID",
+        "issuedOn": "2025-01-12",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5294321297",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Shivam Qureshi",
+    "dateOfBirth": "1990-04-27",
+    "state": "Delhi",
+    "district": "New Delhi",
+    "address": "Ward 19, Indira Nagar, New Delhi",
+    "familyReferenceId": "6523898038",
+    "contact": {
+      "mobile": "9869490296",
+      "email": "citizen021@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "3663362591",
+        "status": "VALID",
+        "issuedOn": "2026-11-23",
+        "expiresOn": "2027-11-22",
+        "annualIncomeINR": 150000
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "8634338535",
+        "status": "VALID",
+        "issuedOn": "2026-04-16",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "7087234537",
+        "status": "VALID",
+        "issuedOn": "2025-04-04",
+        "expiresOn": "2028-04-04"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3465556979",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ayush Joshi",
+    "dateOfBirth": "1997-06-11",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 3, Krishna Vihar, Meerut",
+    "familyReferenceId": "3208442624",
+    "contact": {
+      "mobile": "9592626421",
+      "email": "citizen022@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "2489850646",
+        "status": "VALID",
+        "issuedOn": "2026-03-18",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4443294556",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Abhishek Lodhi",
+    "dateOfBirth": "1996-10-02",
+    "state": "Uttar Pradesh",
+    "district": "Prayagraj",
+    "address": "Ward 13, Saraswati Vihar, Prayagraj",
+    "familyReferenceId": "7364358458",
+    "contact": {
+      "mobile": "9892187524",
+      "email": "citizen023@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "1540175583",
+        "status": "VALID",
+        "issuedOn": "2025-02-09",
+        "expiresOn": "2028-02-09"
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "6022268963",
+        "status": "VALID",
+        "issuedOn": "2024-06-13",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "9488725702",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Nikhil Yadav",
+    "dateOfBirth": "2000-04-16",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 14, Indira Nagar, Gorakhpur",
+    "familyReferenceId": "7101790730",
+    "contact": {
+      "mobile": "9542388234",
+      "email": "citizen024@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "3758425547",
+        "status": "VALID",
+        "issuedOn": "2025-09-26",
+        "expiresOn": "2026-09-25",
+        "annualIncomeINR": 420000
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "7081929106",
+        "status": "VALID",
+        "issuedOn": "2023-01-26",
+        "expiresOn": null
+      },
+      {
+        "type": "EWS",
+        "certificateId": "9535190964",
+        "status": "EXPIRED",
+        "issuedOn": "2024-08-11",
+        "expiresOn": "2025-08-10"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4520301475",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Saurabh Srivastava",
+    "dateOfBirth": "2007-11-03",
+    "state": "Uttar Pradesh",
+    "district": "Aligarh",
+    "address": "Ward 25, Indira Nagar, Aligarh",
+    "familyReferenceId": "9524282117",
+    "contact": {
+      "mobile": "9917373961",
+      "email": "citizen025@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "5384452236",
+        "status": "VALID",
+        "issuedOn": "2023-11-03",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7096909157",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Mohit Khan",
+    "dateOfBirth": "2007-05-27",
+    "state": "Delhi",
+    "district": "New Delhi",
+    "address": "Ward 12, Indira Nagar, New Delhi",
+    "familyReferenceId": "8170656976",
+    "contact": {
+      "mobile": "9783480786",
+      "email": "citizen026@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "5230907383",
+        "status": "VALID",
+        "issuedOn": "2024-10-08",
+        "expiresOn": null
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "7317778250",
+        "status": "VALID",
+        "issuedOn": "2025-07-08",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1874726375",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Deepak Bano",
+    "dateOfBirth": "1990-07-03",
+    "state": "Uttar Pradesh",
+    "district": "Ghaziabad",
+    "address": "Ward 18, Saraswati Vihar, Ghaziabad",
+    "familyReferenceId": "7713751013",
+    "contact": {
+      "mobile": "9779772051",
+      "email": "citizen027@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "7868711512",
+        "status": "VALID",
+        "issuedOn": "2026-02-17",
+        "expiresOn": "2027-02-16"
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "1618709461",
+        "status": "EXPIRED",
+        "issuedOn": "2023-03-11",
+        "expiresOn": "2024-03-10",
+        "annualIncomeINR": 420000
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "1442387251",
+        "status": "VALID",
+        "issuedOn": "2026-05-02",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "9245324160",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Vikas Rana",
+    "dateOfBirth": "1975-09-22",
+    "state": "Uttar Pradesh",
+    "district": "Agra",
+    "address": "Ward 18, Saraswati Vihar, Agra",
+    "familyReferenceId": "2717104020",
+    "contact": {
+      "mobile": "9749864985",
+      "email": "citizen028@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "9567625736",
+        "status": "EXPIRED",
+        "issuedOn": "2024-01-08",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3476739512",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ravi Verma",
+    "dateOfBirth": "2005-04-11",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 17, Vikas Nagar, Gorakhpur",
+    "familyReferenceId": "4753881712",
+    "contact": {
+      "mobile": "9169745010",
+      "email": "citizen029@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "8886692965",
+        "status": "EXPIRED",
+        "issuedOn": "2026-01-13",
+        "expiresOn": null
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "6425131388",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2024-09-28",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5506879593",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Karan Tiwari",
+    "dateOfBirth": "1975-11-26",
+    "state": "Uttar Pradesh",
+    "district": "Aligarh",
+    "address": "Ward 15, Shanti Nagar, Aligarh",
+    "familyReferenceId": "2914393188",
+    "contact": {
+      "mobile": "9405922467",
+      "email": "citizen030@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "1634122155",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2023-06-14",
+        "expiresOn": "2024-06-13"
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "5450304569",
+        "status": "VALID",
+        "issuedOn": "2026-11-28",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "9506148816",
+        "status": "VALID",
+        "issuedOn": "2023-03-25",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7665000402",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Meera Maurya",
+    "dateOfBirth": "1994-12-21",
+    "state": "Delhi",
+    "district": "New Delhi",
+    "address": "Ward 8, Nehru Colony, New Delhi",
+    "familyReferenceId": "4568883544",
+    "contact": {
+      "mobile": "9186407462",
+      "email": "citizen031@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "4114650558",
+        "status": "EXPIRED",
+        "issuedOn": "2025-07-17",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "8686231242",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Nisha Siddiqui",
+    "dateOfBirth": "2007-04-02",
+    "state": "Uttar Pradesh",
+    "district": "Ghaziabad",
+    "address": "Ward 11, Saraswati Vihar, Ghaziabad",
+    "familyReferenceId": "1508708458",
+    "contact": {
+      "mobile": "9512741874",
+      "email": "citizen032@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "5365087105",
+        "status": "VALID",
+        "issuedOn": "2024-03-11",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "7875571872",
+        "status": "VALID",
+        "issuedOn": "2026-08-26",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7344465651",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Shreya Sandhu",
+    "dateOfBirth": "1973-07-22",
+    "state": "Uttar Pradesh",
+    "district": "Agra",
+    "address": "Ward 9, Vikas Nagar, Agra",
+    "familyReferenceId": "6889875188",
+    "contact": {
+      "mobile": "9240569080",
+      "email": "citizen033@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "8047878975",
+        "status": "VALID",
+        "issuedOn": "2024-08-22",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "4916287752",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-06-06",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "4723043097",
+        "status": "EXPIRED",
+        "issuedOn": "2026-04-08",
+        "expiresOn": "2027-04-07",
+        "annualIncomeINR": 120000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7868144556",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Swati Saini",
+    "dateOfBirth": "1980-01-13",
+    "state": "Uttar Pradesh",
+    "district": "Kanpur Nagar",
+    "address": "Ward 15, Saraswati Vihar, Kanpur Nagar",
+    "familyReferenceId": "7550398509",
+    "contact": {
+      "mobile": "9358955660",
+      "email": "citizen034@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "9334541868",
+        "status": "EXPIRED",
+        "issuedOn": "2024-05-13",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "8215804954",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Divya Gupta",
+    "dateOfBirth": "1974-04-05",
+    "state": "Uttar Pradesh",
+    "district": "Moradabad",
+    "address": "Ward 15, Nehru Colony, Moradabad",
+    "familyReferenceId": "1843183401",
+    "contact": {
+      "mobile": "9915215359",
+      "email": "citizen035@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "8907520094",
+        "status": "VALID",
+        "issuedOn": "2026-02-23",
+        "expiresOn": "2029-02-23"
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "7330307496",
+        "status": "VALID",
+        "issuedOn": "2023-06-07",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4102477111",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Komal Srivastava",
+    "dateOfBirth": "2005-09-24",
+    "state": "Delhi",
+    "district": "New Delhi",
+    "address": "Ward 24, Vikas Nagar, New Delhi",
+    "familyReferenceId": "5441775145",
+    "contact": {
+      "mobile": "9603306618",
+      "email": "citizen036@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "2948267514",
+        "status": "VALID",
+        "issuedOn": "2023-12-09",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "3293114778",
+        "status": "VALID",
+        "issuedOn": "2024-07-24",
+        "expiresOn": "2025-07-23",
+        "annualIncomeINR": 300000
+      },
+      {
+        "type": "EWS",
+        "certificateId": "2222612068",
+        "status": "VALID",
+        "issuedOn": "2026-09-01",
+        "expiresOn": "2027-09-01"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2170421167",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Payal Dubey",
+    "dateOfBirth": "2006-05-23",
+    "state": "Uttar Pradesh",
+    "district": "Ghaziabad",
+    "address": "Ward 20, Shanti Nagar, Ghaziabad",
+    "familyReferenceId": "4585417403",
+    "contact": {
+      "mobile": "9244995772",
+      "email": "citizen037@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "1339156123",
+        "status": "VALID",
+        "issuedOn": "2023-04-18",
+        "expiresOn": "2026-04-18"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "9488779117",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Tanvi Sheikh",
+    "dateOfBirth": "1983-10-18",
+    "state": "Uttar Pradesh",
+    "district": "Agra",
+    "address": "Ward 17, Azad Nagar, Agra",
+    "familyReferenceId": "2321372614",
+    "contact": {
+      "mobile": "9263544186",
+      "email": "citizen038@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "6063282447",
+        "status": "VALID",
+        "issuedOn": "2026-03-28",
+        "expiresOn": "2027-03-27"
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "5998520997",
+        "status": "VALID",
+        "issuedOn": "2026-11-17",
+        "expiresOn": "2027-11-16",
+        "annualIncomeINR": 120000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3800214869",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Isha Negi",
+    "dateOfBirth": "1997-09-13",
+    "state": "Uttar Pradesh",
+    "district": "Kanpur Nagar",
+    "address": "Ward 13, Gandhi Nagar, Kanpur Nagar",
+    "familyReferenceId": "5411423219",
+    "contact": {
+      "mobile": "9976945407",
+      "email": "citizen039@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "3807583664",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2023-07-14",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "3208283258",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2024-03-06",
+        "expiresOn": "2025-03-05",
+        "annualIncomeINR": 120000
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "8632527425",
+        "status": "VALID",
+        "issuedOn": "2024-03-22",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "8342066297",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Muskan Sharma",
+    "dateOfBirth": "1990-01-11",
+    "state": "Uttar Pradesh",
+    "district": "Moradabad",
+    "address": "Ward 24, Krishna Vihar, Moradabad",
+    "familyReferenceId": "7097140783",
+    "contact": {
+      "mobile": "9484667990",
+      "email": "citizen040@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "7183716475",
+        "status": "VALID",
+        "issuedOn": "2024-05-01",
+        "expiresOn": "2025-05-01"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6252220541",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Harsh Tiwari",
+    "dateOfBirth": "1977-05-22",
+    "state": "Bihar",
+    "district": "Patna",
+    "address": "Ward 14, Saraswati Vihar, Patna",
+    "familyReferenceId": "4634774167",
+    "contact": {
+      "mobile": "9804839990",
+      "email": "citizen041@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "9695529767",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-08-28",
+        "expiresOn": "2029-08-28"
+      },
+      {
+        "type": "EWS",
+        "certificateId": "5900666797",
+        "status": "EXPIRED",
+        "issuedOn": "2024-06-07",
+        "expiresOn": "2025-06-06"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1094838564",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Yash Shukla",
+    "dateOfBirth": "2007-01-04",
+    "state": "Uttar Pradesh",
+    "district": "Gautam Buddha Nagar",
+    "address": "Ward 15, Vikas Nagar, Gautam Buddha Nagar",
+    "familyReferenceId": "2622843786",
+    "contact": {
+      "mobile": "9643140315",
+      "email": "citizen042@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "1422104747",
+        "status": "EXPIRED",
+        "issuedOn": "2023-04-12",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "5195742197",
+        "status": "EXPIRED",
+        "issuedOn": "2024-08-14",
+        "expiresOn": "2027-08-14"
+      },
+      {
+        "type": "EWS",
+        "certificateId": "6322007550",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2025-01-13",
+        "expiresOn": "2026-01-12"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4477319848",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ritik Ali",
+    "dateOfBirth": "1984-10-03",
+    "state": "Uttar Pradesh",
+    "district": "Agra",
+    "address": "Ward 13, Saraswati Vihar, Agra",
+    "familyReferenceId": "7151555073",
+    "contact": {
+      "mobile": "9505197058",
+      "email": "citizen043@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "7564588044",
+        "status": "VALID",
+        "issuedOn": "2023-06-03",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5267942582",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Prashant Gill",
+    "dateOfBirth": "1978-06-01",
+    "state": "Uttar Pradesh",
+    "district": "Kanpur Nagar",
+    "address": "Ward 23, Nehru Colony, Kanpur Nagar",
+    "familyReferenceId": "1477820554",
+    "contact": {
+      "mobile": "9153444849",
+      "email": "citizen044@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "9381077849",
+        "status": "VALID",
+        "issuedOn": "2024-02-22",
+        "expiresOn": null
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "4947315023",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2023-05-08",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3995559576",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Gaurav Chaudhary",
+    "dateOfBirth": "2001-01-14",
+    "state": "Uttar Pradesh",
+    "district": "Moradabad",
+    "address": "Ward 5, Shanti Nagar, Moradabad",
+    "familyReferenceId": "9541681902",
+    "contact": {
+      "mobile": "9874550283",
+      "email": "citizen045@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "2209742924",
+        "status": "VALID",
+        "issuedOn": "2026-02-23",
+        "expiresOn": "2029-02-23"
+      },
+      {
+        "type": "EWS",
+        "certificateId": "8122216852",
+        "status": "VALID",
+        "issuedOn": "2023-01-11",
+        "expiresOn": "2024-01-10"
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "2137416854",
+        "status": "VALID",
+        "issuedOn": "2026-05-09",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3830818230",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Manish Gupta",
+    "dateOfBirth": "1976-09-04",
+    "state": "Bihar",
+    "district": "Patna",
+    "address": "Ward 4, Shanti Nagar, Patna",
+    "familyReferenceId": "6076650632",
+    "contact": {
+      "mobile": "9672449431",
+      "email": "citizen046@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "7294814876",
+        "status": "VALID",
+        "issuedOn": "2024-12-26",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6615138760",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Rakesh Jaiswal",
+    "dateOfBirth": "1977-10-08",
+    "state": "Uttar Pradesh",
+    "district": "Gautam Buddha Nagar",
+    "address": "Ward 20, Krishna Vihar, Gautam Buddha Nagar",
+    "familyReferenceId": "3533474105",
+    "contact": {
+      "mobile": "9317360485",
+      "email": "citizen047@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "5410265695",
+        "status": "VALID",
+        "issuedOn": "2025-10-12",
+        "expiresOn": "2026-10-11",
+        "annualIncomeINR": 72000
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "4837729719",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-09-20",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6699261476",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Akash Rathore",
+    "dateOfBirth": "1977-07-18",
+    "state": "Uttar Pradesh",
+    "district": "Lucknow",
+    "address": "Ward 5, Krishna Vihar, Lucknow",
+    "familyReferenceId": "2334733614",
+    "contact": {
+      "mobile": "9199359927",
+      "email": "citizen048@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "8521560722",
+        "status": "VALID",
+        "issuedOn": "2025-01-03",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "6982086181",
+        "status": "VALID",
+        "issuedOn": "2024-05-18",
+        "expiresOn": null
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "9709329559",
+        "status": "VALID",
+        "issuedOn": "2023-03-23",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4907255251",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Varun Malik",
+    "dateOfBirth": "2002-09-08",
+    "state": "Uttar Pradesh",
+    "district": "Varanasi",
+    "address": "Ward 19, Shanti Nagar, Varanasi",
+    "familyReferenceId": "4181702076",
+    "contact": {
+      "mobile": "9735044634",
+      "email": "citizen049@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "6215276786",
+        "status": "VALID",
+        "issuedOn": "2025-08-15",
+        "expiresOn": "2028-08-15"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5181544014",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Dev Rawat",
+    "dateOfBirth": "1973-09-15",
+    "state": "Uttar Pradesh",
+    "district": "Moradabad",
+    "address": "Ward 6, Saraswati Vihar, Moradabad",
+    "familyReferenceId": "3931989472",
+    "contact": {
+      "mobile": "9430483397",
+      "email": "citizen050@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "4639852827",
+        "status": "VALID",
+        "issuedOn": "2023-09-14",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "4823935276",
+        "status": "VALID",
+        "issuedOn": "2026-06-25",
+        "expiresOn": "2029-06-25"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "4513727544",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Anjali Sharma",
+    "dateOfBirth": "1998-07-28",
+    "state": "Bihar",
+    "district": "Patna",
+    "address": "Ward 10, Azad Nagar, Patna",
+    "familyReferenceId": "6542681299",
+    "contact": {
+      "mobile": "9974989801",
+      "email": "citizen051@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "8610350990",
+        "status": "EXPIRED",
+        "issuedOn": "2025-03-15",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "9289994174",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-06-02",
+        "expiresOn": "2027-06-01",
+        "annualIncomeINR": 150000
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "2780934250",
+        "status": "VALID",
+        "issuedOn": "2025-01-06",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "8501545386",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Preeti Pandey",
+    "dateOfBirth": "2000-08-06",
+    "state": "Uttar Pradesh",
+    "district": "Gautam Buddha Nagar",
+    "address": "Ward 7, Krishna Vihar, Gautam Buddha Nagar",
+    "familyReferenceId": "6692678076",
+    "contact": {
+      "mobile": "9704742065",
+      "email": "citizen052@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "7375137347",
+        "status": "VALID",
+        "issuedOn": "2024-12-24",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2143472892",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Jyoti Saxena",
+    "dateOfBirth": "1984-10-01",
+    "state": "Uttar Pradesh",
+    "district": "Lucknow",
+    "address": "Ward 8, Nehru Colony, Lucknow",
+    "familyReferenceId": "5746852401",
+    "contact": {
+      "mobile": "9285761061",
+      "email": "citizen053@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "5551691755",
+        "status": "EXPIRED",
+        "issuedOn": "2026-10-23",
+        "expiresOn": "2027-10-22"
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "1023844943",
+        "status": "VALID",
+        "issuedOn": "2025-04-15",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "3626941050",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Kiran Ansari",
+    "dateOfBirth": "1992-07-01",
+    "state": "Uttar Pradesh",
+    "district": "Varanasi",
+    "address": "Ward 1, Shanti Nagar, Varanasi",
+    "familyReferenceId": "1694391112",
+    "contact": {
+      "mobile": "9841073499",
+      "email": "citizen054@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "6006742408",
+        "status": "VALID",
+        "issuedOn": "2026-06-03",
+        "expiresOn": "2027-06-02",
+        "annualIncomeINR": 72000
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "4923228685",
+        "status": "VALID",
+        "issuedOn": "2026-08-06",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "5886490347",
+        "status": "VALID",
+        "issuedOn": "2026-02-27",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7974961315",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Sunita Kaur",
+    "dateOfBirth": "1982-12-17",
+    "state": "Uttar Pradesh",
+    "district": "Bareilly",
+    "address": "Ward 20, Shanti Nagar, Bareilly",
+    "familyReferenceId": "9348489243",
+    "contact": {
+      "mobile": "9487363966",
+      "email": "citizen055@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "9515500967",
+        "status": "VALID",
+        "issuedOn": "2024-07-15",
+        "expiresOn": "2025-07-14",
+        "annualIncomeINR": 300000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1530154103",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Rekha Chaudhary",
+    "dateOfBirth": "1993-02-27",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 19, Krishna Vihar, East Champaran",
+    "familyReferenceId": "8220619325",
+    "contact": {
+      "mobile": "9872586628",
+      "email": "citizen056@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "6812037215",
+        "status": "VALID",
+        "issuedOn": "2023-12-06",
+        "expiresOn": "2024-12-05",
+        "annualIncomeINR": 72000
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "3600046473",
+        "status": "VALID",
+        "issuedOn": "2026-03-01",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6488378525",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Pallavi Kumar",
+    "dateOfBirth": "2002-08-17",
+    "state": "Uttar Pradesh",
+    "district": "Gautam Buddha Nagar",
+    "address": "Ward 4, Indira Nagar, Gautam Buddha Nagar",
+    "familyReferenceId": "1645868443",
+    "contact": {
+      "mobile": "9331720940",
+      "email": "citizen057@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DOMICILE",
+        "certificateId": "1724997446",
+        "status": "EXPIRED",
+        "issuedOn": "2024-06-03",
+        "expiresOn": "2027-06-03"
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "1837136840",
+        "status": "VALID",
+        "issuedOn": "2026-08-02",
+        "expiresOn": "2027-08-01",
+        "annualIncomeINR": 420000
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "7541193510",
+        "status": "VALID",
+        "issuedOn": "2023-12-20",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6805182646",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Mansi Patel",
+    "dateOfBirth": "1977-03-07",
+    "state": "Uttar Pradesh",
+    "district": "Lucknow",
+    "address": "Ward 3, Krishna Vihar, Lucknow",
+    "familyReferenceId": "5708352164",
+    "contact": {
+      "mobile": "9968164793",
+      "email": "citizen058@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "9863280627",
+        "status": "VALID",
+        "issuedOn": "2023-07-13",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7362956760",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Nandini Pal",
+    "dateOfBirth": "1995-07-23",
+    "state": "Uttar Pradesh",
+    "district": "Varanasi",
+    "address": "Ward 19, Saraswati Vihar, Varanasi",
+    "familyReferenceId": "6138582789",
+    "contact": {
+      "mobile": "9135571571",
+      "email": "citizen059@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "8994748440",
+        "status": "EXPIRED",
+        "issuedOn": "2023-07-06",
+        "expiresOn": null
+      },
+      {
+        "type": "EWS",
+        "certificateId": "9794209935",
+        "status": "EXPIRED",
+        "issuedOn": "2026-01-22",
+        "expiresOn": "2027-01-21"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1738404852",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Shalini Qureshi",
+    "dateOfBirth": "2007-08-05",
+    "state": "Uttar Pradesh",
+    "district": "Bareilly",
+    "address": "Ward 2, Krishna Vihar, Bareilly",
+    "familyReferenceId": "4993999653",
+    "contact": {
+      "mobile": "9965437884",
+      "email": "citizen060@example.test"
+    },
+    "certificates": [
+      {
+        "type": "BIRTH",
+        "certificateId": "4515181886",
+        "status": "EXPIRED",
+        "issuedOn": "2023-03-21",
+        "expiresOn": null
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "9503600676",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2024-11-02",
+        "expiresOn": "2025-11-01",
+        "annualIncomeINR": 180000
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "3750991920",
+        "status": "EXPIRED",
+        "issuedOn": "2026-10-16",
+        "expiresOn": "2029-10-16"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2978716201",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Farhan Rawat",
+    "dateOfBirth": "2005-05-11",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 7, Indira Nagar, East Champaran",
+    "familyReferenceId": "1220619754",
+    "contact": {
+      "mobile": "9889137900",
+      "email": "citizen061@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "8910700834",
+        "status": "EXPIRED",
+        "issuedOn": "2026-06-12",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2661055664",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Arman Nishad",
+    "dateOfBirth": "1987-09-05",
+    "state": "Haryana",
+    "district": "Faridabad",
+    "address": "Ward 19, Azad Nagar, Faridabad",
+    "familyReferenceId": "3785580787",
+    "contact": {
+      "mobile": "9820952616",
+      "email": "citizen062@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "1734277487",
+        "status": "VALID",
+        "issuedOn": "2023-05-21",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "5855855548",
+        "status": "VALID",
+        "issuedOn": "2025-03-07",
+        "expiresOn": "2028-03-07"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1124292427",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Ayesha Mishra",
+    "dateOfBirth": "2002-04-16",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 15, Nehru Colony, Meerut",
+    "familyReferenceId": "3616658766",
+    "contact": {
+      "mobile": "9895167615",
+      "email": "citizen063@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "2768413882",
+        "status": "VALID",
+        "issuedOn": "2023-01-23",
+        "expiresOn": null
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "5100674459",
+        "status": "EXPIRED",
+        "issuedOn": "2023-03-12",
+        "expiresOn": null
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "5627493390",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2024-12-02",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7153793870",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Sana Agarwal",
+    "dateOfBirth": "1995-04-04",
+    "state": "Uttar Pradesh",
+    "district": "Varanasi",
+    "address": "Ward 23, Nehru Colony, Varanasi",
+    "familyReferenceId": "7632975063",
+    "contact": {
+      "mobile": "9207986369",
+      "email": "citizen064@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "7172502769",
+        "status": "EXPIRED",
+        "issuedOn": "2023-12-19",
+        "expiresOn": "2024-12-18"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6808854317",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Zoya Khan",
+    "dateOfBirth": "1991-09-21",
+    "state": "Uttar Pradesh",
+    "district": "Bareilly",
+    "address": "Ward 6, Shanti Nagar, Bareilly",
+    "familyReferenceId": "1421564321",
+    "contact": {
+      "mobile": "9330402214",
+      "email": "citizen065@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "3286212986",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2023-11-04",
+        "expiresOn": "2024-11-03"
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "6458361812",
+        "status": "EXPIRED",
+        "issuedOn": "2024-04-05",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "9019178056",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Imran Kaur",
+    "dateOfBirth": "1995-05-23",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 25, Nehru Colony, East Champaran",
+    "familyReferenceId": "3126596439",
+    "contact": {
+      "mobile": "9457780319",
+      "email": "citizen066@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "8652350774",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2024-11-21",
+        "expiresOn": "2025-11-20",
+        "annualIncomeINR": 96000
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "4424071224",
+        "status": "VALID",
+        "issuedOn": "2026-10-12",
+        "expiresOn": null
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "6717930868",
+        "status": "VALID",
+        "issuedOn": "2024-11-02",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7849604003",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Sameer Thakur",
+    "dateOfBirth": "1993-11-08",
+    "state": "Haryana",
+    "district": "Faridabad",
+    "address": "Ward 8, Indira Nagar, Faridabad",
+    "familyReferenceId": "6985455723",
+    "contact": {
+      "mobile": "9244960408",
+      "email": "citizen067@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "5091789906",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2024-08-14",
+        "expiresOn": "2025-08-13"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6113674668",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Faizan Singh",
+    "dateOfBirth": "1990-08-17",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 2, Gandhi Nagar, Meerut",
+    "familyReferenceId": "5627441751",
+    "contact": {
+      "mobile": "9861363723",
+      "email": "citizen068@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "4958529709",
+        "status": "EXPIRED",
+        "issuedOn": "2026-01-06",
+        "expiresOn": "2027-01-05",
+        "annualIncomeINR": 72000
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "2359439746",
+        "status": "EXPIRED",
+        "issuedOn": "2026-02-28",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2198994577",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Irfan Chauhan",
+    "dateOfBirth": "1974-01-07",
+    "state": "Uttar Pradesh",
+    "district": "Prayagraj",
+    "address": "Ward 4, Vikas Nagar, Prayagraj",
+    "familyReferenceId": "3673372129",
+    "contact": {
+      "mobile": "9407952974",
+      "email": "citizen069@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "4268562529",
+        "status": "EXPIRED",
+        "issuedOn": "2026-10-20",
+        "expiresOn": "2027-10-19",
+        "annualIncomeINR": 180000
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "9755009667",
+        "status": "VALID",
+        "issuedOn": "2023-02-08",
+        "expiresOn": null
+      },
+      {
+        "type": "RATION_CARD",
+        "certificateId": "9123866413",
+        "status": "VALID",
+        "issuedOn": "2024-11-06",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1170930663",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Nazia Maurya",
+    "dateOfBirth": "1979-05-15",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 14, Azad Nagar, Gorakhpur",
+    "familyReferenceId": "9694678296",
+    "contact": {
+      "mobile": "9795241467",
+      "email": "citizen070@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "5339298792",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-11-21",
+        "expiresOn": "2027-11-20",
+        "annualIncomeINR": 72000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5621406591",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Jaspreet Qureshi",
+    "dateOfBirth": "1989-11-17",
+    "state": "Bihar",
+    "district": "East Champaran",
+    "address": "Ward 8, Saraswati Vihar, East Champaran",
+    "familyReferenceId": "6827855453",
+    "contact": {
+      "mobile": "9686556000",
+      "email": "citizen071@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "6155067850",
+        "status": "VALID",
+        "issuedOn": "2023-11-27",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "1113700347",
+        "status": "EXPIRED",
+        "issuedOn": "2024-06-07",
+        "expiresOn": "2027-06-07"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6675776725",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Gurpreet Joshi",
+    "dateOfBirth": "1982-02-05",
+    "state": "Haryana",
+    "district": "Faridabad",
+    "address": "Ward 12, Shanti Nagar, Faridabad",
+    "familyReferenceId": "8576460669",
+    "contact": {
+      "mobile": "9997245130",
+      "email": "citizen072@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "5020451059",
+        "status": "VALID",
+        "issuedOn": "2023-01-16",
+        "expiresOn": "2024-01-15"
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "3561849862",
+        "status": "VALID",
+        "issuedOn": "2026-08-13",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "2988450440",
+        "status": "VALID",
+        "issuedOn": "2024-08-02",
+        "expiresOn": "2027-08-02"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "6738362247",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Navdeep Lodhi",
+    "dateOfBirth": "2007-07-23",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 19, Shanti Nagar, Meerut",
+    "familyReferenceId": "2453721096",
+    "contact": {
+      "mobile": "9911627475",
+      "email": "citizen073@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "2018407026",
+        "status": "VALID",
+        "issuedOn": "2024-09-01",
+        "expiresOn": "2025-09-01"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7401606281",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Simranjit Yadav",
+    "dateOfBirth": "2001-08-03",
+    "state": "Uttar Pradesh",
+    "district": "Prayagraj",
+    "address": "Ward 9, Krishna Vihar, Prayagraj",
+    "familyReferenceId": "2589439100",
+    "contact": {
+      "mobile": "9202903190",
+      "email": "citizen074@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "3239097692",
+        "status": "VALID",
+        "issuedOn": "2023-02-21",
+        "expiresOn": "2024-02-20",
+        "annualIncomeINR": 72000
+      },
+      {
+        "type": "DISABILITY",
+        "certificateId": "3446329529",
+        "status": "EXPIRED",
+        "issuedOn": "2023-06-16",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "2805148609",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Harpreet Srivastava",
+    "dateOfBirth": "2003-06-22",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 3, Indira Nagar, Gorakhpur",
+    "familyReferenceId": "5231397711",
+    "contact": {
+      "mobile": "9319191988",
+      "email": "citizen075@example.test"
+    },
+    "certificates": [
+      {
+        "type": "DISABILITY",
+        "certificateId": "2712761292",
+        "status": "VALID",
+        "issuedOn": "2025-05-27",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "8847331523",
+        "status": "REVIEW_REQUIRED",
+        "issuedOn": "2026-05-15",
+        "expiresOn": "2029-05-15"
+      },
+      {
+        "type": "INCOME",
+        "certificateId": "9440589159",
+        "status": "VALID",
+        "issuedOn": "2026-08-07",
+        "expiresOn": "2027-08-06",
+        "annualIncomeINR": 96000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "8610964234",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Rupinder Khan",
+    "dateOfBirth": "1998-11-17",
+    "state": "Uttar Pradesh",
+    "district": "Aligarh",
+    "address": "Ward 3, Saraswati Vihar, Aligarh",
+    "familyReferenceId": "8795882415",
+    "contact": {
+      "mobile": "9590735387",
+      "email": "citizen076@example.test"
+    },
+    "certificates": [
+      {
+        "type": "INCOME",
+        "certificateId": "7323839096",
+        "status": "EXPIRED",
+        "issuedOn": "2025-10-19",
+        "expiresOn": "2026-10-18",
+        "annualIncomeINR": 120000
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "5414302973",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Manpreet Bano",
+    "dateOfBirth": "1986-10-09",
+    "state": "Delhi",
+    "district": "New Delhi",
+    "address": "Ward 16, Krishna Vihar, New Delhi",
+    "familyReferenceId": "4210542327",
+    "contact": {
+      "mobile": "9720629370",
+      "email": "citizen077@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "7359644009",
+        "status": "VALID",
+        "issuedOn": "2025-12-08",
+        "expiresOn": null
+      },
+      {
+        "type": "DOMICILE",
+        "certificateId": "8192739808",
+        "status": "EXPIRED",
+        "issuedOn": "2026-08-02",
+        "expiresOn": "2029-08-02"
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7840446688",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Sukhdeep Rana",
+    "dateOfBirth": "1983-06-07",
+    "state": "Uttar Pradesh",
+    "district": "Meerut",
+    "address": "Ward 21, Gandhi Nagar, Meerut",
+    "familyReferenceId": "9575918872",
+    "contact": {
+      "mobile": "9436160411",
+      "email": "citizen078@example.test"
+    },
+    "certificates": [
+      {
+        "type": "RATION_CARD",
+        "certificateId": "4117448500",
+        "status": "VALID",
+        "issuedOn": "2026-04-12",
+        "expiresOn": null
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "7751901098",
+        "status": "EXPIRED",
+        "issuedOn": "2024-03-25",
+        "expiresOn": null
+      },
+      {
+        "type": "CASTE",
+        "certificateId": "8091077451",
+        "status": "VALID",
+        "issuedOn": "2025-08-18",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "7159926317",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Tanya Verma",
+    "dateOfBirth": "1979-01-20",
+    "state": "Uttar Pradesh",
+    "district": "Prayagraj",
+    "address": "Ward 15, Nehru Colony, Prayagraj",
+    "familyReferenceId": "9128341784",
+    "contact": {
+      "mobile": "9387623871",
+      "email": "citizen079@example.test"
+    },
+    "certificates": [
+      {
+        "type": "CASTE",
+        "certificateId": "9343121926",
+        "status": "VALID",
+        "issuedOn": "2023-04-08",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  },
+  {
+    "recordId": "1752454890",
+    "recordType": "SYNTHETIC_TEST_RECORD",
+    "fullName": "Lakshmi Tiwari",
+    "dateOfBirth": "1997-08-21",
+    "state": "Uttar Pradesh",
+    "district": "Gorakhpur",
+    "address": "Ward 22, Vikas Nagar, Gorakhpur",
+    "familyReferenceId": "6067920732",
+    "contact": {
+      "mobile": "9133175986",
+      "email": "citizen080@example.test"
+    },
+    "certificates": [
+      {
+        "type": "EWS",
+        "certificateId": "4567792288",
+        "status": "VALID",
+        "issuedOn": "2026-10-19",
+        "expiresOn": "2027-10-18"
+      },
+      {
+        "type": "BIRTH",
+        "certificateId": "7037815208",
+        "status": "VALID",
+        "issuedOn": "2023-07-17",
+        "expiresOn": null
+      }
+    ],
+    "verificationSource": "LOCAL_SYNTHETIC_DATASET",
+    "verificationNote": "Fictional test record; not an official government record."
+  }
+]

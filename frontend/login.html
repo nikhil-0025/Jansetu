@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — JanSetu (जनसेतु) | Citizen & Officer Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/styles/main.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f1f5f9;
+    }
+    .auth-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    .auth-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+    .auth-header {
+      background: linear-gradient(135deg, #0f284e 0%, #1b3b6f 100%);
+      color: #ffffff;
+      padding: 28px 30px;
+      text-align: center;
+      position: relative;
+    }
+    .auth-tabs {
+      display: flex;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-radius: 8px;
+      color: var(--text-muted);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .auth-tab-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body class="auth-page">
+
+  <!-- Gov Ribbon -->
+  <header class="gov-ribbon">
+    <div class="gov-ribbon-left">
+      <span class="gov-tricolor"></span>
+      <span>भारत सरकार | Government of India — JanSetu Authentication Service</span>
+    </div>
+    <div class="gov-ribbon-right">
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="/assets/logo.svg" alt="JanSetu Emblem" style="width: 52px; height: 52px; margin-bottom: 8px;">
+        <h2 style="color: #ffffff; margin-bottom: 4px; font-size: 1.5rem;">JanSetu <span style="color:#ff9933;">जनसेतु</span></h2>
+        <p style="font-size: 0.8rem; color: #cbd5e1;">Har Parivaar, Har Haq, Ek Setu.</p>
+      </div>
+
+      <div style="padding: 28px 30px;">
+        <!-- Role Selector Tabs -->
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" id="tabCitizen" onclick="switchRole('citizen')">
+            <i data-lucide="home"></i>
+            <span>Citizen / Family</span>
+          </button>
+          <button class="auth-tab-btn" id="tabOfficer" onclick="switchRole('officer')">
+            <i data-lucide="shield-check"></i>
+            <span>Government Officer</span>
+          </button>
+        </div>
+
+        <div id="roleDescription" style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.45;">
+          Sign in using your household <strong>Family ID</strong> (e.g. FAM-1001) to manage family registry, upload documents, view eligible welfare schemes, or request household separation.
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label" id="idLabel" for="userId">Family ID (Household Identifier)</label>
+            <input type="text" id="userId" class="form-control" placeholder="e.g. FAM-1001" required autofocus>
+            <div class="form-help" id="idHelp">Enter your registered household identifier.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div style="position: relative;">
+              <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+              <button type="button" onclick="togglePassword()" aria-label="Toggle password visibility" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background:none; border:none; color: var(--text-muted); cursor:pointer;">
+                <i data-lucide="eye" id="eyeIcon" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 10px;">
+            <i data-lucide="log-in"></i>
+            <span>Sign In to JanSetu</span>
+          </button>
+        </form>
+
+        <!-- Citizen Registration Link -->
+        <div style="margin-top: 18px; padding: 12px 14px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; text-align: center;">
+          <div style="font-size: 0.85rem; color: var(--text-main); margin-bottom: 4px;">
+            New Citizen Family without a Family ID?
+          </div>
+          <a href="/signup.html" style="font-weight: 700; color: var(--primary); text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;">
+            <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i> Register / Sign Up with Certificate
+          </a>
+        </div>
+
+        <!-- Quick 1-Click Demo Buttons -->
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em;">
+            1-Click Demo Autofill Credentials
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" onclick="fillCreds('FAM-1001', 'citizen123', 'citizen')" class="demo-creds-btn" style="text-align: left; padding: 8px 12px; display: flex; align-items: center; gap: 10px;">
+              <i data-lucide="users" style="width: 18px; height: 18px; color: var(--secondary); flex-shrink: 0;"></i>
+              <div>
+                <strong>Citizen Family (FAM-1001):</strong> Rahul & Amit Sharma household (Pass: citizen123)
+              </div>
+            </button>
+            <button type="button" onclick="fillCreds('OFFICER-01', 'officer123', 'officer')" class="demo-creds-btn" style="text-align: left; padding: 8px 12px; display: flex; align-items: center; gap: 10px;">
+              <i data-lucide="shield-check" style="width: 18px; height: 18px; color: var(--accent-saffron); flex-shrink: 0;"></i>
+              <div>
+                <strong>Verification Officer (OFFICER-01):</strong> Block Development Officer (Pass: officer123)
+              </div>
+            </button>
+            <button type="button" onclick="fillCreds('ADMIN-01', 'admin123', 'officer')" class="demo-creds-btn" style="text-align: left; padding: 8px 12px; border-color: #cbd5e1; color: var(--primary); display: flex; align-items: center; gap: 10px;">
+              <i data-lucide="settings" style="width: 18px; height: 18px; color: var(--primary); flex-shrink: 0;"></i>
+              <div>
+                <strong>Portal Admin (ADMIN-01):</strong> State Portal Administrator (Pass: admin123)
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="/" style="font-size: 0.85rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px;">
+            <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i> Back to JanSetu Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/scripts/api.js"></script>
+  <script src="/scripts/translations.js"></script>
+  <script>
+    lucide.createIcons();
+    let currentRole = 'citizen';
+
+    function switchRole(role) {
+      currentRole = role;
+      const tabCitizen = document.getElementById('tabCitizen');
+      const tabOfficer = document.getElementById('tabOfficer');
+      const idLabel = document.getElementById('idLabel');
+      const idInput = document.getElementById('userId');
+      const idHelp = document.getElementById('idHelp');
+      const desc = document.getElementById('roleDescription');
+
+      if (role === 'citizen') {
+        tabCitizen.classList.add('active');
+        tabOfficer.classList.remove('active');
+        idLabel.textContent = 'Family ID (Household Identifier)';
+        idInput.placeholder = 'e.g. FAM-1001';
+        idHelp.textContent = 'Enter your registered household identifier (e.g. FAM-1001).';
+        desc.innerHTML = 'Sign in using your household <strong>Family ID</strong> to access family records, documents, welfare schemes, and separation requests.';
+      } else {
+        tabOfficer.classList.add('active');
+        tabCitizen.classList.remove('active');
+        idLabel.textContent = 'Officer / Admin Identifier';
+        idInput.placeholder = 'e.g. OFFICER-01';
+        idHelp.textContent = 'Enter your authorized government staff ID.';
+        desc.innerHTML = 'Restricted government portal for <strong>Authorized Verification Officers</strong> to review applications, separation requests, documents, and duplicate flags.';
+      }
+    }
+
+    function fillCreds(userId, pass, role) {
+      switchRole(role);
+      document.getElementById('userId').value = userId;
+      document.getElementById('password').value = pass;
+      showToast(`Autofilled ${userId} credentials. Click 'Sign In' or hit Enter.`, 'info');
+    }
+
+    function togglePassword() {
+      const pass = document.getElementById('password');
+      const icon = document.getElementById('eyeIcon');
+      if (pass.type === 'password') {
+        pass.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        pass.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
+
+    async function handleLogin(e) {
+      if (e) e.preventDefault();
+      const userId = document.getElementById('userId').value.trim();
+      const password = document.getElementById('password').value;
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!userId || !password) {
+        showToast('Please enter both User ID and password.', 'warning');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Verifying credentials...</span>`;
+
+      try {
+        const res = await api.login({ userId, password, expectedRole: currentRole });
+        api.setAuth(res.token, res.user);
+        showToast(`Welcome, ${res.user.headName || res.user.officerName || res.user.userId}! Redirecting...`, 'success');
+
+        setTimeout(() => {
+          if (res.user.role === 'citizen') {
+            window.location.href = '/dashboard.html';
+          } else {
+            window.location.href = '/officer.html';
+          }
+        }, 600);
+      } catch (err) {
+        showToast(err.message, 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i data-lucide="log-in"></i><span>Sign In to JanSetu</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    // Check query params for autologin or portal selection
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const portal = params.get('portal');
+      const autologin = params.get('autologin');
+
+      if (portal === 'officer' || autologin === 'officer') {
+        switchRole('officer');
+      } else {
+        switchRole('citizen');
+      }
+
+      if (autologin === 'citizen') {
+        fillCreds('FAM-1001', 'citizen123', 'citizen');
+        handleLogin();
+      } else if (autologin === 'officer') {
+        fillCreds('OFFICER-01', 'officer123', 'officer');
+        handleLogin();
+      }
+    });
+  </script>
+</body>
+</html>

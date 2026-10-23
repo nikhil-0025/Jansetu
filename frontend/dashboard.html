@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Citizen Dashboard — JanSetu (जनसेतु) | Har Parivaar, Har Haq, Ek Setu</title>
+  <meta name="description" content="JanSetu Citizen Portal - Unified Household Welfare and Public Documentation Dashboard">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="/styles/dashboard.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- National Top Gov Ribbon -->
+  <header class="gov-ribbon">
+    <div class="gov-ribbon-left">
+      <span class="gov-tricolor"></span>
+      <span>भारत सरकार | Government of India — JanSetu Unified Citizen Welfare Portal</span>
+    </div>
+    <div class="gov-ribbon-right">
+      <span id="systemModeTag" style="color: #fed7aa; font-weight: 600;">Demo Storage Mode</span>
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Portal Header (SmartSeva Layout) -->
+  <header class="portal-header">
+    <div class="portal-header-inner">
+      <div class="brand-section">
+        <img src="/assets/logo.svg" alt="JanSetu Emblem" class="brand-logo-img">
+        <div class="brand-text">
+          <h1>JanSetu <span class="hindi">जनसेतु</span></h1>
+          <div class="brand-tagline" data-i18n="tagline">Har Parivaar, Har Haq, Ek Setu.</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Account Identifier -->
+        <div class="account-pill" title="Current Authenticated Household">
+          <span class="pill-dot"></span>
+          <span style="color: var(--text-muted); font-size: 0.75rem;">Household:</span>
+          <span id="headerFamilyId" style="color: var(--primary); font-family: Outfit, sans-serif; font-weight: 700;">FAM-1001</span>
+        </div>
+
+        <!-- Notification Bell -->
+        <div style="position: relative;">
+          <button class="icon-btn" id="notifBellBtn" onclick="toggleNotifications()" title="Notifications" aria-label="Notifications">
+            <i data-lucide="bell"></i>
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          
+          <!-- Notification Dropdown Menu -->
+          <div id="notifDropdown" style="display: none; position: absolute; right: 0; top: 48px; width: 340px; background: #ffffff; border-radius: 12px; box-shadow: var(--shadow-xl); border: 1px solid var(--border-color); z-index: 100; overflow: hidden;">
+            <div style="padding: 12px 16px; background: var(--bg-subtle); border-bottom: 1px solid var(--border-color); font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+              <span>Notifications & Alerts</span>
+              <span id="notifCountText" style="font-size: 0.75rem; color: var(--text-muted);">0 New</span>
+            </div>
+            <div id="notifList" style="max-height: 280px; overflow-y: auto; padding: 8px;">
+              <div style="padding: 14px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">No unread alerts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Officer Portal Switch -->
+        <a href="/login.html?autologin=officer" class="btn btn-secondary btn-sm" title="Switch to Government Officer Portal">
+          <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i>
+          <span>Officer View</span>
+        </a>
+
+        <!-- Logout -->
+        <button onclick="handleLogout()" class="btn btn-secondary btn-sm" title="Sign Out">
+          <i data-lucide="log-out" style="width: 14px; height: 14px;"></i>
+          <span data-i18n="navLogout">Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+
+    <!-- Interactive Hackathon Scenario Testing Toolbar -->
+    <div class="scenario-bar">
+      <div class="scenario-title">
+        <i data-lucide="zap"></i>
+        <span>Hackathon 1-Click Scenario Walkthrough:</span>
+      </div>
+      <div class="scenario-btns">
+        <button onclick="triggerScenarioA()" class="scenario-btn" title="Simulate Amit Sharma requesting separation to FAM-2001">
+          Scenario A: Household Separation
+        </button>
+        <button onclick="triggerScenarioB()" class="scenario-btn" title="Attempt repeat claim on PMAY Housing for Dwelling D-104">
+          Scenario B: Duplicate Household Benefit
+        </button>
+        <button onclick="triggerScenarioC()" class="scenario-btn" title="Check PM-KISAN for Rahul vs Amit individually">
+          Scenario C: Individual Scheme
+        </button>
+        <button onclick="triggerScenarioD()" class="scenario-btn" title="Upload sample document and test verification">
+          Scenario D: Document Vault
+        </button>
+        <button onclick="triggerScenarioE()" class="scenario-btn" title="View Application Tracking Status">
+          Scenario E: Track Applications
+        </button>
+        <button onclick="triggerScenarioF()" class="scenario-btn" title="Lodge citizen name correction request">
+          Scenario F: Name Correction
+        </button>
+        <button onclick="resetDemoData()" class="scenario-btn" style="background:#f1f5f9; border-color:#cbd5e1; color:#475569;" title="Reset environment">
+          🔄 Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Welcome Section (SmartSeva Style) -->
+    <section class="welcome-banner">
+      <div class="welcome-content">
+        <h2>
+          <span data-i18n="welcomeBack">Welcome back,</span>
+          <span id="welcomeCitizenName" style="color: #fed7aa;">Rahul Sharma</span>
+        </h2>
+        <p style="font-size: 0.95rem; color: #cbd5e1; max-width: 780px; line-height: 1.5;">
+          Access your verified family registry, explore government welfare entitlements, check real-time eligibility with transparent criteria, and manage household records with JanSetu.
+        </p>
+
+        <div class="welcome-meta">
+          <div class="welcome-meta-item">
+            <i data-lucide="home" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
+            <span><span data-i18n="familyIdLabel">Family ID:</span> <strong id="bannerFamilyId">FAM-1001</strong></span>
+          </div>
+
+          <div class="welcome-meta-item">
+            <i data-lucide="user" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
+            <span>Citizen ID (Head): <strong id="bannerCitizenId">CIT-1001</strong></span>
+          </div>
+
+          <div class="welcome-meta-item">
+            <i data-lucide="map-pin" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
+            <span>Dwelling: <strong id="bannerDwellingRef">D-104 (Kutcha)</strong></span>
+          </div>
+
+          <div class="welcome-meta-item">
+            <span class="badge badge-verified" id="bannerStatusBadge">
+              <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i>
+              <span id="bannerStatusText">Verified Household</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Access Cards (SmartSeva Reference Layout) -->
+    <section class="quick-access-section">
+      <div class="section-title">
+        <h3 data-i18n="quickAccessTitle">Quick Access Services</h3>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">Direct Navigation</span>
+      </div>
+
+      <div class="quick-cards-grid">
+        <!-- 1. All Schemes -->
+        <a href="#schemesTab" onclick="switchTab('schemes')" class="quick-card" id="cardQuickSchemes">
+          <span class="quick-card-badge badge-saffron" id="countSchemesBadge">6 Schemes</span>
+          <div class="quick-card-icon icon-blue">
+            <i data-lucide="book-open"></i>
+          </div>
+          <div>
+            <div class="quick-card-title" data-i18n="navSchemes">All Schemes</div>
+            <div class="quick-card-desc">Browse central & state welfare programmes</div>
+          </div>
+        </a>
+
+        <!-- 2. My Applications -->
+        <a href="#applicationsTab" onclick="switchTab('applications')" class="quick-card" id="cardQuickApps">
+          <span class="quick-card-badge badge-info" id="countAppsBadge">1 Active</span>
+          <div class="quick-card-icon icon-green">
+            <i data-lucide="file-check"></i>
+          </div>
+          <div>
+            <div class="quick-card-title" data-i18n="navApplications">My Applications</div>
+            <div class="quick-card-desc">Track status & benefit disbursement</div>
+          </div>
+        </a>
+
+        <!-- 3. My Documents Vault -->
+        <a href="#documentsTab" onclick="switchTab('documents')" class="quick-card" id="cardQuickDocs">
+          <span class="quick-card-badge badge-verified" id="countDocsBadge">6 Vault Docs</span>
+          <div class="quick-card-icon icon-amber">
+            <i data-lucide="folder-lock"></i>
+          </div>
+          <div>
+            <div class="quick-card-title" data-i18n="navDocuments">My Documents</div>
+            <div class="quick-card-desc">Upload & manage verified certificates</div>
+          </div>
+        </a>
+
+        <!-- 4. Family Members & Registry -->
+        <a href="#familyTab" onclick="switchTab('family')" class="quick-card" id="cardQuickFamily">
+          <span class="quick-card-badge badge-neutral" id="countFamilyBadge">4 Members</span>
+          <div class="quick-card-icon icon-purple">
+            <i data-lucide="users"></i>
+          </div>
+          <div>
+            <div class="quick-card-title" data-i18n="navFamily">Family Members</div>
+            <div class="quick-card-desc">Interactive tree & Citizen ID registry</div>
+          </div>
+        </a>
+
+        <!-- 5. Household Separation (Key Feature) -->
+        <a href="#separationTab" onclick="switchTab('separation')" class="quick-card special-separation" id="cardQuickSep">
+          <span class="quick-card-badge badge-saffron">Core Feature</span>
+          <div class="quick-card-icon icon-orange">
+            <i data-lucide="git-branch"></i>
+          </div>
+          <div>
+            <div class="quick-card-title" data-i18n="navSeparation">Household Separation</div>
+            <div class="quick-card-desc">Form new household while keeping family bond</div>
+          </div>
+        </a>
+
+        <!-- 6. Profile Corrections -->
+        <a href="#profileTab" onclick="switchTab('profile')" class="quick-card" id="cardQuickProfile">
+          <div class="quick-card-icon icon-teal">
+            <i data-lucide="user-cog"></i>
+          </div>
+          <div>
+            <div class="quick-card-title" data-i18n="navCorrections">Profile & Name Change</div>
+            <div class="quick-card-desc">Request official verified corrections</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="view-tabs">
+      <button class="tab-btn active" id="tabBtnOverview" onclick="switchTab('overview')">
+        <i data-lucide="layout-dashboard"></i>
+        <span>Dashboard Overview</span>
+      </button>
+      <button class="tab-btn" id="tabBtnSchemes" onclick="switchTab('schemes')">
+        <i data-lucide="list"></i>
+        <span>Schemes Catalogue</span>
+      </button>
+      <button class="tab-btn" id="tabBtnApplications" onclick="switchTab('applications')">
+        <i data-lucide="clock"></i>
+        <span>My Applications</span>
+      </button>
+      <button class="tab-btn" id="tabBtnDocuments" onclick="switchTab('documents')">
+        <i data-lucide="file-text"></i>
+        <span>Document Vault</span>
+      </button>
+      <button class="tab-btn" id="tabBtnFamily" onclick="switchTab('family')">
+        <i data-lucide="network"></i>
+        <span>Family Registry & Tree</span>
+      </button>
+      <button class="tab-btn" id="tabBtnSeparation" onclick="switchTab('separation')">
+        <i data-lucide="split"></i>
+        <span>Household Separation</span>
+      </button>
+      <button class="tab-btn" id="tabBtnProfile" onclick="switchTab('profile')">
+        <i data-lucide="edit-3"></i>
+        <span>Name & Profile Corrections</span>
+      </button>
+    </nav>
+
+    <!-- TAB 1: DASHBOARD OVERVIEW (SmartSeva Reference Layout) -->
+    <div id="viewOverview" class="tab-view active">
+      <!-- Search & Filters -->
+      <div class="search-filter-bar">
+        <div class="search-input-wrapper">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" id="schemeSearchInput" placeholder="Search welfare schemes (e.g. Housing, Kisan, Ayushman)..." oninput="filterSchemesLive()">
+        </div>
+        <div class="category-chips">
+          <button class="cat-chip active" onclick="filterSchemeCategory('all')">All Categories</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Housing')">Housing</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Agriculture')">Agriculture</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Healthcare')">Healthcare</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Food Security')">Food Security</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Energy & Clean Fuel')">Energy / LPG</button>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Main Column (Left) -->
+        <div>
+          <!-- Eligible Schemes Section -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <h3 style="font-size: 1.05rem;" data-i18n="eligibleSchemes">Eligible Schemes For Your Household</h3>
+              <a href="#schemesTab" onclick="switchTab('schemes')" style="font-size: 0.825rem; font-weight: 600;">View All Schemes &rarr;</a>
+            </div>
+            <div class="card-body" style="padding: 16px;">
+              <div id="overviewSchemesGrid" class="schemes-grid">
+                <!-- Dynamically loaded -->
+                <div style="text-align: center; padding: 30px; color: var(--text-muted);">Loading schemes catalogue...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Applications Tracker -->
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <h3 style="font-size: 1.05rem;" data-i18n="recentApplications">Recent Applications & Benefits</h3>
+              <button onclick="openApplyModal()" class="btn btn-primary btn-sm">
+                <i data-lucide="plus"></i> New Application
+              </button>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <div id="recentApplicationsList">
+                <!-- Dynamically loaded -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Separation Status Widget (if any) -->
+          <div id="separationAlertCard" style="display: none; margin-bottom: 24px;"></div>
+        </div>
+
+        <!-- Sidebar Column (Right) -->
+        <div>
+          <!-- Household Information Widget (SmartSeva Style) -->
+          <div class="sidebar-widget">
+            <div class="widget-title">
+              <span>Household Information</span>
+              <span class="badge badge-verified" id="sideStatusBadge">Verified</span>
+            </div>
+            <table class="info-table">
+              <tr>
+                <td>Family ID:</td>
+                <td id="infoFamilyId">FAM-1001</td>
+              </tr>
+              <tr>
+                <td>Head of Household:</td>
+                <td id="infoHeadName">Rahul Sharma</td>
+              </tr>
+              <tr>
+                <td>Dwelling Ref:</td>
+                <td id="infoDwellingRef">D-104</td>
+              </tr>
+              <tr>
+                <td>Dwelling Type:</td>
+                <td id="infoDwellingType">Kutcha</td>
+              </tr>
+              <tr>
+                <td>Ration Card No:</td>
+                <td id="infoRationCard">RC-UP-2024-98421</td>
+              </tr>
+              <tr>
+                <td>Income Category:</td>
+                <td><span class="badge badge-saffron" id="infoIncomeCat">BPL (₹1,20,000/yr)</span></td>
+              </tr>
+              <tr>
+                <td>Location:</td>
+                <td id="infoAddress">Varanasi, Uttar Pradesh</td>
+              </tr>
+            </table>
+            <div style="margin-top: 14px; text-align: center;">
+              <button onclick="switchTab('family')" class="btn btn-secondary btn-sm" style="width: 100%;">
+                <i data-lucide="users"></i> View All 4 Members
+              </button>
+            </div>
+          </div>
+
+          <!-- Pending Document Verification Widget -->
+          <div class="sidebar-widget">
+            <div class="widget-title">
+              <span data-i18n="pendingDocs">Pending Documents</span>
+              <span class="badge badge-pending" id="sidePendingDocCount">1 Pending</span>
+            </div>
+            <div id="sidePendingDocsList" style="font-size: 0.825rem;">
+              <!-- Dynamically loaded -->
+            </div>
+            <div style="margin-top: 14px;">
+              <button onclick="openUploadDocModal()" class="btn btn-secondary btn-sm" style="width: 100%;">
+                <i data-lucide="upload"></i> Upload Supporting Document
+              </button>
+            </div>
+          </div>
+
+          <!-- Help & Assistance Widget -->
+          <div class="sidebar-widget" style="background: #f8fafc; border: 1px dashed var(--border-color-dark);">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="width: 36px; height: 36px; border-radius: 8px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <i data-lucide="help-circle"></i>
+              </div>
+              <div>
+                <h4 style="font-size: 0.9rem; margin-bottom: 4px;">JanSetu Assistance Helpline</h4>
+                <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+                  Need assistance with scheme eligibility or household separation? Reach our Block Seva Desk or talk to JanSetu AI Saathi.
+                </p>
+                <button onclick="toggleAssistant()" class="btn btn-primary btn-sm" style="font-size: 0.75rem;">
+                  <i data-lucide="bot"></i> Open JanSetu Saathi
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: SCHEMES CATALOGUE -->
+    <div id="viewSchemes" class="tab-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Government Scheme Catalogue</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Rule-based eligibility engine evaluates individual and household conditions with transparent explanations.
+            </p>
+          </div>
+          <button onclick="openApplyModal()" class="btn btn-primary btn-sm">
+            <i data-lucide="send"></i> Direct Scheme Application
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="allSchemesGrid" class="schemes-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MY APPLICATIONS -->
+    <div id="viewApplications" class="tab-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Application Tracker & Recorded Benefits</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Track applications, officer review notes, decision rationale, and historical benefit disbursements.
+            </p>
+          </div>
+          <button onclick="openApplyModal()" class="btn btn-primary btn-sm">
+            <i data-lucide="plus"></i> Submit New Claim
+          </button>
+        </div>
+        <div class="card-body" style="padding: 0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>App ID</th>
+                <th>Scheme Name</th>
+                <th>Type</th>
+                <th>Applicant</th>
+                <th>Dwelling</th>
+                <th>Status</th>
+                <th>Duplicate Flag</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTableBody">
+              <!-- Dynamically loaded -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: MY DOCUMENTS VAULT -->
+    <div id="viewDocuments" class="tab-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Verified Document Vault</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Manage individual and household supporting records (Ration Card, Income, Khatauni land records, Certificates).
+            </p>
+          </div>
+          <button onclick="openUploadDocModal()" class="btn btn-primary btn-sm">
+            <i data-lucide="upload"></i> Upload New Document
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="documentVaultGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: FAMILY / HOUSEHOLD MANAGEMENT -->
+    <div id="viewFamily" class="tab-view" style="display: none;">
+      <!-- Household Overview Header Card -->
+      <div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--secondary);">
+        <div class="card-header" style="flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <h3 style="font-size: 1.2rem; margin: 0;">Household Management: <span id="familyHeaderId">FAM-1001</span></h3>
+              <span class="badge badge-warning" style="font-size: 0.72rem; font-weight: 500;" title="Local JanSetu System Household ID - Not an official National/Government Family ID">
+                Internal Household ID
+              </span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; margin-bottom: 0;">
+              Household Head: <strong id="familyHeaderHeadName">Rahul Sharma</strong> • Total Members: <strong id="familyHeaderMemberCount">4</strong> • Dwelling: <span id="familyHeaderDwelling">D-104</span>
+            </p>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;">
+              ⚠️ <em>Notice: JanSetu internal household IDs are system-specific identifiers and are not official National Government Family IDs.</em>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onclick="openAddMemberModal()" class="btn btn-primary btn-sm">
+              <i data-lucide="user-plus"></i> Add Family Member
+            </button>
+            <button onclick="switchTab('separation')" class="btn btn-saffron btn-sm">
+              <i data-lucide="git-branch"></i> Request Household Separation
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Family Relationship Tree -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Interactive Family Relationship Tree</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Visual representation of family relationships (Brother, Spouse, Parent-Child). Biological family bonds persist across household separations!
+            </p>
+          </div>
+        </div>
+        <div class="card-body" style="background: #f8fafc; padding: 20px;">
+          <div id="familyTreeSvgContainer" style="width: 100%; min-height: 380px;">
+            <!-- SVG rendered here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Member Registry Table -->
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <h3 style="font-size: 1.05rem;">Current Household Members (Family ID: <span id="familyTableId">FAM-1001</span>)</h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0;">
+              Members registered under this household record. Newly added members require officer verification before being marked verified.
+            </p>
+          </div>
+          <button onclick="openAddMemberModal()" class="btn btn-secondary btn-sm">
+            <i data-lucide="user-plus"></i> Add Member
+          </button>
+        </div>
+        <div class="card-body" style="padding: 0; overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Citizen ID</th>
+                <th>Full Name</th>
+                <th>Relationship</th>
+                <th>Age & Gender</th>
+                <th>Verification Status</th>
+                <th>Occupation</th>
+                <th>Farmer Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="familyMembersTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 6: HOUSEHOLD SEPARATION (Core Feature) -->
+    <div id="viewSeparation" class="tab-view" style="display: none;">
+      <div class="card" style="margin-bottom: 24px; border-left: 5px solid #ea580c;">
+        <div class="card-header">
+          <div>
+            <span class="badge badge-saffron" style="margin-bottom: 4px;">Key Platform Capability</span>
+            <h3 style="font-size: 1.25rem;">Household Separation (Parivaar Vibhajan)</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.45; margin-top: 4px;">
+              Allows adult family members moving into an independent home or cooking unit to establish a separate household.
+              <br><strong>Key Law of JanSetu:</strong> A new Family ID (e.g. FAM-2001) is issued upon officer verification. Citizen IDs (e.g. CIT-1002) and biological family relationships (e.g. brothers) remain permanently preserved.
+            </p>
+          </div>
+          <button onclick="openSeparationWizard()" class="btn btn-saffron">
+            <i data-lucide="plus-circle"></i> Initiate Separation Request
+          </button>
+        </div>
+        <div class="card-body">
+          <h4 style="font-size: 1rem; margin-bottom: 12px; color: var(--primary);">Active & Historical Separation Requests</h4>
+          <div id="separationRequestsContainer">
+            <!-- Dynamically loaded -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: PROFILE & NAME CORRECTIONS -->
+    <div id="viewProfile" class="tab-view" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Official Profile & Name Correction Requests</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+              Request legal corrections to citizen names, dates of birth, or addresses. Changes require verified supporting evidence and officer approval.
+            </p>
+          </div>
+          <button onclick="openCorrectionModal()" class="btn btn-primary btn-sm">
+            <i data-lucide="edit"></i> Request New Correction
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="correctionsListContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- JanSetu AI Saathi Floating Button & Drawer -->
+  <button id="openAssistantBtn" class="btn btn-saffron" style="position: fixed; bottom: 24px; right: 24px; z-index: 999; border-radius: 30px; box-shadow: var(--shadow-xl); padding: 12px 20px; font-weight: 700;">
+    <i data-lucide="bot"></i>
+    <span data-i18n="btnAssistant">JanSetu AI Saathi</span>
+  </button>
+
+  <div id="assistantDrawer" class="assistant-drawer">
+    <div class="assistant-header">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="bot" style="color: #ffd8a8;"></i>
+        <div>
+          <div style="font-weight: 700; font-size: 0.95rem;">JanSetu AI Saathi</div>
+          <div style="font-size: 0.7rem; color: #cbd5e1;">Rule-Based Welfare Guidance Assistant</div>
+        </div>
+      </div>
+      <button id="closeAssistantBtn" style="background: none; border: none; color: #ffffff; cursor: pointer;">&times;</button>
+    </div>
+
+    <div class="assistant-body">
+      <!-- Quick chip prompts -->
+      <div class="assistant-chips">
+        <button class="assistant-chip" data-query="How does Household Separation work?">Household Separation?</button>
+        <button class="assistant-chip" data-query="What is the difference between Family ID and Citizen ID?">Family vs Citizen ID?</button>
+        <button class="assistant-chip" data-query="PMAY housing scheme rules">PMAY Housing?</button>
+        <button class="assistant-chip" data-query="Am I eligible for PM-KISAN?">PM-KISAN rules?</button>
+        <button class="assistant-chip" data-query="परिवार अलग कैसे करें?">परिवार अलग कैसे करें? (हिंदी)</button>
+      </div>
+
+      <div id="chatMessages" style="flex: 1; overflow-y: auto;">
+        <div style="padding: 10px 14px; background: #ffffff; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 0.85rem; line-height: 1.45; margin-bottom: 12px;">
+          🙏 Namaste! I am <strong>JanSetu Saathi</strong>. You can ask me about welfare schemes, required documents, eligibility rules, or how household separation works in English or Hindi.
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 6px;">
+            ⚠️ <em>Demonstration assistant. Official decisions are made exclusively by authorized government officers.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="assistant-footer">
+      <input type="text" id="assistantInput" class="form-control" placeholder="Ask in English or Hindi..." style="font-size: 0.85rem; padding: 8px 12px;">
+      <button id="sendAssistantMsg" class="btn btn-primary btn-sm" style="padding: 0 14px;">
+        <i data-lucide="send"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 1: Live Scheme Eligibility & Duplicate Result Modal -->
+  <div class="modal-overlay" id="eligibilityModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="check-circle" style="color: var(--secondary);"></i>
+          <span id="eligModalSchemeName">Scheme Eligibility Assessment</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('eligibilityModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Duplicate Warning Alert Box (if triggered) -->
+        <div id="duplicateAlertBox" style="display: none;" class="duplicate-explain-card">
+          <h4>
+            <i data-lucide="alert-triangle"></i>
+            <span id="duplicateAlertTitle">POTENTIAL DUPLICATE CLAIM WARNING</span>
+          </h4>
+          <p id="duplicateAlertExplanation"></p>
+          <div style="margin-top: 8px; font-size: 0.78rem; color: #9a3412; font-weight: 600;" id="duplicateOfficerAction"></div>
+        </div>
+
+        <!-- Overall Status Banner -->
+        <div id="eligibilityStatusBanner" style="padding: 14px 18px; border-radius: 10px; margin-bottom: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+          <!-- Dynamically filled -->
+        </div>
+
+        <!-- Passed Criteria -->
+        <div style="margin-bottom: 18px;">
+          <h5 style="font-size: 0.85rem; text-transform: uppercase; color: var(--success-text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="check" style="width: 14px; height: 14px;"></i> Conditions Satisfied
+          </h5>
+          <ul id="passedConditionsList" style="list-style: none; font-size: 0.85rem; line-height: 1.6; color: var(--text-main);"></ul>
+        </div>
+
+        <!-- Failed Criteria -->
+        <div id="failedConditionsContainer" style="margin-bottom: 18px; display: none;">
+          <h5 style="font-size: 0.85rem; text-transform: uppercase; color: var(--danger-text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="x" style="width: 14px; height: 14px;"></i> Unsatisfied Conditions
+          </h5>
+          <ul id="failedConditionsList" style="list-style: none; font-size: 0.85rem; line-height: 1.6; color: var(--danger-text);"></ul>
+        </div>
+
+        <!-- Missing Documents -->
+        <div id="missingDocsContainer" style="margin-bottom: 18px; display: none;">
+          <h5 style="font-size: 0.85rem; text-transform: uppercase; color: var(--warning-text); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i> Missing / Unverified Required Documents
+          </h5>
+          <ul id="missingDocsList" style="list-style: none; font-size: 0.85rem; line-height: 1.6; color: var(--warning-text);"></ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('eligibilityModal')" class="btn btn-secondary">Close</button>
+        <button id="btnProceedToApply" onclick="handleProceedFromEligModal()" class="btn btn-primary">Proceed to Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Direct Scheme Application Modal -->
+  <div class="modal-overlay" id="applyModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="send" style="color: var(--primary);"></i>
+          <span>Lodge Welfare Scheme Application</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('applyModal')">&times;</button>
+      </div>
+      <form id="applySchemeForm" onsubmit="handleApplySubmit(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="applySchemeSelect">Select Welfare Scheme</label>
+            <select id="applySchemeSelect" class="form-control" required onchange="handleApplySchemeChange()">
+              <!-- Options loaded -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="applyCitizenSelect">Applying Beneficiary Member</label>
+            <select id="applyCitizenSelect" class="form-control" required>
+              <!-- Options loaded -->
+            </select>
+            <div class="form-help">Individual schemes evaluate this specific citizen; household schemes evaluate the dwelling & family.</div>
+          </div>
+
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
+            ℹ️ Submitting an application automatically triggers rule-based eligibility calculation, duplicate claim cross-referencing, and creates an immutable entry in the government verification queue.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('applyModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitApp" class="btn btn-primary">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Household Separation Request Wizard -->
+  <div class="modal-overlay" id="separationModal">
+    <div class="modal-dialog" style="max-width: 720px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="git-branch" style="color: var(--accent-saffron);"></i>
+          <span>Request Household Separation (Parivaar Vibhajan)</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('separationModal')">&times;</button>
+      </div>
+      <form id="separationForm" onsubmit="handleSeparationSubmit(event)">
+        <div class="modal-body">
+          <div style="background: #fff7ed; border: 1px solid #fed7aa; padding: 12px; border-radius: 8px; font-size: 0.825rem; color: #9a3412; margin-bottom: 16px;">
+            <strong>Important Principle:</strong> Household separation creates a new <strong>Family ID</strong> for the separating members. Each citizen's permanent <strong>Citizen ID</strong> and biological family relationships (e.g. brothers) are strictly preserved.
+          </div>
+
+          <!-- Step 1: Member Selection -->
+          <div class="form-group">
+            <label class="form-label">Step 1: Select Member(s) Moving to the New Household</label>
+            <div id="separationMemberCheckboxes" style="display: flex; flex-direction: column; gap: 8px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+              <!-- Checkboxes dynamically populated -->
+            </div>
+            <div class="form-help">At least one member must remain in the original household.</div>
+          </div>
+
+          <!-- Step 2: New Household Address -->
+          <div class="form-group">
+            <label class="form-label">Step 2: Proposed New Independent Address</label>
+            <input type="text" id="sepAddressLine1" class="form-control" value="Near New Panchayat Office, Ward 3" placeholder="Address Line 1" required style="margin-bottom: 8px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <input type="text" id="sepDistrict" class="form-control" value="Varanasi" placeholder="District" required>
+              <input type="text" id="sepPincode" class="form-control" value="221001" placeholder="PIN Code" required>
+            </div>
+          </div>
+
+          <!-- Step 3: New Dwelling Reference -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="sepDwellingRef">New Dwelling Unit Ref</label>
+              <input type="text" id="sepDwellingRef" class="form-control" value="D-210" placeholder="e.g. D-210" required>
+              <div class="form-help">Independent physical structure.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sepDate">Effective Separation Date</label>
+              <input type="date" id="sepDate" class="form-control" required>
+            </div>
+          </div>
+
+          <!-- Step 4: Reason & Documents -->
+          <div class="form-group">
+            <label class="form-label" for="sepReason">Step 3: Reason for Separation</label>
+            <textarea id="sepReason" class="form-control" rows="2" placeholder="e.g. Setting up independent residence following professional employment / separate cooking hearth." required>Setting up independent residence and cooking hearth in Ward 3 following employment.</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Step 4: Attached Supporting Evidence</label>
+            <div style="background: #f8fafc; border: 1px dashed var(--border-color); padding: 10px; border-radius: 8px; font-size: 0.8rem; color: var(--text-muted);">
+              📄 Attached: <strong>Mutual Family Partition Declaration / Rent Agreement (Affidavit)</strong>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('separationModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitSeparation" class="btn btn-saffron">
+            <i data-lucide="check"></i> Submit Separation Request
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Document Upload Modal -->
+  <div class="modal-overlay" id="uploadDocModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="upload" style="color: var(--primary);"></i>
+          <span>Upload Supporting Document</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('uploadDocModal')">&times;</button>
+      </div>
+      <form id="uploadDocForm" onsubmit="handleDocUpload(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="docTitle">Document Title</label>
+            <input type="text" id="docTitle" class="form-control" placeholder="e.g. Tahsil Income Certificate 2025" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="docTypeSelect">Document Type</label>
+            <select id="docTypeSelect" class="form-control" required>
+              <option value="Ration Card">Ration Card (Household)</option>
+              <option value="Income Certificate">Income Certificate (Household / Individual)</option>
+              <option value="Residence Proof">Residence Proof / Electricity Bill (Household)</option>
+              <option value="Land Ownership Record (Khatauni)">Land Ownership Record (Khatauni) (Individual)</option>
+              <option value="Birth Certificate">Birth Certificate (Individual)</option>
+              <option value="Caste Certificate">Caste Certificate (Individual)</option>
+              <option value="Separation Order">Separation Agreement / Affidavit</option>
+              <option value="Other">Other Certificate / Diploma</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label" for="docScope">Document Scope</label>
+              <select id="docScope" class="form-control" onchange="handleDocScopeChange()">
+                <option value="Household">Household Level</option>
+                <option value="Individual">Individual Citizen</option>
+              </select>
+            </div>
+            <div class="form-group" id="docCitizenWrap" style="display: none;">
+              <label class="form-label" for="docCitizenSelect">Associated Member</label>
+              <select id="docCitizenSelect" class="form-control">
+                <!-- Dynamically populated -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="docFile">Choose File (PDF, JPG, PNG up to 5MB)</label>
+            <input type="file" id="docFile" class="form-control" accept=".pdf,.jpg,.jpeg,.png">
+            <div class="form-help">Synthetic simulation supported. A sample valid document will be registered if no file selected.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('uploadDocModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnUploadDocSubmit" class="btn btn-primary">Upload to Vault</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Profile Correction Request Modal (Scenario F) -->
+  <div class="modal-overlay" id="correctionModal">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="edit-3" style="color: var(--primary);"></i>
+          <span id="corrModalTitle">Official Profile Correction Request</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('correctionModal')">&times;</button>
+      <form id="correctionForm" onsubmit="handleCorrectionSubmit(event)" style="display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow: hidden; margin: 0;">
+        <input type="hidden" id="corrResubmitRequestId" value="">
+        <div class="modal-body">
+          <div id="corrResubmitNotice" style="display:none; background:#fffbeb; border-left:4px solid #f59e0b; padding:10px 14px; border-radius:6px; font-size:0.85rem; color:#92400e; margin-bottom:14px;">
+            <strong>Resubmission Mode:</strong> Additional evidence was requested by the reviewing officer. Please attach an updated, valid PDF document to continue your review.
+          </div>
+
+          <div class="form-group" id="corrCitizenSelectWrap">
+            <label class="form-label" for="corrCitizenSelect">Select Household Member</label>
+            <select id="corrCitizenSelect" class="form-control" required onchange="handleCorrCitizenChange()">
+              <!-- Options loaded dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group" id="corrFieldSelectWrap">
+            <label class="form-label" for="corrFieldSelect">Field to Correct</label>
+            <select id="corrFieldSelect" class="form-control" required onchange="handleCorrFieldChange()">
+              <option value="fullName">Full Name (Legal Name Correction / Gazette)</option>
+              <option value="dob">Date of Birth</option>
+              <option value="gender">Gender</option>
+              <option value="address">Residential Address</option>
+              <option value="occupation">Occupation</option>
+              <option value="education">Educational Qualification</option>
+              <option value="category">Social Category</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="corrCurrentValueWrap">
+            <label class="form-label">Currently Recorded Value</label>
+            <input type="text" id="corrCurrentValue" class="form-control" readonly style="background:#f1f5f9; color:#475569;" placeholder="Loading current value...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="corrProposedValue">Requested Correct Value <span class="mandatory-note">* Required</span></label>
+            <input type="text" id="corrProposedValue" class="form-control" placeholder="Enter verified correct legal value" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="corrReason">Correction Reason <span class="mandatory-note">* Mandatory</span></label>
+            <textarea id="corrReason" class="form-control" rows="2" placeholder="Explain reason for correction and describe why this profile change is required (mandatory)..." required></textarea>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">
+              A clear reason and valid supporting proof are strictly required for administrative review.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="corrDocTypeSelect">Supporting Document Type <span class="mandatory-note">* Required</span></label>
+            <select id="corrDocTypeSelect" class="form-control" required onchange="handleCorrDocTypeChange()">
+              <option value="">-- Select Supporting Document Type --</option>
+              <option value="Aadhaar Card">1. Aadhaar Card</option>
+              <option value="Voter ID Card">2. Voter ID Card</option>
+              <option value="Passport">3. Passport</option>
+              <option value="Matriculation / Class 10 Certificate">4. Matriculation / Class 10 Certificate</option>
+              <option value="Birth Certificate">5. Birth Certificate</option>
+              <option value="Driving Licence">6. Driving Licence</option>
+              <option value="PAN Card">7. PAN Card</option>
+              <option value="Other">8. Other (Specify Below)</option>
+            </select>
+          </div>
+
+          <!-- Dynamic Other Document Field -->
+          <div class="form-group" id="corrOtherDocTypeWrap" style="display:none;">
+            <label class="form-label" for="corrOtherDocType">Specify Document Type <span class="mandatory-note">* Required</span></label>
+            <input type="text" id="corrOtherDocType" class="form-control" placeholder="Enter the exact name of the official document">
+          </div>
+
+          <!-- Officer Discretion Legal Notice -->
+          <div style="background:#eff6ff; border-left:4px solid #2563eb; padding:10px 14px; border-radius:6px; font-size:0.825rem; color:#1e40af; margin-bottom:16px;">
+            <strong>Official Verification Notice:</strong> The reviewing officer independently assesses whether the submitted documentary proof is appropriate and sufficient for the requested correction. Submission does not imply automatic approval.
+          </div>
+
+          <!-- Supporting PDF Upload Section -->
+          <div class="form-group">
+            <label class="form-label">Supporting PDF Document <span class="mandatory-note">* PDF only (Max 5 MB)</span></label>
+            <input type="file" id="corrDocFile" accept=".pdf,application/pdf" style="display:none;" onchange="handleCorrFileSelected(event)">
+
+            <!-- Dropzone / Picker Button -->
+            <div id="corrUploadDropzone" onclick="triggerCorrFileInput()" style="border: 2px dashed #cbd5e1; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; background: #f8fafc; transition: all 0.2s ease;">
+              <i data-lucide="file-up" style="width: 32px; height: 32px; color: var(--secondary); margin-bottom: 6px;"></i>
+              <div style="font-weight: 600; font-size: 0.9rem; color: var(--primary);">Click to Select Supporting PDF Proof</div>
+              <div style="font-size: 0.775rem; color: var(--text-muted); margin-top: 2px;">Supported format: genuine PDF only. Maximum file size: 5 MB.</div>
+            </div>
+
+            <!-- Selected File Preview Card -->
+            <div id="corrFilePreviewCard" style="display: none; border: 1px solid #bfdbfe; background: #f0f7ff; border-radius: 8px; padding: 12px 14px; margin-top: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="background: #ef4444; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 6px; border-radius: 4px;">PDF</div>
+                  <div>
+                    <div id="corrFileName" style="font-weight: 600; font-size: 0.85rem; color: #1e293b; word-break: break-all;">document.pdf</div>
+                    <div id="corrFileSize" style="font-size: 0.75rem; color: #64748b;">0 KB</div>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" onclick="triggerCorrFileInput()" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 4px 8px;">Replace</button>
+                  <button type="button" onclick="removeCorrFile()" class="btn btn-danger btn-sm" style="font-size: 0.75rem; padding: 4px 8px;">Remove</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Error message container -->
+            <div id="corrFileError" style="display: none; color: #dc2626; font-size: 0.8rem; margin-top: 6px;"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('correctionModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitCorr" class="btn btn-primary">Submit for Officer Verification</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 6: Add Family Member Modal -->
+  <div class="modal-overlay" id="addMemberModal">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="user-plus" style="color: var(--primary);"></i>
+          <span>Add Household Family Member</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('addMemberModal')">&times;</button>
+      </div>
+      <form id="addMemberForm" onsubmit="handleAddMemberSubmit(event)" style="display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 0;">
+        <div class="modal-body">
+          <div style="background:#eff6ff; border-left:4px solid #2563eb; padding:10px 14px; border-radius:6px; font-size:0.8rem; color:#1e40af; margin-bottom:14px;">
+            <strong>Household Membership Law:</strong> Members added here are registered to your household record with a local JanSetu Citizen ID. All newly added members are placed into <strong>Pending Verification</strong> status awaiting official administrative review.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="addMemFullName">Full Legal Name <span class="mandatory-note">* Required</span></label>
+            <input type="text" id="addMemFullName" class="form-control" placeholder="e.g. Priya Sharma" required minlength="2">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="addMemDob">Date of Birth <span class="mandatory-note">* Required</span></label>
+              <input type="date" id="addMemDob" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="addMemGender">Gender <span class="mandatory-note">* Required</span></label>
+              <select id="addMemGender" class="form-control" required>
+                <option value="">-- Select Gender --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="addMemRelationship">Relationship to Household Head <span class="mandatory-note">* Required</span></label>
+            <select id="addMemRelationship" class="form-control" required>
+              <option value="">-- Select Relationship --</option>
+              <option value="Spouse">Spouse</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Father">Father</option>
+              <option value="Mother">Mother</option>
+              <option value="Brother">Brother</option>
+              <option value="Sister">Sister</option>
+              <option value="Other Relative">Other Relative</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="addMemOccupation">Occupation</label>
+              <input type="text" id="addMemOccupation" class="form-control" placeholder="e.g. Teacher, Student, Farmer">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="addMemEducation">Education</label>
+              <input type="text" id="addMemEducation" class="form-control" placeholder="e.g. Graduate, Secondary School">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="addMemCategory">Social Category</label>
+              <select id="addMemCategory" class="form-control">
+                <option value="General">General</option>
+                <option value="OBC">OBC</option>
+                <option value="SC">SC</option>
+                <option value="ST">ST</option>
+              </select>
+            </div>
+            <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; margin-top: 10px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer;">
+                <input type="checkbox" id="addMemIsFarmer" onchange="toggleFarmerLandField()">
+                <span>Engaged in Farming / Cultivation</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; cursor: pointer; margin-top: 6px;">
+                <input type="checkbox" id="addMemHasDisability">
+                <span>Person with Benchmark Disability</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" id="addMemLandWrap" style="display: none;">
+            <label class="form-label" for="addMemLandholding">Agricultural Landholding (Hectares)</label>
+            <input type="number" id="addMemLandholding" class="form-control" placeholder="0.0" step="0.1" min="0">
+          </div>
+
+          <!-- Supporting Verification Reference (Synthetic Integration) -->
+          <div style="border-top: 1px dashed var(--border-color); padding-top: 14px; margin-top: 14px;">
+            <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 4px;">
+              Verification Document Reference <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">(Optional / Simulated Verification)</span>
+            </h4>
+            <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">
+              If this member has an existing official certificate (Birth Certificate, Ration Card, EWS, Caste), enter reference details to check against verified test records.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="addMemCertType">Certificate Type</label>
+                <select id="addMemCertType" class="form-control">
+                  <option value="">-- No Certificate Provided --</option>
+                  <option value="BIRTH">Birth Certificate</option>
+                  <option value="RATION_CARD">Ration Card Reference</option>
+                  <option value="EWS">EWS Certificate</option>
+                  <option value="INCOME">Income Certificate</option>
+                  <option value="CASTE">Caste Certificate</option>
+                  <option value="DISABILITY">Disability Certificate</option>
+                  <option value="DOMICILE">Domicile / Residence Proof</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="addMemCertId">Certificate Reference ID</label>
+                <input type="text" id="addMemCertId" class="form-control" placeholder="e.g. BC-2014-9901">
+              </div>
+            </div>
+
+            <div style="background:#fffbeb; border-left:4px solid #f59e0b; padding:8px 12px; border-radius:6px; font-size:0.75rem; color:#92400e;">
+              <strong>Simulated Verification Notice:</strong> JanSetu operates in simulated verification mode using test records. Matches do NOT constitute official Government verification and members require authorized administrative approval.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('addMemberModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnAddMemberSubmit" class="btn btn-primary">
+            <i data-lucide="plus-circle" style="width:14px;height:14px;"></i> Add to Household
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 7: Member Details & Audit History Modal -->
+  <div class="modal-overlay" id="memberDetailsModal">
+    <div class="modal-dialog" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="user" style="color: var(--primary);"></i>
+          <span id="memDetailModalTitle">Member Details</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('memberDetailsModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="overflow-y: auto; max-height: 70vh;">
+        <div id="memDetailContent">
+          <!-- Dynamically loaded -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeModal('memberDetailsModal')" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 8: Remove Member Confirmation Modal -->
+  <div class="modal-overlay" id="removeMemberModal">
+    <div class="modal-dialog" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title" style="color: var(--danger-text);">
+          <i data-lucide="user-x" style="color: var(--danger-text);"></i>
+          <span>Remove Household Member</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('removeMemberModal')">&times;</button>
+      </div>
+      <form id="removeMemberForm" onsubmit="handleRemoveMemberSubmit(event)" style="display: flex; flex-direction: column; flex: 1 1 auto; margin: 0;">
+        <input type="hidden" id="removeMemberCitizenId" value="">
+        <div class="modal-body">
+          <div style="background:#fef2f2; border-left:4px solid #ef4444; padding:10px 14px; border-radius:6px; font-size:0.85rem; color:#991b1b; margin-bottom:14px;">
+            <strong>Warning:</strong> You are removing <strong id="removeMemberNameDisplay">Member Name</strong> (<span id="removeMemberIdDisplay">CIT-XXXX</span>) from Household <strong id="removeMemberFamilyDisplay">FAM-1001</strong>.
+            <div style="font-size:0.75rem; margin-top:4px;">
+              This exit will be recorded permanently in the household membership history and audit trail.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="removeMemberReason">Reason for Removal <span class="mandatory-note">* Required</span></label>
+            <select id="removeMemberReason" class="form-control" required>
+              <option value="">-- Select Reason --</option>
+              <option value="Relocated / Moved to Independent Residence">Relocated / Moved to Independent Residence</option>
+              <option value="Marriage / Joined Another Household">Marriage / Joined Another Household</option>
+              <option value="Deceased">Deceased</option>
+              <option value="Separated from Household">Separated from Household</option>
+              <option value="Correction of Mistaken Registration">Correction of Mistaken Registration</option>
+              <option value="Other">Other (Specify Below)</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="removeMemberOtherReasonWrap" style="display:none;">
+            <label class="form-label" for="removeMemberOtherReason">Specify Removal Details</label>
+            <textarea id="removeMemberOtherReason" class="form-control" rows="2" placeholder="Describe the reason for removing this member..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('removeMemberModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnConfirmRemoveMember" class="btn btn-danger">Confirm Removal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/scripts/api.js"></script>
+  <script src="/scripts/translations.js"></script>
+  <script src="/scripts/familyTree.js"></script>
+  <script src="/scripts/assistant.js"></script>
+  <script src="/scripts/dashboard.js"></script>
+</body>
+</html>

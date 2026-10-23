@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JanSetu (जनसेतु) — Har Parivaar, Har Haq, Ek Setu | TechTrix’26</title>
+  <meta name="description" content="JanSetu: Unified Digital Platform for Accessible Public Documentation & Welfare Verification. TechTrix'26.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/styles/main.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- National Portal Top Ribbon -->
+  <header class="gov-ribbon">
+    <div class="gov-ribbon-left">
+      <span class="gov-tricolor"></span>
+      <span>भारत सरकार | Government of India — TechTrix’26 Hackathon</span>
+    </div>
+    <div class="gov-ribbon-right">
+      <span>Unified Public Documentation & Welfare Integrity</span>
+      <div class="lang-selector">
+        <button class="lang-btn active" data-lang="en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" data-lang="hi" onclick="setLanguage('hi')">हिंदी</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="portal-header">
+    <div class="portal-header-inner">
+      <a href="/" class="brand-section">
+        <img src="/assets/logo.svg" alt="JanSetu Emblem" class="brand-logo-img">
+        <div class="brand-text">
+          <h1>JanSetu <span class="hindi">जनसेतु</span></h1>
+          <div class="brand-tagline">Har Parivaar, Har Haq, Ek Setu.</div>
+        </div>
+      </a>
+      <div class="header-actions">
+        <a href="/login.html?portal=citizen" class="btn btn-secondary">
+          <i data-lucide="user"></i>
+          <span>Citizen Portal</span>
+        </a>
+        <a href="/login.html?portal=officer" class="btn btn-primary">
+          <i data-lucide="shield-check"></i>
+          <span>Officer Verification Portal</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section style="background: linear-gradient(135deg, #07152b 0%, #0f284e 60%, #1b3b6f 100%); color:#ffffff; padding: 70px 24px 80px; position: relative; overflow: hidden;">
+    <div class="hero-grid">
+      <div>
+        <div class="badge badge-saffron" style="margin-bottom: 16px; padding: 6px 14px; font-size: 0.8rem;">
+          <i data-lucide="award"></i> TechTrix’26 Flagship Welfare Platform Entry
+        </div>
+        <h1 style="font-size: 2.8rem; color:#ffffff; line-height: 1.15; margin-bottom: 18px; font-family: Outfit, sans-serif;">
+          Unified Public Documentation & Welfare Verification
+        </h1>
+        <p style="font-size: 1.1rem; color: #cbd5e1; line-height: 1.6; margin-bottom: 28px;">
+          Connecting citizens, family relationships, household accounts, supporting documents, welfare schemes, and government verification workflows with explainable duplicate detection and seamless household separation.
+        </p>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="/login.html?autologin=citizen" class="btn btn-saffron btn-lg">
+            <i data-lucide="log-in"></i>
+            <span>1-Click Launch: Citizen Portal (FAM-1001)</span>
+          </a>
+          <a href="/login.html?autologin=officer" class="btn btn-secondary btn-lg" style="background: rgba(255,255,255,0.1); color:#ffffff; border-color: rgba(255,255,255,0.3);">
+            <i data-lucide="shield"></i>
+            <span>1-Click Launch: Officer Portal (OFFICER-01)</span>
+          </a>
+        </div>
+        <div style="margin-top: 20px; font-size: 0.8rem; color: #94a3b8;">
+          ✨ Preloaded with Rahul & Amit Sharma household records (Varanasi, UP), active PMAY & PM-KISAN schemes, sample documents, and full audit logs.
+        </div>
+      </div>
+
+      <!-- Quick Launch Card Box -->
+      <div style="background: #ffffff; border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-xl); color: var(--text-main);">
+        <h3 style="font-size: 1.2rem; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="key" style="color: var(--accent-saffron);"></i>
+          <span>Instant Hackathon Evaluation Credentials</span>
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+          Select any role below to launch right into the working demonstration without typing credentials:
+        </p>
+
+        <!-- Citizen Credential Box -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.9rem; color: var(--primary);">Citizen Family Account</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Family ID: <strong>FAM-1001</strong> • Pass: <strong>citizen123</strong></div>
+            <div style="font-size: 0.75rem; color: #15803d;">Rahul Sharma (Head), Amit (Brother), Sunita, Aarav</div>
+          </div>
+          <a href="/login.html?autologin=citizen" class="btn btn-primary btn-sm">Sign In</a>
+        </div>
+
+        <!-- Officer Credential Box -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <div style="font-weight: 700; font-size: 0.9rem; color: var(--primary);">Government Verification Officer</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Officer ID: <strong>OFFICER-01</strong> • Pass: <strong>officer123</strong></div>
+            <div style="font-size: 0.75rem; color: #b45309;">Block Development & Verification Officer</div>
+          </div>
+          <a href="/login.html?autologin=officer" class="btn btn-saffron btn-sm">Sign In</a>
+        </div>
+
+        <!-- State Reset Button -->
+        <button onclick="handleQuickReset()" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">
+          <i data-lucide="refresh-cw"></i>
+          <span>Reset Demo Environment to Clean Pristine Seed State</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 Hackathon Required Demo Scenarios Showcase -->
+  <section style="max-width: 1200px; margin: -30px auto 60px; padding: 0 24px; position: relative; z-index: 10;">
+    <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-lg);">
+      <div style="text-align: center; margin-bottom: 28px;">
+        <span class="badge badge-saffron">Comprehensive Test Coverage</span>
+        <h2 style="font-size: 1.8rem; color: var(--primary); margin-top: 8px;">6 Core Scenarios Ready For Demonstration</h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted);">Every single public welfare and document workflow is fully implemented end-to-end.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+        <!-- Scenario A -->
+        <div class="card" style="border-top: 4px solid #ea580c;">
+          <div class="card-body">
+            <span class="badge badge-saffron" style="margin-bottom: 8px;">Scenario A (Core Feature)</span>
+            <h4 style="margin-bottom: 6px;">Household Separation & Family Bond</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Amit Sharma requests separation from FAM-1001. Officer reviews and approves: Amit receives new Family ID <strong>FAM-2001</strong>, but his Citizen ID (<strong>CIT-1002</strong>) and biological sibling relationship with Rahul remain completely preserved!
+            </p>
+          </div>
+        </div>
+
+        <!-- Scenario B -->
+        <div class="card" style="border-top: 4px solid #ef4444;">
+          <div class="card-body">
+            <span class="badge badge-danger" style="margin-bottom: 8px;">Scenario B (Core Feature)</span>
+            <h4 style="margin-bottom: 6px;">Duplicate Household Benefit Detection</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Household FAM-1001 already received a PMAY Housing grant for Dwelling D-104 in 2023. When an applicant re-applies for PMAY, the explainable engine immediately flags the repeat claim and routes it for authorized officer review.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scenario C -->
+        <div class="card" style="border-top: 4px solid #16a34a;">
+          <div class="card-body">
+            <span class="badge badge-success" style="margin-bottom: 8px;">Scenario C</span>
+            <h4 style="margin-bottom: 6px;">Individual vs Household Schemes</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              When siblings apply for PM-KISAN, the system evaluates each brother individually. Rahul (1.2 Ha land) qualifies, while Amit (0 Ha) is evaluated independently on his own credentials without false duplicate fraud flags!
+            </p>
+          </div>
+        </div>
+
+        <!-- Scenario D -->
+        <div class="card" style="border-top: 4px solid #2563eb;">
+          <div class="card-body">
+            <span class="badge badge-info" style="margin-bottom: 8px;">Scenario D</span>
+            <h4 style="margin-bottom: 6px;">Document Vault & Verification</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Citizens upload Ration Cards, Income Certificates, and Land Khatauni records in PDF/PNG format. Officers verify or reject them with mandatory remarks, and the citizen receives real-time status updates.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scenario E -->
+        <div class="card" style="border-top: 4px solid #8b5cf6;">
+          <div class="card-body">
+            <span class="badge badge-neutral" style="margin-bottom: 8px;">Scenario E</span>
+            <h4 style="margin-bottom: 6px;">Application Tracking & Disbursement</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Complete lifecycle tracking: Draft &rarr; Submitted &rarr; Pending Verification &rarr; Approved / Disbursed with unique tracking IDs (APP-2026-XXX) and immutable audit log snapshots.
+            </p>
+          </div>
+        </div>
+
+        <!-- Scenario F -->
+        <div class="card" style="border-top: 4px solid #0d9488;">
+          <div class="card-body">
+            <span class="badge badge-saffron" style="margin-bottom: 8px;">Scenario F</span>
+            <h4 style="margin-bottom: 6px;">Profile & Name Corrections</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+              Citizens lodge name/DOB change requests with supporting evidence. The portal's official record updates only upon officer verification, while preserving change history and keeping Citizen IDs stable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architectural Pillars -->
+  <section style="max-width: 1200px; margin: 0 auto 80px; padding: 0 24px;">
+    <h2 style="text-align: center; font-size: 1.8rem; color: var(--primary); margin-bottom: 30px;">
+      Core Design Distinctions of JanSetu
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+      <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: #eff6ff; color: #2563eb; display:flex; align-items:center; justify-content:center; margin-bottom: 14px;">
+          <i data-lucide="users"></i>
+        </div>
+        <h4 style="margin-bottom: 8px;">Family ID vs Citizen ID</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          <strong>Family ID (e.g. FAM-1001)</strong> belongs to the shared household unit. <strong>Citizen ID (e.g. CIT-1001, CIT-1002)</strong> is permanent and stays with the individual across separations.
+        </p>
+      </div>
+
+      <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: #fff7ed; color: #ea580c; display:flex; align-items:center; justify-content:center; margin-bottom: 14px;">
+          <i data-lucide="git-branch"></i>
+        </div>
+        <h4 style="margin-bottom: 8px;">Persistent Family Relationships</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Household membership and biological relationships are maintained as independent data models. Brothers remain brothers in the registry even after living under separate roofs.
+        </p>
+      </div>
+
+      <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: #ecfdf5; color: #16a34a; display:flex; align-items:center; justify-content:center; margin-bottom: 14px;">
+          <i data-lucide="search-check"></i>
+        </div>
+        <h4 style="margin-bottom: 8px;">Explainable Duplicate Detection</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Never blindly rejects! Transparently explains which rule triggered, which dwelling was matched, and suggests actionable guidance for the human verification officer.
+        </p>
+      </div>
+
+      <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid var(--border-color);">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: #fdf2f8; color: #db2777; display:flex; align-items:center; justify-content:center; margin-bottom: 14px;">
+          <i data-lucide="bot"></i>
+        </div>
+        <h4 style="margin-bottom: 8px;">JanSetu AI Saathi</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
+          Conversational bilingual assistant providing simple English and Hindi guidance on welfare eligibility, documents, and household separation.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #0f172a; color: #94a3b8; padding: 40px 24px; text-align: center; font-size: 0.85rem; border-top: 3px solid var(--accent-saffron);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="font-size: 1.1rem; color: #ffffff; font-weight: 700; margin-bottom: 6px;">
+        JanSetu (जनसेतु) — Har Parivaar, Har Haq, Ek Setu.
+      </div>
+      <p style="margin-bottom: 16px;">
+        Unified Digital Platform for Accessible Public Documentation • TechTrix’26 Hackathon
+      </p>
+      <div style="font-size: 0.75rem; color: #64748b;">
+        Demo Platform initialized with synthetic sample data for educational hackathon evaluation. No real Aadhaar or confidential citizen data collected.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/scripts/api.js"></script>
+  <script src="/scripts/translations.js"></script>
+  <script>
+    lucide.createIcons();
+
+    async function handleQuickReset() {
+      try {
+        const res = await api.resetDemo();
+        showToast('JanSetu demo environment reset to fresh pristine seed state!', 'success');
+      } catch (err) {
+        showToast('Error resetting demo state: ' + err.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>
