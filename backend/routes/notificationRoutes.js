@@ -26,4 +26,16 @@ router.patch('/:notificationId/read', requireAuth, (req, res) => {
   });
 });
 
+// POST /api/notifications/read-all
+router.post('/read-all', requireAuth, (req, res) => {
+  const recipientId = req.user.role === 'citizen' ? req.user.familyId : 'ALL_OFFICERS';
+  const updatedList = dataStore.markAllNotificationsRead(recipientId);
+
+  res.json({
+    success: true,
+    message: 'All notifications marked as read.',
+    count: updatedList.length
+  });
+});
+
 module.exports = router;

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGradAgri" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+    <linearGradient id="sunGradAgri" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="fieldGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+    <linearGradient id="fieldGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ca8a04"/>
+      <stop offset="100%" stop-color="#854d0e"/>
+    </linearGradient>
+    <linearGradient id="cropGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="400" height="200" fill="url(#skyGradAgri)"/>
+
+  <!-- Morning Sun -->
+  <circle cx="200" cy="85" r="45" fill="url(#sunGradAgri)" opacity="0.9"/>
+  <circle cx="200" cy="85" r="58" fill="#fef08a" opacity="0.25"/>
+
+  <!-- Rolling Agricultural Fields -->
+  <path d="M0,110 Q100,85 220,115 T400,105 L400,200 L0,200 Z" fill="#22c55e" opacity="0.45"/>
+  <path d="M0,128 Q150,105 280,135 T400,125 L400,200 L0,200 Z" fill="url(#fieldGrad1)"/>
+  <path d="M0,150 Q120,135 240,155 T400,140 L400,200 L0,200 Z" fill="url(#fieldGrad2)" opacity="0.85"/>
+
+  <!-- Contour Furrows / Crop Rows -->
+  <path d="M120,135 Q180,165 240,200" stroke="#a16207" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <path d="M160,135 Q220,165 300,200" stroke="#a16207" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <path d="M200,135 Q270,165 360,200" stroke="#a16207" stroke-width="2.5" fill="none" opacity="0.6"/>
+
+  <!-- Wheat / Grain Stalks Foreground (Golden Harvest) -->
+  <g transform="translate(60, 95)">
+    <!-- Stalk 1 -->
+    <path d="M30,105 Q32,50 35,0" stroke="#ca8a04" stroke-width="3" fill="none"/>
+    <ellipse cx="33" cy="15" rx="5" ry="9" fill="url(#cropGrad)" transform="rotate(-20 33 15)"/>
+    <ellipse cx="39" cy="25" rx="5" ry="9" fill="url(#cropGrad)" transform="rotate(25 39 25)"/>
+    <ellipse cx="32" cy="35" rx="5" ry="9" fill="url(#cropGrad)" transform="rotate(-25 32 35)"/>
+    <ellipse cx="38" cy="45" rx="5" ry="9" fill="url(#cropGrad)" transform="rotate(20 38 45)"/>
+    <ellipse cx="34" cy="55" rx="4.5" ry="8" fill="url(#cropGrad)" transform="rotate(-20 34 55)"/>
+
+    <!-- Stalk 2 -->
+    <path d="M10,105 Q18,60 22,12" stroke="#a16207" stroke-width="2.5" fill="none"/>
+    <ellipse cx="20" cy="25" rx="4.5" ry="8" fill="url(#cropGrad)" transform="rotate(-25 20 25)"/>
+    <ellipse cx="26" cy="35" rx="4.5" ry="8" fill="url(#cropGrad)" transform="rotate(25 26 35)"/>
+    <ellipse cx="19" cy="45" rx="4" ry="7" fill="url(#cropGrad)" transform="rotate(-20 19 45)"/>
+  </g>
+
+  <!-- Tractor Silhouette on Field -->
+  <g transform="translate(250, 118) scale(0.65)">
+    <!-- Large rear wheel -->
+    <circle cx="50" cy="45" r="18" fill="#1e293b"/>
+    <circle cx="50" cy="45" r="9" fill="#94a3b8"/>
+    <!-- Small front wheel -->
+    <circle cx="95" cy="52" r="11" fill="#1e293b"/>
+    <circle cx="95" cy="52" r="5" fill="#94a3b8"/>
+    <!-- Body -->
+    <path d="M45,35 L45,15 L65,15 L70,30 L100,32 L100,50 L45,50 Z" fill="#dc2626"/>
+    <!-- Hood & Exhaust -->
+    <rect x="75" y="22" width="22" height="15" fill="#ef4444" rx="2"/>
+    <line x1="88" y1="22" x2="88" y2="10" stroke="#1e293b" stroke-width="2.5"/>
+    <rect x="52" y="18" width="12" height="12" fill="#38bdf8" opacity="0.75" rx="1"/>
+  </g>
+
+  <!-- Direct Benefit Coin / Rupee Symbol -->
+  <g transform="translate(325, 40)">
+    <circle cx="18" cy="18" r="18" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+    <text x="18" y="24" fill="#ffffff" font-family="system-ui, sans-serif" font-size="17" font-weight="900" text-anchor="middle">₹</text>
+  </g>
+
+  <!-- Category Tag (Top Left) -->
+  <g transform="translate(24, 20)">
+    <rect width="112" height="26" rx="13" fill="#ffffff" fill-opacity="0.15" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1"/>
+    <circle cx="14" cy="13" r="7" fill="#16a34a"/>
+    <path d="M12,13 L14,15 L17,11" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="26" y="17" fill="#ffffff" font-family="system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="0.5">AGRICULTURE</text>
+  </g>
+</svg>

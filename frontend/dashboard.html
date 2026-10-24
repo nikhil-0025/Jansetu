@@ -42,11 +42,14 @@
       </div>
 
       <div class="header-actions">
-        <!-- Account Identifier -->
+        <!-- Account Identifier with Sensitive Eye Toggle -->
         <div class="account-pill" title="Current Authenticated Household">
           <span class="pill-dot"></span>
           <span style="color: var(--text-muted); font-size: 0.75rem;">Household:</span>
-          <span id="headerFamilyId" style="color: var(--primary); font-family: Outfit, sans-serif; font-weight: 700;">FAM-1001</span>
+          <span id="headerFamilyId" style="color: var(--primary); font-family: Outfit, sans-serif; font-weight: 700;">FAM-••••</span>
+          <button type="button" class="eye-toggle-btn dark-icon" onclick="toggleSensitiveField('headerFamilyId')" title="Toggle Household ID" aria-label="Toggle Household ID">
+            <i data-lucide="eye" id="headerFamilyId-icon" style="width: 12px; height: 12px;"></i>
+          </button>
         </div>
 
         <!-- Notification Bell -->
@@ -57,12 +60,17 @@
           </button>
           
           <!-- Notification Dropdown Menu -->
-          <div id="notifDropdown" style="display: none; position: absolute; right: 0; top: 48px; width: 340px; background: #ffffff; border-radius: 12px; box-shadow: var(--shadow-xl); border: 1px solid var(--border-color); z-index: 100; overflow: hidden;">
+          <div id="notifDropdown" style="display: none; position: absolute; right: 0; top: 48px; width: 360px; background: #ffffff; border-radius: 12px; box-shadow: var(--shadow-xl); border: 1px solid var(--border-color); z-index: 100; overflow: hidden;">
             <div style="padding: 12px 16px; background: var(--bg-subtle); border-bottom: 1px solid var(--border-color); font-weight: 700; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
               <span>Notifications & Alerts</span>
-              <span id="notifCountText" style="font-size: 0.75rem; color: var(--text-muted);">0 New</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="notifCountText" style="font-size: 0.75rem; color: var(--text-muted);">0 New</span>
+                <button type="button" onclick="markAllNotificationsAsRead()" class="btn btn-secondary btn-sm" style="font-size: 0.7rem; padding: 2px 8px; height: auto;">
+                  Mark All Read
+                </button>
+              </div>
             </div>
-            <div id="notifList" style="max-height: 280px; overflow-y: auto; padding: 8px;">
+            <div id="notifList" style="max-height: 320px; overflow-y: auto; padding: 6px;">
               <div style="padding: 14px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">No unread alerts</div>
             </div>
           </div>
@@ -85,70 +93,67 @@
 
   <main class="dashboard-container">
 
-    <!-- Interactive Hackathon Scenario Testing Toolbar -->
-    <div class="scenario-bar">
-      <div class="scenario-title">
-        <i data-lucide="zap"></i>
-        <span>Hackathon 1-Click Scenario Walkthrough:</span>
-      </div>
-      <div class="scenario-btns">
-        <button onclick="triggerScenarioA()" class="scenario-btn" title="Simulate Amit Sharma requesting separation to FAM-2001">
-          Scenario A: Household Separation
-        </button>
-        <button onclick="triggerScenarioB()" class="scenario-btn" title="Attempt repeat claim on PMAY Housing for Dwelling D-104">
-          Scenario B: Duplicate Household Benefit
-        </button>
-        <button onclick="triggerScenarioC()" class="scenario-btn" title="Check PM-KISAN for Rahul vs Amit individually">
-          Scenario C: Individual Scheme
-        </button>
-        <button onclick="triggerScenarioD()" class="scenario-btn" title="Upload sample document and test verification">
-          Scenario D: Document Vault
-        </button>
-        <button onclick="triggerScenarioE()" class="scenario-btn" title="View Application Tracking Status">
-          Scenario E: Track Applications
-        </button>
-        <button onclick="triggerScenarioF()" class="scenario-btn" title="Lodge citizen name correction request">
-          Scenario F: Name Correction
-        </button>
-        <button onclick="resetDemoData()" class="scenario-btn" style="background:#f1f5f9; border-color:#cbd5e1; color:#475569;" title="Reset environment">
-          🔄 Reset
-        </button>
-      </div>
-    </div>
-
-    <!-- Welcome Section (SmartSeva Style) -->
+    <!-- Welcome Section (SmartSeva Style with Sensitive Info Masking) -->
     <section class="welcome-banner">
-      <div class="welcome-content">
-        <h2>
-          <span data-i18n="welcomeBack">Welcome back,</span>
-          <span id="welcomeCitizenName" style="color: #fed7aa;">Rahul Sharma</span>
-        </h2>
-        <p style="font-size: 0.95rem; color: #cbd5e1; max-width: 780px; line-height: 1.5;">
-          Access your verified family registry, explore government welfare entitlements, check real-time eligibility with transparent criteria, and manage household records with JanSetu.
-        </p>
+      <div class="welcome-banner-layout">
+        <div class="welcome-content" style="flex: 1;">
+          <h2>
+            <span data-i18n="welcomeBack">Welcome back,</span>
+            <span id="welcomeCitizenName" style="color: #fed7aa;">Rahul Sharma</span>
+          </h2>
+          <p style="font-size: 0.95rem; color: #cbd5e1; max-width: 780px; line-height: 1.5;">
+            Access your verified family registry, explore government welfare entitlements, check real-time eligibility with transparent criteria, and manage household records with JanSetu.
+          </p>
 
-        <div class="welcome-meta">
-          <div class="welcome-meta-item">
-            <i data-lucide="home" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
-            <span><span data-i18n="familyIdLabel">Family ID:</span> <strong id="bannerFamilyId">FAM-1001</strong></span>
-          </div>
+          <div class="welcome-meta">
+            <!-- Family ID with eye toggle -->
+            <div class="welcome-meta-item">
+              <i data-lucide="home" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
+              <span>
+                <span data-i18n="familyIdLabel">Family ID:</span>
+                <strong id="bannerFamilyId">FAM-••••</strong>
+                <button type="button" class="eye-toggle-btn" onclick="toggleSensitiveField('bannerFamilyId')" title="Toggle Family ID Visibility" aria-label="Toggle Family ID">
+                  <i data-lucide="eye" id="bannerFamilyId-icon" style="width: 14px; height: 14px;"></i>
+                </button>
+              </span>
+            </div>
 
-          <div class="welcome-meta-item">
-            <i data-lucide="user" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
-            <span>Citizen ID (Head): <strong id="bannerCitizenId">CIT-1001</strong></span>
-          </div>
+            <!-- Citizen ID with eye toggle -->
+            <div class="welcome-meta-item">
+              <i data-lucide="user" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
+              <span>
+                <span>Citizen ID (Head):</span>
+                <strong id="bannerCitizenId">CIT-••••</strong>
+                <button type="button" class="eye-toggle-btn" onclick="toggleSensitiveField('bannerCitizenId')" title="Toggle Citizen ID Visibility" aria-label="Toggle Citizen ID">
+                  <i data-lucide="eye" id="bannerCitizenId-icon" style="width: 14px; height: 14px;"></i>
+                </button>
+              </span>
+            </div>
 
-          <div class="welcome-meta-item">
-            <i data-lucide="map-pin" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
-            <span>Dwelling: <strong id="bannerDwellingRef">D-104 (Kutcha)</strong></span>
+            <!-- Dwelling Ref with eye toggle -->
+            <div class="welcome-meta-item">
+              <i data-lucide="map-pin" style="width: 16px; height: 16px; color: #ffd8a8;"></i>
+              <span>
+                <span>Dwelling:</span>
+                <strong id="bannerDwellingRef">D-••• (Kutcha)</strong>
+                <button type="button" class="eye-toggle-btn" onclick="toggleSensitiveField('bannerDwellingRef')" title="Toggle Dwelling Visibility" aria-label="Toggle Dwelling">
+                  <i data-lucide="eye" id="bannerDwellingRef-icon" style="width: 14px; height: 14px;"></i>
+                </button>
+              </span>
+            </div>
           </div>
+        </div>
 
-          <div class="welcome-meta-item">
-            <span class="badge badge-verified" id="bannerStatusBadge">
-              <i data-lucide="check-circle" style="width: 12px; height: 12px;"></i>
-              <span id="bannerStatusText">Verified Household</span>
-            </span>
+        <!-- Right Side: Verified Pill Badge & Master Show/Hide Toggle -->
+        <div class="welcome-banner-right">
+          <div class="verified-pill-box" id="bannerStatusBadge">
+            <i data-lucide="check-circle" style="width: 18px; height: 18px; color: #16a34a;"></i>
+            <span style="font-weight: 700; font-size: 0.88rem;" id="bannerStatusText">Verified Household</span>
           </div>
+          <button type="button" class="btn-toggle-all-sensitive" onclick="toggleAllSensitiveInfo()" id="btnToggleAllSensitive" title="Show or hide all sensitive IDs at once">
+            <i data-lucide="eye" id="masterToggleIcon" style="width: 14px; height: 14px;"></i>
+            <span id="masterToggleText">Show All IDs</span>
+          </button>
         </div>
       </div>
     </section>
@@ -160,7 +165,7 @@
         <span style="font-size: 0.8rem; color: var(--text-muted);">Direct Navigation</span>
       </div>
 
-      <div class="quick-cards-grid">
+      <div class="quick-cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
         <!-- 1. All Schemes -->
         <a href="#schemesTab" onclick="switchTab('schemes')" class="quick-card" id="cardQuickSchemes">
           <span class="quick-card-badge badge-saffron" id="countSchemesBadge">6 Schemes</span>
@@ -206,29 +211,6 @@
           <div>
             <div class="quick-card-title" data-i18n="navFamily">Family Members</div>
             <div class="quick-card-desc">Interactive tree & Citizen ID registry</div>
-          </div>
-        </a>
-
-        <!-- 5. Household Separation (Key Feature) -->
-        <a href="#separationTab" onclick="switchTab('separation')" class="quick-card special-separation" id="cardQuickSep">
-          <span class="quick-card-badge badge-saffron">Core Feature</span>
-          <div class="quick-card-icon icon-orange">
-            <i data-lucide="git-branch"></i>
-          </div>
-          <div>
-            <div class="quick-card-title" data-i18n="navSeparation">Household Separation</div>
-            <div class="quick-card-desc">Form new household while keeping family bond</div>
-          </div>
-        </a>
-
-        <!-- 6. Profile Corrections -->
-        <a href="#profileTab" onclick="switchTab('profile')" class="quick-card" id="cardQuickProfile">
-          <div class="quick-card-icon icon-teal">
-            <i data-lucide="user-cog"></i>
-          </div>
-          <div>
-            <div class="quick-card-title" data-i18n="navCorrections">Profile & Name Change</div>
-            <div class="quick-card-desc">Request official verified corrections</div>
           </div>
         </a>
       </div>
@@ -281,6 +263,7 @@
           <button class="cat-chip" onclick="filterSchemeCategory('Healthcare')">Healthcare</button>
           <button class="cat-chip" onclick="filterSchemeCategory('Food Security')">Food Security</button>
           <button class="cat-chip" onclick="filterSchemeCategory('Energy & Clean Fuel')">Energy / LPG</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Skill Development')">Skill Development</button>
         </div>
       </div>
 
@@ -331,7 +314,12 @@
             <table class="info-table">
               <tr>
                 <td>Family ID:</td>
-                <td id="infoFamilyId">FAM-1001</td>
+                <td>
+                  <strong id="infoFamilyId">FAM-••••</strong>
+                  <button type="button" class="eye-toggle-btn dark-icon" onclick="toggleSensitiveField('infoFamilyId')" title="Toggle Family ID" aria-label="Toggle Family ID">
+                    <i data-lucide="eye" id="infoFamilyId-icon" style="width: 12px; height: 12px;"></i>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>Head of Household:</td>
@@ -339,7 +327,12 @@
               </tr>
               <tr>
                 <td>Dwelling Ref:</td>
-                <td id="infoDwellingRef">D-104</td>
+                <td>
+                  <strong id="infoDwellingRef">D-•••</strong>
+                  <button type="button" class="eye-toggle-btn dark-icon" onclick="toggleSensitiveField('infoDwellingRef')" title="Toggle Dwelling" aria-label="Toggle Dwelling">
+                    <i data-lucide="eye" id="infoDwellingRef-icon" style="width: 12px; height: 12px;"></i>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>Dwelling Type:</td>
@@ -347,7 +340,12 @@
               </tr>
               <tr>
                 <td>Ration Card No:</td>
-                <td id="infoRationCard">RC-UP-2024-98421</td>
+                <td>
+                  <strong id="infoRationCard">RC-UP-••••-••••</strong>
+                  <button type="button" class="eye-toggle-btn dark-icon" onclick="toggleSensitiveField('infoRationCard')" title="Toggle Ration Card" aria-label="Toggle Ration Card">
+                    <i data-lucide="eye" id="infoRationCard-icon" style="width: 12px; height: 12px;"></i>
+                  </button>
+                </td>
               </tr>
               <tr>
                 <td>Income Category:</td>
@@ -378,6 +376,72 @@
               <button onclick="openUploadDocModal()" class="btn btn-secondary btn-sm" style="width: 100%;">
                 <i data-lucide="upload"></i> Upload Supporting Document
               </button>
+            </div>
+          </div>
+
+          <!-- Citizen Requests Hub (Action Desk - Separation, Corrections, Add Member, Grievances) -->
+          <div class="sidebar-widget request-hub-widget" id="citizenRequestsHubWidget">
+            <div class="widget-title" style="margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: #fff7ed; color: #ea580c; display: flex; align-items: center; justify-content: center;">
+                  <i data-lucide="inbox" style="width: 14px; height: 14px;"></i>
+                </div>
+                <span style="font-size: 0.95rem; font-weight: 700; color: var(--primary);">Citizen Requests Hub</span>
+              </div>
+              <span class="badge badge-saffron" style="font-size: 0.65rem;">Action Desk</span>
+            </div>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+              Submit household changes, update demographic records, add members, or lodge welfare appeals.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <!-- 1. Household Separation Request -->
+              <a href="#separationTab" onclick="switchTab('separation'); openSeparationWizard(); return false;" class="request-item">
+                <div class="quick-card-icon icon-orange" style="width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px;">
+                  <i data-lucide="git-branch" style="width: 15px; height: 15px;"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 600; font-size: 0.82rem; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Household Separation</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">Form new independent household</div>
+                </div>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #94a3b8; flex-shrink: 0;"></i>
+              </a>
+
+              <!-- 2. Profile & Demographic Correction -->
+              <a href="#profileTab" onclick="switchTab('profile'); openCorrectionModal(); return false;" class="request-item">
+                <div class="quick-card-icon icon-teal" style="width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px;">
+                  <i data-lucide="user-cog" style="width: 15px; height: 15px;"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 600; font-size: 0.82rem; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Profile & Name Corrections</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">Rectify names, DOB & addresses</div>
+                </div>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #94a3b8; flex-shrink: 0;"></i>
+              </a>
+
+              <!-- 3. Add Household Member -->
+              <a href="javascript:void(0)" onclick="openAddMemberModal()" class="request-item">
+                <div class="quick-card-icon icon-green" style="width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px;">
+                  <i data-lucide="user-plus" style="width: 15px; height: 15px;"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 600; font-size: 0.82rem; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Add Family Member</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">Register a new relative to registry</div>
+                </div>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #94a3b8; flex-shrink: 0;"></i>
+              </a>
+
+              <!-- 4. Scheme Appeal & Grievance -->
+              <a href="javascript:void(0)" onclick="openGrievanceModal()" class="request-item">
+                <div class="quick-card-icon icon-amber" style="width: 32px; height: 32px; font-size: 0.85rem; border-radius: 6px;">
+                  <i data-lucide="alert-circle" style="width: 15px; height: 15px;"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                  <div style="font-weight: 600; font-size: 0.82rem; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Scheme Appeal & Grievance</div>
+                  <div style="font-size: 0.7rem; color: var(--text-muted);">Lodge appeal for benefit review</div>
+                </div>
+                <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: #94a3b8; flex-shrink: 0;"></i>
+              </a>
             </div>
           </div>
 
@@ -415,6 +479,23 @@
           <button onclick="openApplyModal()" class="btn btn-primary btn-sm">
             <i data-lucide="send"></i> Direct Scheme Application
           </button>
+        </div>
+        <div class="card-body" style="padding-bottom: 0;">
+          <div class="search-filter-bar" style="margin-bottom: 0;">
+            <div class="search-input-wrapper">
+              <i data-lucide="search" class="search-icon"></i>
+              <input type="text" id="catalogueSearchInput" placeholder="Filter catalogue by scheme name or keyword..." oninput="filterCatalogueLive()">
+            </div>
+            <div class="category-chips">
+              <button class="cat-chip-cat active" onclick="filterCatalogueCategory('all', this)">All Categories</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Housing', this)">Housing</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Agriculture', this)">Agriculture</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Healthcare', this)">Healthcare</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Food Security', this)">Food Security</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Energy & Clean Fuel', this)">Energy / LPG</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Skill Development', this)">Skill Development</button>
+            </div>
+          </div>
         </div>
         <div class="card-body">
           <div id="allSchemesGrid" class="schemes-grid">
@@ -502,10 +583,10 @@
             </div>
           </div>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-            <button onclick="openAddMemberModal()" class="btn btn-primary btn-sm">
+            <button type="button" onclick="openAddMemberModal()" class="btn btn-primary btn-sm">
               <i data-lucide="user-plus"></i> Add Family Member
             </button>
-            <button onclick="switchTab('separation')" class="btn btn-saffron btn-sm">
+            <button type="button" onclick="switchTab('separation')" class="btn btn-saffron btn-sm">
               <i data-lucide="git-branch"></i> Request Household Separation
             </button>
           </div>
@@ -538,7 +619,7 @@
               Members registered under this household record. Newly added members require officer verification before being marked verified.
             </p>
           </div>
-          <button onclick="openAddMemberModal()" class="btn btn-secondary btn-sm">
+          <button type="button" onclick="openAddMemberModal()" class="btn btn-secondary btn-sm">
             <i data-lucide="user-plus"></i> Add Member
           </button>
         </div>
@@ -712,6 +793,73 @@
       <div class="modal-footer">
         <button onclick="closeModal('eligibilityModal')" class="btn btn-secondary">Close</button>
         <button id="btnProceedToApply" onclick="handleProceedFromEligModal()" class="btn btn-primary">Proceed to Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 1B: Complete Scheme Details & Entitlement Modal -->
+  <div class="modal-overlay" id="schemeDetailsModal">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="info" style="color: var(--secondary);"></i>
+          <span id="detailModalTitle">Scheme Details</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('schemeDetailsModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding-top: 10px;">
+        <!-- Scheme Preview Media Header -->
+        <div style="border-radius: var(--radius-md); overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border-color); background: #0f284e; height: 160px;">
+          <img id="detailModalImg" src="/assets/schemes/fallback.svg" alt="Scheme preview" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='/assets/schemes/fallback.svg';">
+        </div>
+
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+          <span class="badge badge-saffron" id="detailModalCategory">Category</span>
+          <span class="badge badge-info" id="detailModalBenefitType">Household</span>
+        </div>
+
+        <h3 id="detailModalSchemeName" style="color: var(--primary); font-size: 1.2rem; margin-bottom: 2px;"></h3>
+        <div id="detailModalSchemeHindi" style="color: var(--accent-saffron); font-weight: 600; font-size: 0.9rem; margin-bottom: 12px;"></div>
+
+        <p id="detailModalDesc" style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.55; margin-bottom: 16px;"></p>
+
+        <!-- Benefit & Scope Highlights -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Financial Benefit:</div>
+            <div id="detailModalBenefitAmount" style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 4px;"></div>
+          </div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Beneficiary Scope:</div>
+            <div id="detailModalScope" style="font-size: 0.95rem; font-weight: 700; color: #16a34a; margin-top: 4px;"></div>
+          </div>
+        </div>
+
+        <!-- Eligibility Criteria Summary -->
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-bottom: 16px;">
+          <h5 style="color: #1e40af; font-size: 0.825rem; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="shield-check" style="width: 15px; height: 15px;"></i> Statutory Eligibility Criteria
+          </h5>
+          <div id="detailModalEligibility" style="font-size: 0.84rem; color: #1e3a8a; line-height: 1.5;"></div>
+        </div>
+
+        <!-- Required Documents Checklist -->
+        <div>
+          <h5 style="font-size: 0.825rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 8px;">
+            Mandatory Documents Checklist:
+          </h5>
+          <ul id="detailModalDocsList" style="list-style: none; font-size: 0.85rem; line-height: 1.6; color: var(--text-muted);">
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('schemeDetailsModal')" class="btn btn-secondary">Close</button>
+        <button id="detailModalBtnCheckElig" onclick="" class="btn btn-secondary" style="border-color: #cbd5e1;">
+          <i data-lucide="check-circle"></i> Check Eligibility
+        </button>
+        <button id="detailModalBtnApply" onclick="" class="btn btn-primary">
+          <i data-lucide="send"></i> Apply Now
+        </button>
       </div>
     </div>
   </div>
@@ -1018,7 +1166,7 @@
         </div>
         <button class="modal-close" onclick="closeModal('addMemberModal')">&times;</button>
       </div>
-      <form id="addMemberForm" onsubmit="handleAddMemberSubmit(event)" style="display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; overflow-y: auto; margin: 0;">
+      <form id="addMemberForm" onsubmit="handleAddMemberSubmit(event)">
         <div class="modal-body">
           <div style="background:#eff6ff; border-left:4px solid #2563eb; padding:10px 14px; border-radius:6px; font-size:0.8rem; color:#1e40af; margin-bottom:14px;">
             <strong>Household Membership Law:</strong> Members added here are registered to your household record with a local JanSetu Citizen ID. All newly added members are placed into <strong>Pending Verification</strong> status awaiting official administrative review.
@@ -1205,6 +1353,86 @@
         <div class="modal-footer">
           <button type="button" onclick="closeModal('removeMemberModal')" class="btn btn-secondary">Cancel</button>
           <button type="submit" id="btnConfirmRemoveMember" class="btn btn-danger">Confirm Removal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 9: Notification Detail Modal -->
+  <div class="modal-overlay" id="notifDetailModal">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="bell" style="color: var(--primary);"></i>
+          <span id="notifModalTitle">Notification Details</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('notifDetailModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span class="badge badge-info" id="notifModalCategory">General Alert</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);" id="notifModalTime">Just now</span>
+        </div>
+        <h4 style="font-size: 1.05rem; color: var(--primary); margin-bottom: 8px;" id="notifModalHeading">Notification Title</h4>
+        <div style="font-size: 0.875rem; color: var(--text-main); line-height: 1.6; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;" id="notifModalBody">
+          Message text
+        </div>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between;">
+        <button type="button" id="notifModalActionBtn" class="btn btn-primary btn-sm" style="display: none;">
+          Go to Related Service
+        </button>
+        <button type="button" onclick="closeModal('notifDetailModal')" class="btn btn-secondary btn-sm" style="margin-left: auto;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 10: Citizen Grievance & Appeal Modal -->
+  <div class="modal-overlay" id="grievanceModal">
+    <div class="modal-dialog" style="max-width: 580px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="alert-circle" style="color: var(--accent-saffron);"></i>
+          <span>Scheme Appeal & Citizen Grievance</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('grievanceModal')">&times;</button>
+      </div>
+      <form id="grievanceForm" onsubmit="handleGrievanceSubmit(event)" style="display: flex; flex-direction: column; flex: 1 1 auto; margin: 0;">
+        <div class="modal-body" style="padding: 20px;">
+          <div style="background: #fff7ed; border-left: 4px solid #f97316; padding: 10px 14px; border-radius: 6px; font-size: 0.8rem; color: #9a3412; margin-bottom: 14px;">
+            <strong>Citizens' Right to Appeal:</strong> If your scheme application was rejected, benefit disbursement is delayed, or household data was inaccurately recorded, lodge a formal grievance with the Block Grievance Officer.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="grievanceCategory">Grievance Category <span class="mandatory-note">* Required</span></label>
+            <select id="grievanceCategory" class="form-control" required>
+              <option value="">-- Select Grievance Category --</option>
+              <option value="Application Rejection Appeal">Appeal Against Scheme Application Rejection</option>
+              <option value="Benefit Disbursement Delay">Delay in Benefit Disbursement / Direct Benefit Transfer</option>
+              <option value="Household Separation Dispute">Household Separation Verification Delay</option>
+              <option value="Ration / PDS Quota Dispute">Ration Card Entitlement / Quota Issue</option>
+              <option value="Document Verification Issue">Document Verification Delay / Mistaken Rejection</option>
+              <option value="General Service Quality">Other Grievance / Service Feedback</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="grievanceSubject">Subject / Summary <span class="mandatory-note">* Required</span></label>
+            <input type="text" id="grievanceSubject" class="form-control" placeholder="e.g. Appeal regarding PM-KISAN 16th installment delay" required minlength="5">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="grievanceDescription">Detailed Statement of Grievance <span class="mandatory-note">* Required</span></label>
+            <textarea id="grievanceDescription" class="form-control" rows="4" placeholder="Explain the issue in detail, including application or reference IDs..." required minlength="10"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick="closeModal('grievanceModal')" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="btnSubmitGrievance" class="btn btn-primary">
+            <i data-lucide="send" style="width: 14px; height: 14px;"></i> Submit Appeal
+          </button>
         </div>
       </form>
     </div>

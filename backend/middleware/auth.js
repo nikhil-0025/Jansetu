@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'jansetu_super_secure_jwt_secret_key_2026_techtrix';
+const JWT_SECRET = process.env.JWT_SECRET || 'jansetu_super_secure_jwt_secret_key_2026';
 
 const generateToken = (user) => {
   return jwt.sign(

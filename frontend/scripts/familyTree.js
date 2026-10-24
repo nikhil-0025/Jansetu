@@ -27,7 +27,7 @@ function renderFamilyTree(containerId, members, relationships, highlightCitizenI
 
   // Layout dimensions
   const width = Math.max(container.clientWidth || 700, 680);
-  const height = isMultiHousehold ? 450 : 360;
+  const height = isMultiHousehold ? 460 : Math.max(380, 120 + Math.ceil(members.length / 3) * 120);
 
   let svgHtml = `
     <svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; font-family: Inter, sans-serif;">
@@ -191,7 +191,8 @@ function renderFamilyTree(containerId, members, relationships, highlightCitizenI
     const genderIcon = m.gender === 'Female' ? '👩' : (m.age < 18 ? '👦' : '👨');
 
     svgHtml += `
-      <g transform="translate(${pos.x}, ${pos.y})" style="cursor: pointer;" filter="url(#cardShadow)">
+      <g onclick="viewMemberDetails('${m.citizenId}')" transform="translate(${pos.x}, ${pos.y})" style="cursor: pointer;" filter="url(#cardShadow)">
+        <title>Click to view profile, documents and schemes for ${m.fullName} (${m.citizenId})</title>
         <rect width="${nodeWidth}" height="${nodeHeight}" rx="10" fill="#ffffff" stroke="${isSelected ? '#2563eb' : (isHead ? '#0f284e' : '#cbd5e1')}" stroke-width="${isSelected || isHead ? '2.5' : '1.5'}"/>
         
         <!-- Header color bar -->
@@ -208,10 +209,10 @@ function renderFamilyTree(containerId, members, relationships, highlightCitizenI
         <text x="42" y="38" font-size="12" font-weight="700" fill="#0f172a">${m.fullName.length > 14 ? m.fullName.substring(0, 13) + '..' : m.fullName}</text>
         <text x="42" y="52" font-size="10" fill="#64748b">${m.age} yrs • ${m.occupation ? m.occupation.split(' ')[0] : 'Resident'}</text>
         
-        <!-- Current Family Tag -->
-        <rect x="8" y="58" width="${nodeWidth - 16}" height="12" rx="3" fill="#f8fafc" stroke="#e2e8f0"/>
-        <text x="${nodeWidth / 2}" y="67" font-size="8" font-weight="600" fill="#2563eb" text-anchor="middle">
-          Current Household: ${m.currentFamilyId}
+        <!-- Current Family Tag & Click Hint -->
+        <rect x="8" y="58" width="${nodeWidth - 16}" height="12" rx="3" fill="#eff6ff" stroke="#bfdbfe"/>
+        <text x="${nodeWidth / 2}" y="67" font-size="7.5" font-weight="700" fill="#1d4ed8" text-anchor="middle">
+          🔍 Click for Info, Docs & Schemes
         </text>
       </g>
     `;

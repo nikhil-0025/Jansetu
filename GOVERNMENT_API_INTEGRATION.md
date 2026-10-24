@@ -1,6 +1,6 @@
 # JanSetu (जनसेतु) — Indian Government API Integration Layer
 > **Authorized Government Services, DigiLocker Partner Gateway, API Setu, and Open Data Architecture**  
-> **Platform:** JanSetu (TechTrix'26 Hackathon)  
+> **Platform:** JanSetu Unified Citizen Welfare Platform  
 > **Tagline:** *Har Parivaar, Har Haq, Ek Setu (हर परिवार, हर हक, एक सेतु।)*
 
 ---
@@ -179,7 +179,7 @@ In compliance with India's **Digital Personal Data Protection Act, 2023** and **
       "consentId": "c812d4a1-09bc-4882-9011-82194a029312",
       "timestamp": "2026-10-23T18:25:30.000Z",
       "dataConsumer": {
-        "id": "in.gov.jansetu.techtrix",
+        "id": "in.gov.jansetu.portal",
         "name": "JanSetu Unified Public Welfare Verification Platform",
         "role": "DATA_FIDUCIARY"
       },
@@ -232,7 +232,7 @@ Copy `.env.example` to `.env` and configure your credentials:
 # General
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/jansetu
-JWT_SECRET=jansetu_super_secure_jwt_secret_key_2026_techtrix
+JWT_SECRET=jansetu_super_secure_jwt_secret_key_2026
 NODE_ENV=development
 
 # Government Integration Mode

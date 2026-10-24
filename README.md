@@ -1,7 +1,7 @@
 # JanSetu (जनसेतु) — Har Parivaar, Har Haq, Ek Setu.
 
 > **Unified Digital Platform for Accessible Public Documentation & Welfare Verification**  
-> **TechTrix’26 Hackathon**  
+> **National Citizen Welfare & Public Documentation Initiative**  
 > *Tagline:* Har Parivaar, Har Haq, Ek Setu (हर परिवार, हर हक, एक सेतु।)
 
 ---
@@ -81,7 +81,7 @@ Copy `.env.example` to `.env` (already preconfigured with safe defaults):
 ```bash
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/jansetu
-JWT_SECRET=jansetu_super_secure_jwt_secret_key_2026_techtrix
+JWT_SECRET=jansetu_super_secure_jwt_secret_key_2026
 NODE_ENV=development
 ```
 
@@ -98,7 +98,7 @@ The application will launch on `http://localhost:5000`.
 
 ---
 
-## 📋 Hackathon Evaluation Walkthrough (Scenarios A — F)
+## 📋 Feature & Workflow Demonstration Walkthrough (Scenarios A — F)
 
 ### Scenario A — Household Separation & Relationship Persistence
 1. Sign in as Citizen (`FAM-1001` / `citizen123`).
@@ -209,4 +209,4 @@ node tests/test_profile_corrections.js
 ## 📢 Transparent Disclosure
 
 - **Seed Data:** Synthetic fictional records designed specifically for demonstration purposes (Varanasi, UP jurisdiction).
-- **Integrations:** External interfaces (UIDAI Aadhaar biometric, State Bhulekh Land Registry) are realistically simulated for student hackathon judging.
+- **Integrations:** External interfaces (UIDAI Aadhaar biometric, State Bhulekh Land Registry) are realistically simulated for demonstration and evaluation purposes.

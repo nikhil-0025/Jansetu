@@ -162,6 +162,9 @@ const SchemeSchema = new mongoose.Schema({
   benefitType: { type: String, enum: ['Household', 'Individual'], required: true },
   benefitAmount: { type: String },
   requiredDocuments: [{ type: String }],
+  imageUrl: { type: String },
+  imageAlt: { type: String },
+  eligibilityPreview: { type: String },
   rules: {
     maxIncome: { type: Number },
     minAge: { type: Number },

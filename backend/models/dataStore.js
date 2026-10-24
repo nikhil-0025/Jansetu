@@ -404,6 +404,9 @@ const createInitialSeedData = () => {
         benefitType: 'Household',
         benefitAmount: '₹1,20,000 one-time grant',
         requiredDocuments: ['Ration Card', 'Income Certificate', 'Residence Proof'],
+        imageUrl: '/assets/schemes/pmay-g.svg',
+        imageAlt: 'Pradhan Mantri Awas Yojana Gramin rural housing construction scheme',
+        eligibilityPreview: 'For houseless families or living in kutcha/semi-pucca houses. Max income ₹3,00,000/yr.',
         rules: {
           maxIncome: 300000,
           requiredDwellingType: ['Kutcha', 'Semi-Pucca'],
@@ -420,6 +423,9 @@ const createInitialSeedData = () => {
         benefitType: 'Individual',
         benefitAmount: '₹6,000 per year (3 x ₹2,000)',
         requiredDocuments: ['Land Ownership Record (Khatauni)', 'Income Certificate'],
+        imageUrl: '/assets/schemes/pm-kisan.svg',
+        imageAlt: 'PM Kisan Samman Nidhi farmer direct income support scheme',
+        eligibilityPreview: 'For landholding farmer families. Requires verified land ownership (Khatauni) & Age 18+.',
         rules: {
           requiresFarmer: true,
           minAge: 18,
@@ -436,6 +442,9 @@ const createInitialSeedData = () => {
         benefitType: 'Household',
         benefitAmount: '₹5,00,000 health cover / year',
         requiredDocuments: ['Ration Card', 'Income Certificate'],
+        imageUrl: '/assets/schemes/pm-jay.svg',
+        imageAlt: 'Ayushman Bharat PM-JAY cashless hospital healthcare insurance scheme',
+        eligibilityPreview: 'For low-income / BPL families. Cashless healthcare cover up to ₹5,00,000/yr per household.',
         rules: {
           maxIncome: 250000,
           maxBenefitsPerHousehold: 1
@@ -451,6 +460,9 @@ const createInitialSeedData = () => {
         benefitType: 'Household',
         benefitAmount: 'Monthly Subsidized Grains (Wheat/Rice)',
         requiredDocuments: ['Ration Card', 'Residence Proof'],
+        imageUrl: '/assets/schemes/nfsa-ration.svg',
+        imageAlt: 'National Food Security Act subsidized grains and ration card scheme',
+        eligibilityPreview: 'For Antyodaya & Priority households. Max income ₹1,80,000/yr. Requires Ration Card.',
         rules: {
           maxIncome: 180000,
           maxBenefitsPerHousehold: 1
@@ -466,6 +478,9 @@ const createInitialSeedData = () => {
         benefitType: 'Household',
         benefitAmount: 'Free LPG Connection + First Refill',
         requiredDocuments: ['Ration Card', 'Income Certificate', 'Residence Proof'],
+        imageUrl: '/assets/schemes/pmuy-ujjwala.svg',
+        imageAlt: 'Pradhan Mantri Ujjwala Yojana clean LPG cooking fuel connection scheme',
+        eligibilityPreview: 'For adult women in poor/BPL households (Age 18+). Free LPG connection & first refill.',
         rules: {
           genderRequirement: 'Female',
           minAge: 18,
@@ -483,6 +498,9 @@ const createInitialSeedData = () => {
         benefitType: 'Individual',
         benefitAmount: 'Free Training + Certification + ₹8,000 Stipend',
         requiredDocuments: ['Birth Certificate', 'Income Certificate'],
+        imageUrl: '/assets/schemes/pmkvy-skills.svg',
+        imageAlt: 'Pradhan Mantri Kaushal Vikas Yojana youth skill certification & stipend scheme',
+        eligibilityPreview: 'For Indian youth aged 18 to 35 years seeking certified technical training & livelihood skills.',
         rules: {
           minAge: 18,
           maxAge: 35
@@ -963,6 +981,11 @@ const dataStore = {
     const notif = getDB().notifications.find(n => n.notificationId === notifId);
     if (notif) notif.isRead = true;
     return notif;
+  },
+  markAllNotificationsRead: (recipientId) => {
+    const list = getDB().notifications.filter(n => n.recipientId === recipientId || n.recipientId === 'ALL_OFFICERS');
+    list.forEach(n => { n.isRead = true; });
+    return list;
   },
 
   // Audit Logs

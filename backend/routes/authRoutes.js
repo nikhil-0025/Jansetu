@@ -494,7 +494,7 @@ router.get('/system-status', (req, res) => {
     success: true,
     platform: 'JanSetu (जनसेतु)',
     tagline: 'Har Parivaar, Har Haq, Ek Setu.',
-    hackathon: 'TechTrix’26',
+    edition: 'National Citizen Welfare Platform',
     dbStatus: getMongoStatus(),
     verificationMode: process.env.IDENTITY_VERIFICATION_MODE || 'synthetic',
     demoCredentials: {

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="lpgBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="40%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="cylinderRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="45%" stop-color="#ef4444"/>
+      <stop offset="70%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="35%" stop-color="#06b6d4"/>
+      <stop offset="75%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="warmFlame" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="60%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fef08a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Clean Energy Gradient Background -->
+  <rect width="400" height="200" fill="url(#lpgBg)"/>
+
+  <!-- Warm ambient glow -->
+  <circle cx="210" cy="110" r="85" fill="#38bdf8" opacity="0.15"/>
+  <circle cx="270" cy="90" r="50" fill="#f59e0b" opacity="0.1"/>
+
+  <!-- Domestic LPG Gas Cylinder -->
+  <g transform="translate(125, 45)">
+    <!-- Base Ring -->
+    <ellipse cx="45" cy="130" rx="26" ry="7" fill="#7f1d1d"/>
+    <path d="M22,126 L22,130 C22,134 68,134 68,130 L68,126 Z" fill="#991b1b"/>
+
+    <!-- Cylinder Body -->
+    <rect x="20" y="45" width="50" height="82" rx="10" fill="url(#cylinderRed)"/>
+
+    <!-- Dome Top -->
+    <ellipse cx="45" cy="45" rx="25" ry="12" fill="#ef4444"/>
+
+    <!-- Cylinder Collar Guard -->
+    <path d="M25,40 L25,18 C25,12 65,12 65,18 L65,40" fill="none" stroke="#dc2626" stroke-width="4"/>
+    <ellipse cx="45" cy="18" rx="18" ry="6" fill="none" stroke="#dc2626" stroke-width="3"/>
+
+    <!-- Central Valve -->
+    <rect x="42" y="22" width="6" height="15" fill="#d1d5db" rx="1"/>
+    <circle cx="45" cy="22" r="4.5" fill="#eab308"/>
+
+    <!-- Highlights & Welds -->
+    <line x1="20" y1="85" x2="70" y2="85" stroke="#fca5a5" stroke-width="1.2" opacity="0.6"/>
+    <line x1="32" y1="48" x2="32" y2="125" stroke="#ffffff" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
+
+    <!-- Emblem Stamp / PMUY text -->
+    <circle cx="45" cy="70" r="11" fill="#ffffff" fill-opacity="0.2" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1"/>
+    <text x="45" y="73" fill="#ffffff" font-family="system-ui, sans-serif" font-size="7" font-weight="900" text-anchor="middle">PMUY</text>
+  </g>
+
+  <!-- Gas Stove & Clean Blue Flame -->
+  <g transform="translate(225, 75)">
+    <!-- Connecting Pipe -->
+    <path d="M-55,25 Q-20,40 -10,38 T15,35" stroke="#f59e0b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+    <!-- Stove Stand / Burner -->
+    <ellipse cx="50" cy="55" rx="36" ry="10" fill="#334155"/>
+    <ellipse cx="50" cy="50" rx="32" ry="8" fill="#475569" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Burner Crown -->
+    <ellipse cx="50" cy="48" rx="16" ry="5" fill="#ca8a04"/>
+
+    <!-- Clean Blue Flame Core -->
+    <path d="M50,15 C42,28 38,36 40,46 C42,48 58,48 60,46 C62,36 58,28 50,15 Z" fill="url(#flameGrad)"/>
+    <!-- Inner bright white flame tongue -->
+    <path d="M50,22 C46,30 44,38 46,45 C47,46 53,46 54,45 C56,38 54,30 50,22 Z" fill="#ffffff" opacity="0.9"/>
+
+    <!-- Small side flames -->
+    <ellipse cx="36" cy="46" rx="4" ry="7" fill="url(#flameGrad)" transform="rotate(-25 36 46)"/>
+    <ellipse cx="64" cy="46" rx="4" ry="7" fill="url(#flameGrad)" transform="rotate(25 64 46)"/>
+  </g>
+
+  <!-- Woman Empowerment & Health Icon (Top Right) -->
+  <g transform="translate(325, 25)">
+    <circle cx="18" cy="18" r="18" fill="#db2777" fill-opacity="0.25" stroke="#f472b6" stroke-width="1.5"/>
+    <!-- Clean Health Leaf + Hearth -->
+    <path d="M18,9 C12,15 12,24 18,27 C24,24 24,15 18,9 Z" fill="#38bdf8"/>
+    <path d="M18,16 C15,19 15,23 18,25 C21,23 21,19 18,16 Z" fill="#ffffff"/>
+  </g>
+
+  <!-- Category Tag (Top Left) -->
+  <g transform="translate(24, 20)">
+    <rect width="145" height="26" rx="13" fill="#ffffff" fill-opacity="0.15" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1"/>
+    <circle cx="14" cy="13" r="7" fill="#ea580c"/>
+    <path d="M12,13 L14,15 L17,11" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="26" y="17" fill="#ffffff" font-family="system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="0.5">ENERGY &amp; CLEAN FUEL</text>
+  </g>
+</svg>

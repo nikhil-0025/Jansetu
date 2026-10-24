@@ -601,13 +601,13 @@ router.post('/:requestId/review', requireAuth, requireRole(['officer', 'admin'])
             startDate: new Date(),
             endDate: null
           }));
-          await HouseholdMembershipHistory.insertMany(newHistEntries, { session });
+          await HouseholdMembershipHistory.insertMany(newHistEntries, { session, ordered: true });
 
           // 7. Insert Audit Log
           await AuditLog.create([auditRecord], { session });
 
           // 8. Insert Notifications
-          await Notification.create([notifOriginal, notifNew], { session });
+          await Notification.insertMany([notifOriginal, notifNew], { session, ordered: true });
         });
 
         transactionSuccess = true;

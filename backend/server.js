@@ -78,7 +78,7 @@ app.use((err, req, res, next) => {
 // Start Express Server
 app.listen(PORT, () => {
   console.log(`=======================================================`);
-  console.log(`   JANSETU (जनसेतु) - TechTrix'26                      `);
+  console.log(`   JANSETU (जनसेतु) - National Welfare Portal          `);
   console.log(`   Tagline: "Har Parivaar, Har Haq, Ek Setu."          `);
   console.log(`   Server running on: http://localhost:${PORT}         `);
   console.log(`   Citizen Dashboard: http://localhost:${PORT}/dashboard.html`);

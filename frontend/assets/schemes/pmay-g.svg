@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="skyGradHousing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f284e"/>
+      <stop offset="60%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="sunGradHousing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="roofGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="wallGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="groundGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#15803d"/>
+      <stop offset="100%" stop-color="#166534"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky Background -->
+  <rect width="400" height="200" fill="url(#skyGradHousing)"/>
+
+  <!-- Subtle Sun -->
+  <circle cx="320" cy="55" r="32" fill="url(#sunGradHousing)" opacity="0.85"/>
+  <circle cx="320" cy="55" r="44" fill="#fbbf24" opacity="0.2"/>
+
+  <!-- Distant Hills / Village Contours -->
+  <path d="M0,150 Q100,125 200,140 T400,130 L400,200 L0,200 Z" fill="#1e293b" opacity="0.35"/>
+  <path d="M0,158 Q120,142 240,155 T400,148 L400,200 L0,200 Z" fill="url(#groundGrad)"/>
+
+  <!-- Pathway -->
+  <path d="M190,200 L210,200 L204,165 L196,165 Z" fill="#e2e8f0" opacity="0.8"/>
+
+  <!-- Main House (Pucca Awas) Structure -->
+  <!-- Base Shadow -->
+  <ellipse cx="200" cy="170" rx="70" ry="10" fill="#0f172a" opacity="0.3"/>
+
+  <!-- House Body -->
+  <rect x="145" y="105" width="110" height="60" rx="4" fill="url(#wallGrad)" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- Brick / Modern Architecture Lines -->
+  <line x1="145" y1="125" x2="255" y2="125" stroke="#e2e8f0" stroke-width="1"/>
+  <line x1="145" y1="145" x2="255" y2="145" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Roof (Pucca Pitched Roof) -->
+  <polygon points="135,107 200,62 265,107" fill="url(#roofGrad)"/>
+  <polygon points="142,105 200,65 258,105" fill="#f97316" opacity="0.3"/>
+
+  <!-- Front Door -->
+  <rect x="188" y="125" width="24" height="40" rx="3" fill="#0f284e"/>
+  <circle cx="206" cy="145" r="1.8" fill="#fbbf24"/>
+
+  <!-- Windows with Light -->
+  <rect x="156" y="120" width="20" height="20" rx="2" fill="#38bdf8" stroke="#0f284e" stroke-width="1.5"/>
+  <line x1="166" y1="120" x2="166" y2="140" stroke="#0f284e" stroke-width="1"/>
+  <line x1="156" y1="130" x2="176" y2="130" stroke="#0f284e" stroke-width="1"/>
+
+  <rect x="224" y="120" width="20" height="20" rx="2" fill="#38bdf8" stroke="#0f284e" stroke-width="1.5"/>
+  <line x1="234" y1="120" x2="234" y2="140" stroke="#0f284e" stroke-width="1"/>
+  <line x1="224" y1="130" x2="244" y2="130" stroke="#0f284e" stroke-width="1"/>
+
+  <!-- Trees / Greenery -->
+  <path d="M100,165 C85,145 95,120 115,125 C125,110 145,120 140,140 C150,155 135,170 115,165 Z" fill="#22c55e" opacity="0.9"/>
+  <rect x="115" y="155" width="5" height="15" fill="#78350f"/>
+
+  <path d="M290,165 C275,145 285,120 305,125 C315,110 335,120 330,140 C340,155 325,170 305,165 Z" fill="#16a34a" opacity="0.95"/>
+  <rect x="305" y="155" width="5" height="15" fill="#78350f"/>
+
+  <!-- Security & Guarantee Shield Badge (Top Left) -->
+  <g transform="translate(24, 20)">
+    <rect width="90" height="26" rx="13" fill="#ffffff" fill-opacity="0.15" stroke="#ffffff" stroke-opacity="0.3" stroke-width="1"/>
+    <circle cx="14" cy="13" r="7" fill="#ea580c"/>
+    <path d="M12,13 L14,15 L17,11" stroke="#ffffff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <text x="26" y="17" fill="#ffffff" font-family="system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="0.5">HOUSING</text>
+  </g>
+</svg>

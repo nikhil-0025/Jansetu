@@ -43,7 +43,7 @@ class ConsentService {
       consentId,
       timestamp: now.toISOString(),
       dataConsumer: {
-        id: 'in.gov.jansetu.techtrix',
+        id: 'in.gov.jansetu.portal',
         name: 'JanSetu Unified Public Welfare Verification Platform',
         role: 'DATA_FIDUCIARY'
       },

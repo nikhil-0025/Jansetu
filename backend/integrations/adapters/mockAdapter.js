@@ -15,7 +15,7 @@ const crypto = require('crypto');
 class GovServiceMockAdapter {
   constructor() {
     this.adapterName = 'JANSETU_SIMULATED_MOCK_ADAPTER';
-    this.version = '1.0.0-techtrix-demo';
+    this.version = '1.0.0-demo';
   }
 
   _wrapSimulatedResponse(data, serviceName, operation) {

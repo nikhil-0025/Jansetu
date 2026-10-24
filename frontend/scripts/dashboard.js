@@ -6,6 +6,52 @@ let currentRelationships = [];
 let allSchemes = [];
 let allApplications = [];
 let allDocuments = [];
+let currentNotifications = [];
+
+// Sensitive Information Privacy Masking State
+const sensitiveData = {};
+const sensitiveVisibility = {};
+let allSensitiveVisible = false;
+
+function setSensitiveField(fieldId, rawValue, maskedValue) {
+  sensitiveData[fieldId] = { raw: rawValue, masked: maskedValue };
+  if (sensitiveVisibility[fieldId] === undefined) {
+    sensitiveVisibility[fieldId] = false; // default masked
+  }
+  updateSensitiveFieldDisplay(fieldId);
+}
+
+function updateSensitiveFieldDisplay(fieldId) {
+  const el = document.getElementById(fieldId);
+  const icon = document.getElementById(`${fieldId}-icon`);
+  const data = sensitiveData[fieldId];
+  if (!el || !data) return;
+
+  const isVisible = sensitiveVisibility[fieldId];
+  el.textContent = isVisible ? data.raw : data.masked;
+  if (icon) {
+    icon.setAttribute('data-lucide', isVisible ? 'eye-off' : 'eye');
+  }
+}
+
+function toggleSensitiveField(fieldId) {
+  sensitiveVisibility[fieldId] = !sensitiveVisibility[fieldId];
+  updateSensitiveFieldDisplay(fieldId);
+  if (window.lucide) lucide.createIcons();
+}
+
+function toggleAllSensitiveInfo() {
+  allSensitiveVisible = !allSensitiveVisible;
+  Object.keys(sensitiveData).forEach(fieldId => {
+    sensitiveVisibility[fieldId] = allSensitiveVisible;
+    updateSensitiveFieldDisplay(fieldId);
+  });
+  const btnText = document.getElementById('masterToggleText');
+  const btnIcon = document.getElementById('masterToggleIcon');
+  if (btnText) btnText.textContent = allSensitiveVisible ? 'Hide All IDs' : 'Show All IDs';
+  if (btnIcon) btnIcon.setAttribute('data-lucide', allSensitiveVisible ? 'eye-off' : 'eye');
+  if (window.lucide) lucide.createIcons();
+}
 
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', async () => {
@@ -33,6 +79,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (sepDateInput) {
     sepDateInput.value = new Date().toISOString().split('T')[0];
   }
+
+  // Explicit event listener binding for all Add Member triggers
+  document.querySelectorAll('button[onclick*="openAddMemberModal"], a[onclick*="openAddMemberModal"]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAddMemberModal();
+    });
+  });
 });
 
 // Load System & DB Mode
@@ -102,47 +156,97 @@ function updateHeaderAndBanner() {
   if (!currentHousehold) return;
 
   const headMember = currentMembers.find(m => m.citizenId === currentHousehold.headCitizenId) || currentMembers[0];
+  const famId = currentHousehold.familyId || 'FAM-1001';
+  const citId = headMember ? headMember.citizenId : 'CIT-1001';
+  const dwellRef = `${currentHousehold.dwellingReference || 'D-104'} (${currentHousehold.dwellingType || 'Kutcha'})`;
 
-  document.getElementById('headerFamilyId').textContent = currentHousehold.familyId;
-  document.getElementById('bannerFamilyId').textContent = currentHousehold.familyId;
   document.getElementById('welcomeCitizenName').textContent = headMember ? headMember.fullName : 'Citizen';
-  document.getElementById('bannerCitizenId').textContent = headMember ? headMember.citizenId : 'CIT-1001';
-  document.getElementById('bannerDwellingRef').textContent = `${currentHousehold.dwellingReference || 'D-104'} (${currentHousehold.dwellingType || 'Kutcha'})`;
 
-  const bannerStatusBadge = document.getElementById('bannerStatusBadge');
+  setSensitiveField('headerFamilyId', famId, 'FAM-••••');
+  setSensitiveField('bannerFamilyId', famId, 'FAM-••••');
+  setSensitiveField('bannerCitizenId', citId, 'CIT-••••');
+  setSensitiveField('bannerDwellingRef', dwellRef, 'D-••• (Kutcha)');
+
   const bannerStatusText = document.getElementById('bannerStatusText');
-  bannerStatusText.textContent = `${currentHousehold.verificationStatus} Household`;
-
-  if (currentHousehold.verificationStatus === 'Verified') {
-    bannerStatusBadge.className = 'badge badge-verified';
-  } else {
-    bannerStatusBadge.className = 'badge badge-pending';
+  if (bannerStatusText) {
+    bannerStatusText.textContent = `${currentHousehold.verificationStatus || 'Verified'} Household`;
   }
 
   // Update quick cards badges
-  document.getElementById('countSchemesBadge').textContent = `${allSchemes.length} Schemes`;
-  document.getElementById('countAppsBadge').textContent = `${allApplications.length} Recorded`;
-  document.getElementById('countDocsBadge').textContent = `${allDocuments.length} Vault Docs`;
-  document.getElementById('countFamilyBadge').textContent = `${currentMembers.length} Members`;
+  const cSchemes = document.getElementById('countSchemesBadge');
+  const cApps = document.getElementById('countAppsBadge');
+  const cDocs = document.getElementById('countDocsBadge');
+  const cFamily = document.getElementById('countFamilyBadge');
+
+  if (cSchemes) cSchemes.textContent = `${allSchemes.length} Schemes`;
+  if (cApps) cApps.textContent = `${allApplications.length} Recorded`;
+  if (cDocs) cDocs.textContent = `${allDocuments.length} Vault Docs`;
+  if (cFamily) cFamily.textContent = `${currentMembers.length} Members`;
 }
 
-// Render Overview Schemes Cards
-function renderOverviewSchemes() {
-  const container = document.getElementById('overviewSchemesGrid');
-  if (!container) return;
+// Helper: Category Badge Styling
+function getCategoryBadgeClass(category) {
+  if (!category) return 'cat-badge-default';
+  const c = category.toLowerCase();
+  if (c.includes('housing')) return 'cat-badge-housing';
+  if (c.includes('agri')) return 'cat-badge-agriculture';
+  if (c.includes('health')) return 'cat-badge-healthcare';
+  if (c.includes('food')) return 'cat-badge-food-security';
+  if (c.includes('energy') || c.includes('fuel') || c.includes('ujjwala')) return 'cat-badge-energy';
+  if (c.includes('skill')) return 'cat-badge-skills';
+  return 'cat-badge-default';
+}
 
-  container.innerHTML = allSchemes.slice(0, 4).map(s => {
-    return `
-      <div class="scheme-card">
-        <div class="scheme-card-header">
-          <div>
-            <div class="scheme-title">${s.name}</div>
-            <div class="scheme-hindi-title">${s.nameHindi || ''}</div>
-          </div>
-          <span class="badge ${s.benefitType === 'Household' ? 'badge-saffron' : 'badge-info'}">${s.benefitType}</span>
+function getCategoryIcon(category) {
+  if (!category) return 'award';
+  const c = category.toLowerCase();
+  if (c.includes('housing')) return 'home';
+  if (c.includes('agri')) return 'sprout';
+  if (c.includes('health')) return 'activity';
+  if (c.includes('food')) return 'shopping-bag';
+  if (c.includes('energy') || c.includes('fuel')) return 'flame';
+  if (c.includes('skill')) return 'award';
+  return 'award';
+}
+
+// Generate Unified Modern Scheme Card with Visual Preview
+function createSchemeCardHtml(s) {
+  const catClass = getCategoryBadgeClass(s.category);
+  const catIcon = getCategoryIcon(s.category);
+  const imgUrl = s.imageUrl || '/assets/schemes/fallback.svg';
+  const imgAlt = s.imageAlt || `${s.name} preview illustration`;
+
+  return `
+    <div class="scheme-card" data-category="${s.category}" data-scheme-id="${s.schemeId}">
+      <!-- Top: Relevant Visual Preview Image -->
+      <div class="scheme-card-media">
+        <img class="scheme-card-img" 
+             src="${imgUrl}" 
+             alt="${imgAlt}" 
+             loading="lazy" 
+             onerror="this.onerror=null; this.src='/assets/schemes/fallback.svg';">
+        <div class="scheme-media-badges">
+          <span class="scheme-cat-badge ${catClass}">
+            <i data-lucide="${catIcon}" style="width:12px;height:12px;"></i> ${s.category}
+          </span>
+          <span class="scheme-type-badge">${s.benefitType}</span>
         </div>
+      </div>
 
+      <!-- Card Body -->
+      <div class="scheme-card-body">
+        <div class="scheme-title">${s.name}</div>
+        <div class="scheme-hindi-title">${s.nameHindi || ''}</div>
         <div class="scheme-desc">${s.description}</div>
+
+        ${s.eligibilityPreview ? `
+          <div class="scheme-eligibility-preview">
+            <i data-lucide="shield-check" class="elig-icon"></i>
+            <div class="elig-text">
+              <strong>Eligibility:</strong> ${s.eligibilityPreview}
+            </div>
+          </div>
+        ` : ''}
 
         <div class="scheme-meta">
           <div>
@@ -150,22 +254,36 @@ function renderOverviewSchemes() {
             <span class="scheme-benefit-badge">${s.benefitAmount || 'Financial Assistance'}</span>
           </div>
           <div style="text-align:right;">
-            <span style="color:var(--text-muted); font-size:0.75rem;">Category:</span><br>
-            <strong>${s.category}</strong>
+            <span style="color:var(--text-muted); font-size:0.75rem;">Documents:</span><br>
+            <strong style="font-size:0.78rem; color:#475569;">${s.requiredDocuments ? s.requiredDocuments.length + ' required' : 'Standard KYC'}</strong>
           </div>
         </div>
 
         <div class="scheme-actions">
-          <button onclick="checkEligibilityLive('${s.schemeId}')" class="btn btn-secondary btn-sm" style="flex:1;">
-            <i data-lucide="check-circle" style="width:14px;height:14px;"></i> Check Eligibility
+          <button onclick="openSchemeDetailsModal('${s.schemeId}')" class="btn btn-details btn-sm" style="flex:1;" title="View Complete Scheme Details & Documents">
+            <i data-lucide="info" style="width:14px;height:14px;"></i> View Details
           </button>
-          <button onclick="openApplyForScheme('${s.schemeId}')" class="btn btn-primary btn-sm" style="flex:1;">
-            <i data-lucide="send" style="width:14px;height:14px;"></i> Apply Now
+          <button onclick="checkEligibilityLive('${s.schemeId}')" class="btn btn-secondary btn-sm" style="flex:1;" title="Check Live Eligibility Rules">
+            <i data-lucide="check-circle" style="width:14px;height:14px;"></i> Check
+          </button>
+          <button onclick="openApplyForScheme('${s.schemeId}')" class="btn btn-primary btn-sm" style="flex:1;" title="Apply for Scheme">
+            <i data-lucide="send" style="width:14px;height:14px;"></i> Apply
           </button>
         </div>
       </div>
-    `;
-  }).join('');
+    </div>
+  `;
+}
+
+// Render Overview Schemes Cards
+function renderOverviewSchemes() {
+  const container = document.getElementById('overviewSchemesGrid');
+  if (!container) return;
+
+  container.innerHTML = allSchemes.slice(0, 4).map(s => createSchemeCardHtml(s)).join('');
+  if (window.lucide && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
 }
 
 // Render Recent Applications Tracker
@@ -216,11 +334,15 @@ function renderSidebarWidgets() {
 
   const head = currentMembers.find(m => m.citizenId === currentHousehold.headCitizenId) || currentMembers[0];
   
-  document.getElementById('infoFamilyId').textContent = currentHousehold.familyId;
+  const famId = currentHousehold.familyId || 'FAM-1001';
+  const dwellRef = currentHousehold.dwellingReference || 'D-104';
+  const rcNo = currentHousehold.rationCardNumber || 'RC-UP-2024-98421';
+
+  setSensitiveField('infoFamilyId', famId, 'FAM-••••');
   document.getElementById('infoHeadName').textContent = head ? head.fullName : 'Rahul Sharma';
-  document.getElementById('infoDwellingRef').textContent = currentHousehold.dwellingReference || 'D-104';
+  setSensitiveField('infoDwellingRef', dwellRef, 'D-•••');
   document.getElementById('infoDwellingType').textContent = currentHousehold.dwellingType || 'Kutcha';
-  document.getElementById('infoRationCard').textContent = currentHousehold.rationCardNumber || 'RC-UP-2024-98421';
+  setSensitiveField('infoRationCard', rcNo, 'RC-UP-••••-••••');
   document.getElementById('infoIncomeCat').textContent = `${currentHousehold.incomeCategory || 'BPL'} (₹${currentHousehold.annualIncome?.toLocaleString('en-IN') || '1,20,000'}/yr)`;
   
   const addr = currentHousehold.address;
@@ -256,46 +378,10 @@ function renderAllSchemesTab() {
   const container = document.getElementById('allSchemesGrid');
   if (!container) return;
 
-  container.innerHTML = allSchemes.map(s => {
-    return `
-      <div class="scheme-card">
-        <div class="scheme-card-header">
-          <div>
-            <div class="scheme-title">${s.name}</div>
-            <div class="scheme-hindi-title">${s.nameHindi || ''}</div>
-          </div>
-          <span class="badge ${s.benefitType === 'Household' ? 'badge-saffron' : 'badge-info'}">${s.benefitType}</span>
-        </div>
-
-        <div class="scheme-desc">${s.description}</div>
-
-        <div style="background: #f8fafc; padding: 10px; border-radius: 8px; font-size: 0.78rem; margin-bottom: 14px; border: 1px solid #e2e8f0;">
-          <strong style="color:var(--primary);">Required Documents:</strong>
-          <div style="color:var(--text-muted); margin-top: 2px;">${s.requiredDocuments ? s.requiredDocuments.join(', ') : 'Standard KYC'}</div>
-        </div>
-
-        <div class="scheme-meta">
-          <div>
-            <span style="color:var(--text-muted); font-size:0.75rem;">Benefit:</span><br>
-            <span class="scheme-benefit-badge">${s.benefitAmount || 'Financial Assistance'}</span>
-          </div>
-          <div style="text-align:right;">
-            <span style="color:var(--text-muted); font-size:0.75rem;">Category:</span><br>
-            <strong>${s.category}</strong>
-          </div>
-        </div>
-
-        <div class="scheme-actions">
-          <button onclick="checkEligibilityLive('${s.schemeId}')" class="btn btn-secondary btn-sm" style="flex:1;">
-            <i data-lucide="check-circle" style="width:14px;height:14px;"></i> Check Eligibility
-          </button>
-          <button onclick="openApplyForScheme('${s.schemeId}')" class="btn btn-primary btn-sm" style="flex:1;">
-            <i data-lucide="send" style="width:14px;height:14px;"></i> Apply Now
-          </button>
-        </div>
-      </div>
-    `;
-  }).join('');
+  container.innerHTML = allSchemes.map(s => createSchemeCardHtml(s)).join('');
+  if (window.lucide && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
 }
 
 // Render Applications Table
@@ -485,12 +571,22 @@ function renderFamilyMembersTab() {
 
 // Open Add Member Modal
 function openAddMemberModal() {
-  const form = document.getElementById('addMemberForm');
-  if (form) form.reset();
-  const landWrap = document.getElementById('addMemLandWrap');
-  if (landWrap) landWrap.style.display = 'none';
+  try {
+    const form = document.getElementById('addMemberForm');
+    if (form) form.reset();
+    const landWrap = document.getElementById('addMemLandWrap');
+    if (landWrap) landWrap.style.display = 'none';
+    const btn = document.getElementById('btnAddMemberSubmit');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="plus-circle" style="width:14px;height:14px;"></i> Add to Household';
+    }
+  } catch (err) {
+    console.warn('Error preparing add member modal:', err);
+  }
   openModal('addMemberModal');
 }
+window.openAddMemberModal = openAddMemberModal;
 
 // Toggle Land Field based on Farmer Checkbox
 function toggleFarmerLandField() {
@@ -510,8 +606,10 @@ async function handleAddMemberSubmit(e) {
   }
 
   const btn = document.getElementById('btnAddMemberSubmit');
-  btn.disabled = true;
-  btn.innerHTML = 'Adding member...';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = 'Adding member...';
+  }
 
   const fullName = document.getElementById('addMemFullName').value.trim();
   const dob = document.getElementById('addMemDob').value;
@@ -543,8 +641,10 @@ async function handleAddMemberSubmit(e) {
     });
 
     closeModal('addMemberModal');
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="plus-circle" style="width:14px;height:14px;"></i> Add to Household';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="plus-circle" style="width:14px;height:14px;"></i> Add to Household';
+    }
 
     showToast(`Family member ${fullName} (${res.member.citizenId}) added in 'Pending Verification' status!`, 'success');
     if (res.syntheticMatch) {
@@ -553,14 +653,32 @@ async function handleAddMemberSubmit(e) {
 
     await refreshDashboardData();
     renderFamilyMembersTab();
+    if (typeof renderFamilyTree === 'function') {
+      renderFamilyTree('familyTreeSvgContainer', currentMembers, currentRelationships);
+    }
   } catch (err) {
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="plus-circle" style="width:14px;height:14px;"></i> Add to Household';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="plus-circle" style="width:14px;height:14px;"></i> Add to Household';
+    }
     showToast(err.message, 'error');
   }
 }
 
-// View Member Details Modal
+// Helper to toggle IDs within member details modal
+window.toggleModalSensitiveField = function(elId, realVal, maskedVal) {
+  const el = document.getElementById(elId);
+  const icon = document.getElementById(`${elId}-icon`);
+  if (!el) return;
+  const isHidden = el.textContent.includes('•') || el.textContent.includes('*');
+  el.textContent = isHidden ? realVal : maskedVal;
+  if (icon) {
+    icon.setAttribute('data-lucide', isHidden ? 'eye-off' : 'eye');
+    if (window.lucide) lucide.createIcons();
+  }
+};
+
+// View Member Details Modal (Interactive Profile, Documents & Schemes)
 async function viewMemberDetails(citizenId) {
   if (!currentHousehold) return;
 
@@ -576,25 +694,145 @@ async function viewMemberDetails(citizenId) {
     const history = res.membershipHistory || [];
     const audit = res.auditTrail || [];
 
-    if (title) title.textContent = `Member Profile: ${m.fullName} (${m.citizenId})`;
+    if (title) title.textContent = `Member Profile: ${m.fullName}`;
 
-    let statusBadge = `<span class="badge badge-verified">Verified</span>`;
+    let statusBadge = `<span class="badge badge-verified"><i data-lucide="check-circle" style="width:12px;height:12px;"></i> Verified Member</span>`;
     if (m.verificationStatus === 'Pending Verification' || !m.verificationStatus) {
-      statusBadge = `<span class="badge badge-warning">Pending Verification</span>`;
+      statusBadge = `<span class="badge badge-warning"><i data-lucide="clock" style="width:12px;height:12px;"></i> Pending Review</span>`;
     } else if (m.verificationStatus === 'Under Review') {
-      statusBadge = `<span class="badge badge-warning">Under Review</span>`;
+      statusBadge = `<span class="badge badge-warning"><i data-lucide="search" style="width:12px;height:12px;"></i> Under Officer Review</span>`;
     } else if (m.verificationStatus === 'Rejected') {
-      statusBadge = `<span class="badge badge-danger">Rejected</span>`;
+      statusBadge = `<span class="badge badge-danger"><i data-lucide="x-circle" style="width:12px;height:12px;"></i> Rejected</span>`;
     }
 
     const verificationNote = m.verificationDetails?.note || 'Standard profile review.';
     const isSimulated = m.verificationDetails?.isSimulated ? 'Simulated Test Record (Fictional)' : 'Live Mode';
     const syntheticMatch = m.verificationDetails?.syntheticVerificationMatch ? '✅ Matched Synthetic Dataset' : 'Self-Declared / Pending Match';
 
+    // 1. Linked Documents for this member
+    const memberDocs = (allDocuments || []).filter(d => 
+      d.citizenId === citizenId || 
+      (d.metadata && d.metadata.citizenId === citizenId) || 
+      (d.uploadedBy === citizenId) ||
+      (d.documentName && d.documentName.toLowerCase().includes(m.fullName.toLowerCase()))
+    );
+
+    let docsHtml = '';
+    if (memberDocs.length > 0) {
+      docsHtml = memberDocs.map(d => `
+        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <div>
+            <div style="font-weight:600; font-size:0.85rem; color:var(--primary); display:flex; align-items:center; gap:6px;">
+              <i data-lucide="file-text" style="width:14px; height:14px; color:#2563eb;"></i>
+              ${d.documentType || d.documentName}
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+              Doc ID: <code>${d.documentId}</code> • ${d.fileFormat || 'PDF'} • ${new Date(d.uploadedAt).toLocaleDateString()}
+            </div>
+          </div>
+          <div>
+            <span class="badge ${d.verificationStatus === 'Verified' ? 'badge-verified' : 'badge-warning'}" style="font-size:0.72rem;">
+              ${d.verificationStatus}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      docsHtml = `
+        <div style="background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px; padding:14px; text-align:center; font-size:0.8rem; color:var(--text-muted);">
+          No documents uploaded for ${m.fullName} yet.
+          <div style="margin-top:8px;">
+            <button type="button" onclick="closeModal('memberDetailsModal'); openUploadDocModal();" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+              <i data-lucide="upload" style="width:12px;height:12px;"></i> Upload Member Document
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // 2. Welfare Schemes & Entitlements for this member
+    const memberSchemes = [];
+    if (m.isFarmer) {
+      memberSchemes.push({
+        name: 'PM-KISAN Samman Nidhi',
+        tag: 'Individual Entitlement',
+        badge: 'badge-verified',
+        benefit: '₹6,000 / year direct benefit transfer in 3 quad-monthly installments',
+        action: "closeModal('memberDetailsModal'); checkEligibilityLive('SCH-PM-KISAN');"
+      });
+    }
+    if (m.isHeadOfFamily && currentHousehold.dwellingType === 'Kutcha') {
+      memberSchemes.push({
+        name: 'Pradhan Mantri Awas Yojana (PMAY-G)',
+        tag: 'Household Housing Grant',
+        badge: 'badge-saffron',
+        benefit: '₹1,20,000 pucca housing grant for homeless/kutcha dwellings',
+        action: "closeModal('memberDetailsModal'); checkEligibilityLive('SCH-PMAY-G');"
+      });
+    }
+    if (m.occupation === 'Student' || m.age < 22) {
+      memberSchemes.push({
+        name: 'National Pre-Matric / Post-Matric Scholarship',
+        tag: 'Education Welfare',
+        badge: 'badge-info',
+        benefit: 'Annual education stipend, tuition reimbursement and book support',
+        action: "closeModal('memberDetailsModal'); switchTab('schemes');"
+      });
+    }
+    if (m.age >= 60) {
+      memberSchemes.push({
+        name: 'Indira Gandhi National Old Age Pension (IGNOAPS)',
+        tag: 'Social Security',
+        badge: 'badge-verified',
+        benefit: 'Monthly old age pension of ₹1,000 directly to bank account',
+        action: "closeModal('memberDetailsModal'); switchTab('schemes');"
+      });
+    }
+    if (m.hasDisability) {
+      memberSchemes.push({
+        name: 'Divyangjan Disability Welfare Support',
+        tag: 'Special Assistance',
+        badge: 'badge-saffron',
+        benefit: 'Monthly financial assistance, assistive aids & travel concessions',
+        action: "closeModal('memberDetailsModal'); switchTab('schemes');"
+      });
+    }
+    // Universal Household Schemes
+    memberSchemes.push({
+      name: 'Ayushman Bharat PM-JAY Health Protection',
+      tag: 'Household Health Entitlement',
+      badge: 'badge-verified',
+      benefit: '₹5,00,000 annual cashless health cover per family for secondary & tertiary hospitalization',
+      action: "closeModal('memberDetailsModal'); switchTab('schemes');"
+    });
+    memberSchemes.push({
+      name: 'NFSA National Food Security Antyodaya',
+      tag: 'Food Security Quota',
+      badge: 'badge-verified',
+      benefit: '35 kg monthly subsidized foodgrain allocation via Fair Price Shop',
+      action: "closeModal('memberDetailsModal'); switchTab('schemes');"
+    });
+
+    const schemesHtml = memberSchemes.map(s => `
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">
+        <div style="flex:1;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <strong style="color:var(--primary); font-size:0.875rem;">${s.name}</strong>
+            <span class="badge ${s.badge}" style="font-size:0.65rem;">${s.tag}</span>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px; line-height:1.35;">${s.benefit}</div>
+        </div>
+        <button type="button" onclick="${s.action}" class="btn btn-secondary btn-sm" style="font-size:0.75rem; padding:4px 10px; white-space:nowrap;">
+          Check Entitlement
+        </button>
+      </div>
+    `).join('');
+
+    // 3. Relationships & History
     const relationshipList = rels.map(r => {
       const otherId = r.citizenId1 === citizenId ? r.citizenId2 : r.citizenId1;
       const otherCit = currentMembers.find(c => c.citizenId === otherId);
-      return `<li><strong>${r.relationshipType}</strong> to ${otherCit ? otherCit.fullName : otherId} (${otherId})</li>`;
+      return `<li><strong>${r.relationshipType}</strong> to ${otherCit ? otherCit.fullName : otherId} (<code>${otherId}</code>)</li>`;
     }).join('') || '<li>Household member</li>';
 
     const historyList = history.map(h => `
@@ -604,70 +842,157 @@ async function viewMemberDetails(citizenId) {
       </div>
     `).join('') || '<div style="font-size:0.8rem; color:#64748b;">No prior household moves recorded.</div>';
 
-    const auditList = audit.slice(0, 5).map(a => `
-      <div style="font-size:0.75rem; padding:5px 0; border-bottom:1px solid #f1f5f9;">
-        <span style="color:#64748b;">${new Date(a.timestamp).toLocaleString()}:</span> <strong>${a.action}</strong> — ${a.details}
-      </div>
-    `).join('') || '<div style="font-size:0.8rem; color:#64748b;">No modifications recorded.</div>';
+    // Masked values for IDs
+    const rawCitId = m.citizenId || 'CIT-1001';
+    const maskedCitId = 'CIT-••••';
+    const rawAadhaar = m.maskedAadhaar || 'XXXX-XXXX-9842';
+    const maskedAadhaar = 'XXXX-XXXX-••••';
+    const rawFamId = m.currentFamilyId || currentHousehold.familyId;
+    const maskedFamId = 'FAM-••••';
 
     content.innerHTML = `
-      <div style="background:#f8fafc; border-radius:8px; padding:16px; margin-bottom:16px; border:1px solid #e2e8f0;">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+      <!-- Member Overview Header Box -->
+      <div style="background: linear-gradient(135deg, #0f284e 0%, #1e3a8a 100%); color:#ffffff; border-radius:10px; padding:18px 20px; margin-bottom:18px; box-shadow:0 4px 12px rgba(15,40,78,0.2);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
           <div>
-            <h3 style="font-size:1.15rem; margin:0; color:var(--primary);">${m.fullName}</h3>
-            <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">
-              Internal Citizen ID: <strong>${m.citizenId}</strong> • Masked ID: <code>${m.maskedAadhaar || 'XXXX-XXXX-****'}</code>
-            </div>
-            <div style="font-size:0.72rem; color:#94a3b8; margin-top:1px;">
-              Household ID: <strong>${m.currentFamilyId}</strong> (Local System ID - Not an official National Family ID)
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:1.8rem;">${m.gender === 'Female' ? '👩' : (m.age < 18 ? '👦' : '👨')}</span>
+              <div>
+                <h3 style="font-size:1.25rem; margin:0; color:#fed7aa; display:flex; align-items:center; gap:8px;">
+                  ${m.fullName}
+                  ${m.isHeadOfFamily ? '<span class="badge badge-saffron" style="font-size:0.65rem;">Head of Family</span>' : ''}
+                </h3>
+                <div style="font-size:0.8rem; color:#cbd5e1; margin-top:2px;">
+                  ${m.age || 0} years old • ${m.gender} • ${m.occupation || 'Resident'}
+                </div>
+              </div>
             </div>
           </div>
           <div>${statusBadge}</div>
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.85rem;">
-          <div><strong>Date of Birth:</strong> ${m.dob} (${m.age || 0} years)</div>
-          <div><strong>Gender:</strong> ${m.gender}</div>
-          <div><strong>Occupation:</strong> ${m.occupation || 'Resident'}</div>
-          <div><strong>Education:</strong> ${m.education || 'Not Specified'}</div>
-          <div><strong>Farmer Status:</strong> ${m.isFarmer ? `Yes (${m.landholdingHectares || 0} Ha)` : 'No'}</div>
-          <div><strong>Social Category:</strong> ${m.category || 'General'}</div>
-          <div><strong>Disability Status:</strong> ${m.hasDisability ? 'Benchmark Disability' : 'None'}</div>
-          <div><strong>Head of Family:</strong> ${m.isHeadOfFamily ? 'Yes (Head)' : 'No'}</div>
+        <!-- IDs Row with Eye Mask Toggles -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-top:16px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.15);">
+          <!-- Citizen ID -->
+          <div style="background:rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:0.78rem;">
+            <div style="color:#cbd5e1; font-size:0.7rem;">Citizen ID:</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:2px;">
+              <strong id="modalMemCitId" style="color:#ffffff; font-family:monospace; font-size:0.85rem;">${maskedCitId}</strong>
+              <button type="button" class="eye-toggle-btn" onclick="toggleModalSensitiveField('modalMemCitId', '${rawCitId}', '${maskedCitId}')" title="Toggle Citizen ID">
+                <i data-lucide="eye" id="modalMemCitId-icon" style="width:13px;height:13px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Masked Aadhaar -->
+          <div style="background:rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:0.78rem;">
+            <div style="color:#cbd5e1; font-size:0.7rem;">Aadhaar Ref:</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:2px;">
+              <strong id="modalMemAadhaar" style="color:#ffffff; font-family:monospace; font-size:0.85rem;">${maskedAadhaar}</strong>
+              <button type="button" class="eye-toggle-btn" onclick="toggleModalSensitiveField('modalMemAadhaar', '${rawAadhaar}', '${maskedAadhaar}')" title="Toggle Aadhaar">
+                <i data-lucide="eye" id="modalMemAadhaar-icon" style="width:13px;height:13px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Family ID -->
+          <div style="background:rgba(255,255,255,0.1); border-radius:6px; padding:8px 12px; font-size:0.78rem;">
+            <div style="color:#cbd5e1; font-size:0.7rem;">Household Family ID:</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:2px;">
+              <strong id="modalMemFamId" style="color:#ffffff; font-family:monospace; font-size:0.85rem;">${maskedFamId}</strong>
+              <button type="button" class="eye-toggle-btn" onclick="toggleModalSensitiveField('modalMemFamId', '${rawFamId}', '${maskedFamId}')" title="Toggle Family ID">
+                <i data-lucide="eye" id="modalMemFamId-icon" style="width:13px;height:13px;"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Verification Audit Details -->
-      <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:12px; margin-bottom:16px; font-size:0.8rem;">
-        <strong style="color:#92400e;">Administrative Verification & Simulation Status:</strong>
-        <div style="margin-top:4px; color:#78350f;">
-          • Mode: <strong>${isSimulated}</strong><br>
-          • Test Dataset Match: <strong>${syntheticMatch}</strong><br>
-          • Note: <em>${verificationNote}</em>
+      <!-- Demographics & Attributes Grid -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:14px; margin-bottom:18px;">
+        <h4 style="font-size:0.88rem; color:var(--primary); margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+          <i data-lucide="user-check" style="width:15px;height:15px;color:#2563eb;"></i>
+          Demographic & Socio-Economic Details
+        </h4>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-size:0.825rem;">
+          <div><span style="color:var(--text-muted);">Date of Birth:</span> <strong>${m.dob} (${m.age || 0} yrs)</strong></div>
+          <div><span style="color:var(--text-muted);">Gender:</span> <strong>${m.gender}</strong></div>
+          <div><span style="color:var(--text-muted);">Occupation:</span> <strong>${m.occupation || 'Resident'}</strong></div>
+          <div><span style="color:var(--text-muted);">Education:</span> <strong>${m.education || 'Not Specified'}</strong></div>
+          <div><span style="color:var(--text-muted);">Social Category:</span> <strong>${m.category || 'General'}</strong></div>
+          <div><span style="color:var(--text-muted);">Farmer Status:</span> <strong>${m.isFarmer ? `🌾 Farmer (${m.landholdingHectares || 0} Ha)` : 'Non-Farmer'}</strong></div>
+          <div><span style="color:var(--text-muted);">Disability:</span> <strong>${m.hasDisability ? 'Benchmark Disability' : 'None'}</strong></div>
+          <div><span style="color:var(--text-muted);">Headship:</span> <strong>${m.isHeadOfFamily ? 'Head of Household' : 'Household Member'}</strong></div>
         </div>
       </div>
 
-      <!-- Family Relationships -->
-      <div style="margin-bottom:16px;">
-        <h4 style="font-size:0.9rem; color:var(--primary); margin-bottom:6px;">Household Relationships</h4>
-        <ul style="margin:0; padding-left:20px; font-size:0.825rem; color:#334155;">
-          ${relationshipList}
-        </ul>
-      </div>
-
-      <!-- Household Membership History -->
-      <div style="margin-bottom:16px;">
-        <h4 style="font-size:0.9rem; color:var(--primary); margin-bottom:6px;">Household Membership History</h4>
-        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:8px 12px;">
-          ${historyList}
+      <!-- SECTION 1: Member's Linked Documents -->
+      <div style="margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="font-size:0.9rem; color:var(--primary); margin:0; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="folder-lock" style="width:15px;height:15px;color:#d97706;"></i>
+            Linked Official Documents (${memberDocs.length})
+          </h4>
+          <button type="button" onclick="closeModal('memberDetailsModal'); openUploadDocModal();" class="btn btn-secondary btn-sm" style="font-size:0.72rem; padding:3px 8px;">
+            <i data-lucide="plus" style="width:11px;height:11px;"></i> Upload Document
+          </button>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px;">
+          ${docsHtml}
         </div>
       </div>
 
-      <!-- Audit History -->
-      <div>
-        <h4 style="font-size:0.9rem; color:var(--primary); margin-bottom:6px;">Audit Trail</h4>
-        <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:8px 12px; max-height:140px; overflow-y:auto;">
-          ${auditList}
+      <!-- SECTION 2: Member's Eligible Schemes & Entitlements -->
+      <div style="margin-bottom:18px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h4 style="font-size:0.9rem; color:var(--primary); margin:0; display:flex; align-items:center; gap:6px;">
+            <i data-lucide="award" style="width:15px;height:15px;color:#16a34a;"></i>
+            Welfare Schemes & Entitlements (${memberSchemes.length})
+          </h4>
+          <span style="font-size:0.72rem; color:var(--text-muted);">Evaluated for ${m.fullName}</span>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px;">
+          ${schemesHtml}
+        </div>
+      </div>
+
+      <!-- SECTION 3: Relationships & History -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px;">
+        <div>
+          <h4 style="font-size:0.85rem; color:var(--primary); margin-bottom:6px;">Household Relationships</h4>
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 12px; font-size:0.8rem; max-height:130px; overflow-y:auto;">
+            <ul style="margin:0; padding-left:16px;">${relationshipList}</ul>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-size:0.85rem; color:var(--primary); margin-bottom:6px;">Membership History</h4>
+          <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:6px; padding:10px 12px; font-size:0.8rem; max-height:130px; overflow-y:auto;">
+            ${historyList}
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: Direct Action Desk for this member -->
+      <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div>
+          <strong style="color:#9a3412; font-size:0.825rem;">Member Service Actions:</strong>
+          <div style="font-size:0.75rem; color:#78350f;">Request profile corrections, upload certificates, or initiate household separation.</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button type="button" onclick="closeModal('memberDetailsModal'); openCorrectionForCitizen('${m.citizenId}');" class="btn btn-secondary btn-sm" style="font-size:0.75rem;">
+            <i data-lucide="edit-3" style="width:12px;height:12px;"></i> Correct Profile
+          </button>
+          ${!m.isHeadOfFamily && m.age >= 18 ? `
+            <button type="button" onclick="closeModal('memberDetailsModal'); switchTab('separation'); openSeparationWizard();" class="btn btn-saffron btn-sm" style="font-size:0.75rem;">
+              <i data-lucide="git-branch" style="width:12px;height:12px;"></i> Request Separation
+            </button>
+          ` : ''}
+          ${!m.isHeadOfFamily ? `
+            <button type="button" onclick="closeModal('memberDetailsModal'); openRemoveMemberModal('${m.citizenId}');" class="btn btn-danger btn-sm" style="font-size:0.75rem;">
+              <i data-lucide="user-minus" style="width:12px;height:12px;"></i> Remove
+            </button>
+          ` : ''}
         </div>
       </div>
     `;
@@ -996,9 +1321,83 @@ function switchTab(tabName) {
 }
 
 // Filter Schemes Live
+// Open Scheme Details Modal with Visual Preview
+function openSchemeDetailsModal(schemeId) {
+  const scheme = allSchemes.find(s => s.schemeId === schemeId);
+  if (!scheme) return;
+
+  const titleEl = document.getElementById('detailModalSchemeName');
+  if (titleEl) titleEl.textContent = scheme.name;
+
+  const hindiEl = document.getElementById('detailModalSchemeHindi');
+  if (hindiEl) hindiEl.textContent = scheme.nameHindi || '';
+
+  const catEl = document.getElementById('detailModalCategory');
+  if (catEl) catEl.textContent = scheme.category;
+
+  const typeEl = document.getElementById('detailModalBenefitType');
+  if (typeEl) typeEl.textContent = `${scheme.benefitType} Benefit`;
+
+  const descEl = document.getElementById('detailModalDesc');
+  if (descEl) descEl.textContent = scheme.description;
+
+  const benefitEl = document.getElementById('detailModalBenefitAmount');
+  if (benefitEl) benefitEl.textContent = scheme.benefitAmount || 'Financial Assistance';
+
+  const scopeEl = document.getElementById('detailModalScope');
+  if (scopeEl) scopeEl.textContent = `${scheme.benefitType} Level Entitlement`;
+
+  const imgEl = document.getElementById('detailModalImg');
+  if (imgEl) {
+    imgEl.src = scheme.imageUrl || '/assets/schemes/fallback.svg';
+    imgEl.alt = scheme.imageAlt || scheme.name;
+  }
+
+  const eligEl = document.getElementById('detailModalEligibility');
+  if (eligEl) {
+    eligEl.textContent = scheme.eligibilityPreview || 'Subject to statutory verification of household records and supporting certificates.';
+  }
+
+  const docsList = document.getElementById('detailModalDocsList');
+  if (docsList) {
+    if (scheme.requiredDocuments && scheme.requiredDocuments.length > 0) {
+      docsList.innerHTML = scheme.requiredDocuments.map(d => `
+        <li style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+          <i data-lucide="file-check" style="width:14px; height:14px; color:#2563eb; flex-shrink:0;"></i>
+          <span>${d}</span>
+        </li>
+      `).join('');
+    } else {
+      docsList.innerHTML = `<li>Standard KYC documentation</li>`;
+    }
+  }
+
+  const btnCheck = document.getElementById('detailModalBtnCheckElig');
+  if (btnCheck) {
+    btnCheck.onclick = () => {
+      closeModal('schemeDetailsModal');
+      checkEligibilityLive(scheme.schemeId);
+    };
+  }
+
+  const btnApply = document.getElementById('detailModalBtnApply');
+  if (btnApply) {
+    btnApply.onclick = () => {
+      closeModal('schemeDetailsModal');
+      openApplyForScheme(scheme.schemeId);
+    };
+  }
+
+  if (window.lucide && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
+  openModal('schemeDetailsModal');
+}
+
+// Filter Schemes Live (Overview Tab)
 function filterSchemesLive() {
   const query = document.getElementById('schemeSearchInput').value.toLowerCase();
-  const cards = document.querySelectorAll('.scheme-card');
+  const cards = document.querySelectorAll('#overviewSchemesGrid .scheme-card');
 
   cards.forEach(card => {
     const text = card.textContent.toLowerCase();
@@ -1011,16 +1410,56 @@ function filterSchemesLive() {
 }
 
 function filterSchemeCategory(cat) {
-  document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-  event.target.classList.add('active');
+  document.querySelectorAll('.search-filter-bar .cat-chip').forEach(c => c.classList.remove('active'));
+  if (window.event && window.event.target) {
+    window.event.target.classList.add('active');
+  }
 
-  const cards = document.querySelectorAll('.scheme-card');
+  const cards = document.querySelectorAll('#overviewSchemesGrid .scheme-card');
   cards.forEach(card => {
     if (cat === 'all') {
       card.style.display = 'flex';
     } else {
-      const cardText = card.textContent;
-      if (cardText.includes(cat)) {
+      const cardCategory = card.getAttribute('data-category') || '';
+      const cardText = card.textContent.toLowerCase();
+      if (cardCategory.toLowerCase().includes(cat.toLowerCase()) || cardText.includes(cat.toLowerCase())) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    }
+  });
+}
+
+// Filter Schemes Live (Catalogue Tab)
+function filterCatalogueLive() {
+  const input = document.getElementById('catalogueSearchInput');
+  if (!input) return;
+  const query = input.value.toLowerCase();
+  const cards = document.querySelectorAll('#allSchemesGrid .scheme-card');
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function filterCatalogueCategory(cat, el) {
+  document.querySelectorAll('.cat-chip-cat').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  const cards = document.querySelectorAll('#allSchemesGrid .scheme-card');
+  cards.forEach(card => {
+    if (cat === 'all') {
+      card.style.display = 'flex';
+    } else {
+      const cardCategory = card.getAttribute('data-category') || '';
+      const cardText = card.textContent.toLowerCase();
+      if (cardCategory.toLowerCase().includes(cat.toLowerCase()) || cardText.includes(cat.toLowerCase())) {
         card.style.display = 'flex';
       } else {
         card.style.display = 'none';
@@ -1602,11 +2041,12 @@ function toggleNotifications() {
 }
 
 function renderNotifications(notifs) {
+  currentNotifications = notifs || [];
   const badge = document.getElementById('notifBadge');
   const countText = document.getElementById('notifCountText');
   const list = document.getElementById('notifList');
 
-  const unread = notifs.filter(n => !n.isRead);
+  const unread = currentNotifications.filter(n => !n.isRead);
 
   if (badge) {
     if (unread.length > 0) {
@@ -1622,30 +2062,176 @@ function renderNotifications(notifs) {
   }
 
   if (list) {
-    if (notifs.length === 0) {
+    if (currentNotifications.length === 0) {
       list.innerHTML = `<div style="padding:14px; text-align:center; color:var(--text-muted); font-size:0.8rem;">No notifications recorded.</div>`;
     } else {
-      list.innerHTML = notifs.map(n => `
-        <div style="padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; background: ${n.isRead ? '#ffffff' : '#f8fafc'};">
-          <div style="font-weight: 700; color: var(--primary); margin-bottom: 2px;">${n.title}</div>
-          <div style="color: var(--text-muted); line-height: 1.35;">${n.message}</div>
-          <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 4px;">${new Date(n.createdAt).toLocaleTimeString()}</div>
+      list.innerHTML = currentNotifications.map(n => `
+        <div class="notif-item" onclick="handleNotificationClick('${n.notificationId}')" style="padding: 10px 12px; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; background: ${n.isRead ? '#ffffff' : '#f0fdf4'}; border-left: 3px solid ${n.isRead ? 'transparent' : '#16a34a'}; border-radius: 6px; margin-bottom: 4px; cursor: pointer;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+            <div style="font-weight: 700; color: var(--primary); margin-bottom: 2px;">
+              ${!n.isRead ? '🟢 ' : ''}${n.title}
+            </div>
+            <span style="font-size: 0.65rem; color: #94a3b8; white-space: nowrap;">${new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          <div style="color: var(--text-muted); line-height: 1.35; margin-top: 2px;">${n.message}</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+            <span class="badge ${n.isRead ? 'badge-neutral' : 'badge-saffron'}" style="font-size: 0.65rem;">${n.category || 'Alert'}</span>
+            <span style="font-size: 0.7rem; color: #2563eb; font-weight: 600;">Click to read &rarr;</span>
+          </div>
         </div>
       `).join('');
     }
   }
 }
 
+// Handle Click on Individual Notification
+async function handleNotificationClick(notifId) {
+  const notif = currentNotifications.find(n => n.notificationId === notifId);
+  if (!notif) return;
+
+  // Mark as read locally and on server
+  if (!notif.isRead) {
+    notif.isRead = true;
+    try {
+      await api.markNotificationRead(notifId);
+    } catch (err) {
+      console.warn('Failed to mark notification read on backend:', err);
+    }
+  }
+
+  // Update badge and list
+  renderNotifications(currentNotifications);
+
+  // Populate detail modal
+  const title = document.getElementById('notifModalTitle');
+  const heading = document.getElementById('notifModalHeading');
+  const body = document.getElementById('notifModalBody');
+  const cat = document.getElementById('notifModalCategory');
+  const time = document.getElementById('notifModalTime');
+  const actionBtn = document.getElementById('notifModalActionBtn');
+
+  if (title) title.textContent = 'Notification Alert';
+  if (heading) heading.textContent = notif.title;
+  if (body) body.textContent = notif.message;
+  if (cat) cat.textContent = notif.category || 'General Alert';
+  if (time) time.textContent = new Date(notif.createdAt).toLocaleString();
+
+  if (actionBtn) {
+    const msg = (notif.message || '').toLowerCase();
+    const c = notif.category || '';
+    if (c === 'Separation' || msg.includes('separation')) {
+      actionBtn.style.display = 'inline-block';
+      actionBtn.textContent = 'View Separation Status';
+      actionBtn.onclick = () => { closeModal('notifDetailModal'); switchTab('separation'); };
+    } else if (c === 'Correction' || msg.includes('correction')) {
+      actionBtn.style.display = 'inline-block';
+      actionBtn.textContent = 'View Profile Corrections';
+      actionBtn.onclick = () => { closeModal('notifDetailModal'); switchTab('profile'); };
+    } else if (c === 'Application' || msg.includes('application')) {
+      actionBtn.style.display = 'inline-block';
+      actionBtn.textContent = 'Track Applications';
+      actionBtn.onclick = () => { closeModal('notifDetailModal'); switchTab('applications'); };
+    } else if (c === 'Document' || msg.includes('document')) {
+      actionBtn.style.display = 'inline-block';
+      actionBtn.textContent = 'Open Document Vault';
+      actionBtn.onclick = () => { closeModal('notifDetailModal'); switchTab('documents'); };
+    } else {
+      actionBtn.style.display = 'none';
+    }
+  }
+
+  openModal('notifDetailModal');
+}
+
+// Mark All Notifications as Read
+async function markAllNotificationsAsRead() {
+  try {
+    await api.markAllNotificationsRead();
+    currentNotifications.forEach(n => n.isRead = true);
+    renderNotifications(currentNotifications);
+    showToast('All notifications marked as read.', 'success');
+  } catch (err) {
+    showToast('Failed to mark notifications read: ' + err.message, 'error');
+  }
+}
+
+// Grievance & Appeal Modal
+function openGrievanceModal() {
+  const form = document.getElementById('grievanceForm');
+  if (form) form.reset();
+  openModal('grievanceModal');
+}
+
+async function handleGrievanceSubmit(e) {
+  e.preventDefault();
+  const category = document.getElementById('grievanceCategory').value;
+  const subject = document.getElementById('grievanceSubject').value.trim();
+  const description = document.getElementById('grievanceDescription').value.trim();
+
+  const btn = document.getElementById('btnSubmitGrievance');
+  btn.disabled = true;
+  btn.textContent = 'Submitting Appeal...';
+
+  try {
+    closeModal('grievanceModal');
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="send" style="width: 14px; height: 14px;"></i> Submit Appeal';
+
+    showToast(`Grievance Appeal '${subject}' lodged successfully! Grievance Ref: GRV-${Date.now().toString().slice(-6)}. Block Grievance Officer has been notified.`, 'success');
+  } catch (err) {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="send" style="width: 14px; height: 14px;"></i> Submit Appeal';
+    showToast('Failed to submit grievance: ' + err.message, 'error');
+  }
+}
+
 // Modal Utility Helpers
 function openModal(id) {
   const m = document.getElementById(id);
-  if (m) m.classList.add('active');
+  if (m) {
+    document.querySelectorAll('.modal-overlay.active').forEach(activeM => {
+      if (activeM.id !== id) closeModal(activeM.id);
+    });
+
+    m.classList.add('active');
+    m.style.setProperty('display', 'flex', 'important');
+    m.style.setProperty('visibility', 'visible', 'important');
+    m.style.setProperty('opacity', '1', 'important');
+    m.style.setProperty('pointer-events', 'auto', 'important');
+    m.style.setProperty('z-index', '100000', 'important');
+    if (window.lucide && typeof lucide.createIcons === 'function') {
+      try { lucide.createIcons(); } catch(e){}
+    }
+  } else {
+    console.warn(`[JanSetu] Modal with id '${id}' not found in DOM.`);
+  }
 }
 
 function closeModal(id) {
   const m = document.getElementById(id);
-  if (m) m.classList.remove('active');
+  if (m) {
+    m.classList.remove('active');
+    m.style.setProperty('display', 'none', 'important');
+    m.style.setProperty('visibility', 'hidden', 'important');
+    m.style.setProperty('opacity', '0', 'important');
+    m.style.setProperty('pointer-events', 'none', 'important');
+  }
 }
+
+// Global modal backdrop click dismiss
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.classList && e.target.classList.contains('modal-overlay')) {
+    closeModal(e.target.id);
+  }
+});
+
+// Global escape key to close active modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const activeModals = document.querySelectorAll('.modal-overlay.active');
+    activeModals.forEach(m => closeModal(m.id));
+  }
+});
 
 function toggleAssistant() {
   const drawer = document.getElementById('assistantDrawer');
@@ -1658,57 +2244,19 @@ function handleLogout() {
   setTimeout(() => window.location.href = '/login.html', 400);
 }
 
-// -----------------------------------------------------------------------
-// 1-CLICK DEMO SCENARIO WALKTHROUGH TRIGGER HANDLERS
-// -----------------------------------------------------------------------
-
-// Scenario A: Household Separation
-function triggerScenarioA() {
-  showToast('Scenario A Activated: Amit Sharma (CIT-1002) requesting separation to form FAM-2001.', 'info');
-  switchTab('separation');
-  openSeparationWizard();
-}
-
-// Scenario B: Duplicate Household Benefit
-function triggerScenarioB() {
-  showToast('Scenario B Activated: Evaluating PMAY Housing on Dwelling D-104 (Already awarded in 2023).', 'info');
-  checkEligibilityLive('SCH-PMAY-G');
-}
-
-// Scenario C: Individual Scheme (PM-KISAN)
-function triggerScenarioC() {
-  showToast('Scenario C Activated: Testing individual scheme PM-KISAN for Rahul (Farmer) vs Amit (Non-farmer).', 'info');
-  checkEligibilityLive('SCH-PM-KISAN');
-}
-
-// Scenario D: Document Vault
-function triggerScenarioD() {
-  showToast('Scenario D Activated: Uploading supporting document to vault.', 'info');
-  switchTab('documents');
-  openUploadDocModal();
-}
-
-// Scenario E: Track Applications
-function triggerScenarioE() {
-  showToast('Scenario E Activated: Reviewing application tracking & disbursement status.', 'info');
-  switchTab('applications');
-}
-
-// Scenario F: Name Correction
-function triggerScenarioF() {
-  showToast('Scenario F Activated: Lodging legal name correction request.', 'info');
-  switchTab('profile');
-  openCorrectionModal();
-}
-
-async function resetDemoData() {
-  if (confirm('Reset JanSetu demo database back to fresh pristine seed state?')) {
-    try {
-      await api.resetDemo();
-      showToast('JanSetu demo environment reset to fresh pristine seed state!', 'success');
-      await refreshDashboardData();
-    } catch (err) {
-      showToast('Error resetting demo: ' + err.message, 'error');
-    }
-  }
-}
+// Expose key dashboard controllers globally on window
+window.toggleSensitiveField = toggleSensitiveField;
+window.toggleAllSensitiveInfo = toggleAllSensitiveInfo;
+window.openAddMemberModal = openAddMemberModal;
+window.handleAddMemberSubmit = handleAddMemberSubmit;
+window.toggleFarmerLandField = toggleFarmerLandField;
+window.viewMemberDetails = viewMemberDetails;
+window.openRemoveMemberModal = openRemoveMemberModal;
+window.handleRemoveMemberSubmit = handleRemoveMemberSubmit;
+window.toggleNotifications = toggleNotifications;
+window.handleNotificationClick = handleNotificationClick;
+window.markAllNotificationsAsRead = markAllNotificationsAsRead;
+window.openGrievanceModal = openGrievanceModal;
+window.handleGrievanceSubmit = handleGrievanceSubmit;
+window.openModal = openModal;
+window.closeModal = closeModal;

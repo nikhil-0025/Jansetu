@@ -116,6 +116,7 @@ const api = {
   // Notifications
   getNotifications: () => api.request('/notifications'),
   markNotificationRead: (notifId) => api.request(`/notifications/${notifId}/read`, { method: 'PATCH' }),
+  markAllNotificationsRead: () => api.request('/notifications/read-all', { method: 'POST' }),
 
   // Assistant
   askAssistant: (data) => api.request('/assistant/chat', { method: 'POST', body: JSON.stringify(data) }),
