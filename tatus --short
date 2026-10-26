@@ -1,0 +1,56 @@
+warning: in the working copy of 'backend/config/db.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/integrations/clients/digilockerClient.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/integrations/clients/ogdDataGovClient.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/integrations/index.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/models/dataStore.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/models/schemaDefinitions.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/applicationRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/authRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/citizenRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/documentRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/govIntegrationRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/householdRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/officerRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/routes/schemeRoutes.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/server.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/services/eligibilityEngine.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/dashboard.html', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/scripts/api.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/scripts/dashboard.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/styles/dashboard.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/test_family_management.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/test_household_separation.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/test_profile_corrections.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/test_scheme_cards.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/test_signup_verification.js', LF will be replaced by CRLF the next time Git touches it
+backend/config/db.js:29: new blank line at EOF.
+backend/integrations/clients/digilockerClient.js:92: trailing whitespace.
+[32m+[m[32m      note: hasCreds[m[41m [m
+backend/integrations/clients/digilockerClient.js:93: trailing whitespace.
+[32m+[m[32m        ? 'Redirect citizen to authUrl to obtain DigiLocker authorization.'[m[41m [m
+backend/models/schemaDefinitions.js:176: trailing whitespace.
+[32m+[m[32m  verificationStatus: {[m[41m [m
+backend/models/schemaDefinitions.js:177: trailing whitespace.
+[32m+[m[32m    type: String,[m[41m [m
+backend/models/schemaDefinitions.js:178: trailing whitespace.
+[32m+[m[32m    enum: ['Verified Official', 'Department Verified', 'Under Review'],[m[41m [m
+backend/models/schemaDefinitions.js:179: trailing whitespace.
+[32m+[m[32m    default: 'Verified Official'[m[41m [m
+backend/routes/schemeRoutes.js:46: trailing whitespace.
+[32m+[m[32m      schemes = schemes.filter(s =>[m[41m [m
+backend/routes/schemeRoutes.js:47: trailing whitespace.
+[32m+[m[32m        s.name.toLowerCase().includes(q) ||[m[41m [m
+backend/routes/schemeRoutes.js:48: trailing whitespace.
+[32m+[m[32m        (s.nameHindi && s.nameHindi.includes(q)) ||[m[41m [m
+backend/services/eligibilityEngine.js:65: trailing whitespace.
+[32m+[m[32m  const incomeValue = customAnswers?.annualIncome !== undefined[m[41m [m
+backend/services/eligibilityEngine.js:66: trailing whitespace.
+[32m+[m[32m    ? Number(customAnswers.annualIncome)[m[41m [m
+backend/services/eligibilityEngine.js:142: trailing whitespace.
+[32m+[m[32m  const isFarmerValue = customAnswers?.isFarmer !== undefined[m[41m [m
+backend/services/eligibilityEngine.js:143: trailing whitespace.
+[32m+[m[32m    ? Boolean(customAnswers.isFarmer)[m[41m [m
+frontend/scripts/dashboard.js:1604: trailing whitespace.
+[32m+[m[41m          [m

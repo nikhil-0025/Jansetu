@@ -1,0 +1,27 @@
+# Render Blueprint Specification for JanSetu (Non-Docker Native Node.js Deployment)
+# Documentation: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: jansetu-staging
+    runtime: node
+    plan: starter # or free
+    region: oregon # or frankfurt, singapore
+    buildCommand: npm install
+    startCommand: node backend/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: MONGODB_URI
+        sync: false # Set manually in Render Dashboard with your MongoDB Atlas connection string
+      - key: JWT_SECRET
+        generateValue: true # Render automatically generates a 256-bit cryptographically secure secret
+      - key: ALLOWED_ORIGINS
+        value: https://jansetu-staging.onrender.com
+      - key: RESET_DEMO_KEY
+        generateValue: true
+      - key: GOV_API_FORCE_MOCK
+        value: "false"
+      - key: APISETU_ENV
+        value: sandbox

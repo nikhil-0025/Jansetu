@@ -662,6 +662,20 @@
   border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
+.cat-badge-social-security,
+.cat-badge-pension {
+  background: rgba(14, 116, 144, 0.94);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.cat-badge-financial-inclusion,
+.cat-badge-urban {
+  background: rgba(124, 58, 237, 0.94);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
 .cat-badge-default {
   background: rgba(15, 40, 78, 0.94);
   color: #ffffff;
@@ -702,7 +716,31 @@
   font-size: 0.8rem;
   color: var(--accent-saffron);
   font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.scheme-ministry-subtitle {
+  font-size: 0.72rem;
+  color: #64748b;
+  font-weight: 600;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.scheme-source-pill {
+  font-size: 0.72rem;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 8px;
+  width: fit-content;
+  border: 1px solid #e2e8f0;
 }
 
 .scheme-desc {
@@ -771,8 +809,9 @@
 .scheme-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-top: auto;
+  flex-wrap: wrap;
 }
 
 .btn-details {
@@ -784,6 +823,61 @@
 .btn-details:hover {
   background: #e2e8f0;
   color: var(--primary-dark);
+}
+
+.btn-official-link {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-official-link:hover {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* Eligibility Finder UI */
+.finder-result-card {
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.finder-result-card.eligible {
+  border-left: 4px solid #16a34a;
+  background: #f0fdf4;
+}
+
+.finder-result-card.data-required {
+  border-left: 4px solid #f59e0b;
+  background: #fffbeb;
+}
+
+.finder-result-card.ineligible {
+  border-left: 4px solid #94a3b8;
+  background: #f8fafc;
+  opacity: 0.85;
+}
+
+.finder-disclaimer-banner {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 0.8rem;
+  color: #1e40af;
+  line-height: 1.45;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
 }
 
 /* Sidebar Widgets */

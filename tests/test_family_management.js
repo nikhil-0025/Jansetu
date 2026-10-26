@@ -46,7 +46,10 @@ async function runTests() {
     }
 
     // 1. Reset demo environment to pristine state
-    await fetch(`${BASE_URL}/auth/reset-demo`, { method: 'POST' });
+    await fetch(`${BASE_URL}/auth/reset-demo`, {
+      method: 'POST',
+      headers: { 'x-reset-key': process.env.RESET_DEMO_KEY || 'jansetu-test-reset-key' }
+    });
 
     // 2. Obtain citizen FAM-1001 authentication token
     console.log('--- Setup: Authenticating Citizen & Officer Accounts ---');

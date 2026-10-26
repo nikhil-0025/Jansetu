@@ -194,6 +194,8 @@ function getCategoryBadgeClass(category) {
   if (c.includes('food')) return 'cat-badge-food-security';
   if (c.includes('energy') || c.includes('fuel') || c.includes('ujjwala')) return 'cat-badge-energy';
   if (c.includes('skill')) return 'cat-badge-skills';
+  if (c.includes('social') || c.includes('pension')) return 'cat-badge-social-security';
+  if (c.includes('financial') || c.includes('urban') || c.includes('svanidhi')) return 'cat-badge-financial-inclusion';
   return 'cat-badge-default';
 }
 
@@ -206,6 +208,8 @@ function getCategoryIcon(category) {
   if (c.includes('food')) return 'shopping-bag';
   if (c.includes('energy') || c.includes('fuel')) return 'flame';
   if (c.includes('skill')) return 'award';
+  if (c.includes('social') || c.includes('pension')) return 'shield';
+  if (c.includes('financial') || c.includes('urban') || c.includes('svanidhi')) return 'briefcase';
   return 'award';
 }
 
@@ -215,9 +219,13 @@ function createSchemeCardHtml(s) {
   const catIcon = getCategoryIcon(s.category);
   const imgUrl = s.imageUrl || '/assets/schemes/fallback.svg';
   const imgAlt = s.imageAlt || `${s.name} preview illustration`;
+  const ministry = s.ministry || s.department || 'Government of India';
+  const coverage = s.stateCoverage || 'Pan-India';
+  const verifiedDate = s.lastVerifiedDate || '2026-10-24';
+  const officialUrl = s.officialUrl || '#';
 
   return `
-    <div class="scheme-card" data-category="${s.category}" data-scheme-id="${s.schemeId}">
+    <div class="scheme-card" data-category="${s.category}" data-coverage="${coverage}" data-scheme-id="${s.schemeId}">
       <!-- Top: Relevant Visual Preview Image -->
       <div class="scheme-card-media">
         <img class="scheme-card-img" 
@@ -237,6 +245,18 @@ function createSchemeCardHtml(s) {
       <div class="scheme-card-body">
         <div class="scheme-title">${s.name}</div>
         <div class="scheme-hindi-title">${s.nameHindi || ''}</div>
+        <div class="scheme-ministry-subtitle">
+          <i data-lucide="building" style="width:11px;height:11px;flex-shrink:0;"></i>
+          <span>${ministry}</span>
+        </div>
+
+        <div class="scheme-source-pill" title="Source: ${s.sourceUrl || 'Official Department Portal'}">
+          <i data-lucide="shield-check" style="width:11px; height:11px; color:#16a34a;"></i>
+          <span>Verified: ${verifiedDate}</span>
+          <span style="color:#94a3b8;">•</span>
+          <span style="color:#0284c7; font-weight:600;">${coverage}</span>
+        </div>
+
         <div class="scheme-desc">${s.description}</div>
 
         ${s.eligibilityPreview ? `
@@ -261,13 +281,16 @@ function createSchemeCardHtml(s) {
 
         <div class="scheme-actions">
           <button onclick="openSchemeDetailsModal('${s.schemeId}')" class="btn btn-details btn-sm" style="flex:1;" title="View Complete Scheme Details & Documents">
-            <i data-lucide="info" style="width:14px;height:14px;"></i> View Details
+            <i data-lucide="info" style="width:13px;height:13px;"></i> Details
           </button>
+          <a href="${officialUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-official-link" style="flex:1; justify-content:center;" title="Open Authoritative Government Portal">
+            <i data-lucide="external-link" style="width:12px;height:12px;"></i> Official Link
+          </a>
           <button onclick="checkEligibilityLive('${s.schemeId}')" class="btn btn-secondary btn-sm" style="flex:1;" title="Check Live Eligibility Rules">
-            <i data-lucide="check-circle" style="width:14px;height:14px;"></i> Check
+            <i data-lucide="check-circle" style="width:13px;height:13px;"></i> Check
           </button>
-          <button onclick="openApplyForScheme('${s.schemeId}')" class="btn btn-primary btn-sm" style="flex:1;" title="Apply for Scheme">
-            <i data-lucide="send" style="width:14px;height:14px;"></i> Apply
+          <button onclick="openApplyForScheme('${s.schemeId}')" class="btn btn-primary btn-sm" style="flex:1;" title="Record Scheme Claim in JanSetu">
+            <i data-lucide="send" style="width:13px;height:13px;"></i> Apply
           </button>
         </div>
       </div>
@@ -1321,7 +1344,7 @@ function switchTab(tabName) {
 }
 
 // Filter Schemes Live
-// Open Scheme Details Modal with Visual Preview
+// Open Scheme Details Modal with Visual Preview & Official Attribution
 function openSchemeDetailsModal(schemeId) {
   const scheme = allSchemes.find(s => s.schemeId === schemeId);
   if (!scheme) return;
@@ -1332,11 +1355,19 @@ function openSchemeDetailsModal(schemeId) {
   const hindiEl = document.getElementById('detailModalSchemeHindi');
   if (hindiEl) hindiEl.textContent = scheme.nameHindi || '';
 
+  const ministryEl = document.getElementById('detailModalMinistry');
+  if (ministryEl) {
+    ministryEl.textContent = `${scheme.ministry || 'Government of India'}${scheme.department ? ' • ' + scheme.department : ''}`;
+  }
+
   const catEl = document.getElementById('detailModalCategory');
   if (catEl) catEl.textContent = scheme.category;
 
   const typeEl = document.getElementById('detailModalBenefitType');
   if (typeEl) typeEl.textContent = `${scheme.benefitType} Benefit`;
+
+  const covBadge = document.getElementById('detailModalCoverageBadge');
+  if (covBadge) covBadge.textContent = scheme.stateCoverage || 'Pan-India';
 
   const descEl = document.getElementById('detailModalDesc');
   if (descEl) descEl.textContent = scheme.description;
@@ -1344,8 +1375,26 @@ function openSchemeDetailsModal(schemeId) {
   const benefitEl = document.getElementById('detailModalBenefitAmount');
   if (benefitEl) benefitEl.textContent = scheme.benefitAmount || 'Financial Assistance';
 
-  const scopeEl = document.getElementById('detailModalScope');
-  if (scopeEl) scopeEl.textContent = `${scheme.benefitType} Level Entitlement`;
+  const beneEl = document.getElementById('detailModalBeneficiaries');
+  if (beneEl) beneEl.textContent = scheme.targetBeneficiaries || 'Eligible Citizens / Households';
+
+  const appProcEl = document.getElementById('detailModalAppProcess');
+  if (appProcEl) appProcEl.textContent = scheme.applicationProcess || 'Official Online Portal / Gram Panchayat';
+
+  const covEl = document.getElementById('detailModalCoverage');
+  if (covEl) covEl.textContent = scheme.stateCoverage || 'Pan-India';
+
+  const sourceLink = document.getElementById('detailModalSourceLink');
+  if (sourceLink) {
+    sourceLink.href = scheme.sourceUrl || scheme.officialUrl || '#';
+    sourceLink.textContent = scheme.sourceUrl ? 'myScheme / Department Reference' : 'Official Portal';
+  }
+
+  const lastVerEl = document.getElementById('detailModalLastVerified');
+  if (lastVerEl) lastVerEl.textContent = scheme.lastVerifiedDate || '2026-10-24';
+
+  const extLink = document.getElementById('detailModalOfficialExternalLink');
+  if (extLink) extLink.href = scheme.officialUrl || '#';
 
   const imgEl = document.getElementById('detailModalImg');
   if (imgEl) {
@@ -1394,78 +1443,203 @@ function openSchemeDetailsModal(schemeId) {
   openModal('schemeDetailsModal');
 }
 
+// Current Filter States
+let currentOverviewCategory = 'all';
+let currentCatalogueCategory = 'all';
+
 // Filter Schemes Live (Overview Tab)
 function filterSchemesLive() {
-  const query = document.getElementById('schemeSearchInput').value.toLowerCase();
+  const query = (document.getElementById('schemeSearchInput')?.value || '').toLowerCase().trim();
+  const locationFilter = (document.getElementById('schemeLocationFilter')?.value || 'all').toLowerCase();
   const cards = document.querySelectorAll('#overviewSchemesGrid .scheme-card');
 
   cards.forEach(card => {
     const text = card.textContent.toLowerCase();
-    if (text.includes(query)) {
-      card.style.display = 'flex';
-    } else {
-      card.style.display = 'none';
-    }
+    const cat = (card.getAttribute('data-category') || '').toLowerCase();
+    const cov = (card.getAttribute('data-coverage') || '').toLowerCase();
+
+    const matchesQuery = !query || text.includes(query);
+    const matchesCat = currentOverviewCategory === 'all' || cat.includes(currentOverviewCategory.toLowerCase());
+    const matchesLoc = locationFilter === 'all' || cov.includes(locationFilter) || cov.includes('pan-india');
+
+    card.style.display = (matchesQuery && matchesCat && matchesLoc) ? 'flex' : 'none';
   });
 }
 
 function filterSchemeCategory(cat) {
+  currentOverviewCategory = cat;
   document.querySelectorAll('.search-filter-bar .cat-chip').forEach(c => c.classList.remove('active'));
   if (window.event && window.event.target) {
     window.event.target.classList.add('active');
   }
-
-  const cards = document.querySelectorAll('#overviewSchemesGrid .scheme-card');
-  cards.forEach(card => {
-    if (cat === 'all') {
-      card.style.display = 'flex';
-    } else {
-      const cardCategory = card.getAttribute('data-category') || '';
-      const cardText = card.textContent.toLowerCase();
-      if (cardCategory.toLowerCase().includes(cat.toLowerCase()) || cardText.includes(cat.toLowerCase())) {
-        card.style.display = 'flex';
-      } else {
-        card.style.display = 'none';
-      }
-    }
-  });
+  filterSchemesLive();
 }
 
 // Filter Schemes Live (Catalogue Tab)
 function filterCatalogueLive() {
-  const input = document.getElementById('catalogueSearchInput');
-  if (!input) return;
-  const query = input.value.toLowerCase();
+  const query = (document.getElementById('catalogueSearchInput')?.value || '').toLowerCase().trim();
+  const locationFilter = (document.getElementById('catalogueLocationFilter')?.value || 'all').toLowerCase();
   const cards = document.querySelectorAll('#allSchemesGrid .scheme-card');
 
   cards.forEach(card => {
     const text = card.textContent.toLowerCase();
-    if (text.includes(query)) {
-      card.style.display = 'flex';
-    } else {
-      card.style.display = 'none';
-    }
+    const cat = (card.getAttribute('data-category') || '').toLowerCase();
+    const cov = (card.getAttribute('data-coverage') || '').toLowerCase();
+
+    const matchesQuery = !query || text.includes(query);
+    const matchesCat = currentCatalogueCategory === 'all' || cat.includes(currentCatalogueCategory.toLowerCase());
+    const matchesLoc = locationFilter === 'all' || cov.includes(locationFilter) || cov.includes('pan-india');
+
+    card.style.display = (matchesQuery && matchesCat && matchesLoc) ? 'flex' : 'none';
   });
 }
 
 function filterCatalogueCategory(cat, el) {
+  currentCatalogueCategory = cat;
   document.querySelectorAll('.cat-chip-cat').forEach(c => c.classList.remove('active'));
   if (el) el.classList.add('active');
+  filterCatalogueLive();
+}
 
-  const cards = document.querySelectorAll('#allSchemesGrid .scheme-card');
-  cards.forEach(card => {
-    if (cat === 'all') {
-      card.style.display = 'flex';
-    } else {
-      const cardCategory = card.getAttribute('data-category') || '';
-      const cardText = card.textContent.toLowerCase();
-      if (cardCategory.toLowerCase().includes(cat.toLowerCase()) || cardText.includes(cat.toLowerCase())) {
-        card.style.display = 'flex';
-      } else {
-        card.style.display = 'none';
-      }
+// Interactive Eligibility Finder UI Functions
+function openEligibilityFinderModal() {
+  openModal('eligibilityFinderModal');
+  if (window.lucide && typeof lucide.createIcons === 'function') {
+    lucide.createIcons();
+  }
+}
+
+function prefillFinderFromHousehold() {
+  if (!currentHousehold) {
+    showToast('No active household session to pre-fill from.', 'info');
+    return;
+  }
+
+  const head = currentMembers.find(m => m.citizenId === currentHousehold.headCitizenId) || currentMembers[0];
+  if (head && head.dateOfBirth) {
+    const birthYear = new Date(head.dateOfBirth).getFullYear();
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - birthYear;
+    if (age > 0) document.getElementById('finderAge').value = age;
+    if (head.gender) document.getElementById('finderGender').value = head.gender;
+  }
+
+  if (currentHousehold.annualIncome) {
+    document.getElementById('finderIncome').value = currentHousehold.annualIncome;
+  }
+
+  if (currentHousehold.dwellingType) {
+    document.getElementById('finderDwelling').value = currentHousehold.dwellingType;
+  }
+
+  showToast('Prefilled non-PII parameters from current household profile', 'success');
+}
+
+async function handleRunFinder(e) {
+  if (e) e.preventDefault();
+
+  const criteria = {
+    age: parseInt(document.getElementById('finderAge').value, 10) || 30,
+    gender: document.getElementById('finderGender').value || 'Male',
+    occupation: document.getElementById('finderOccupation').value || 'General / Salaried',
+    annualIncome: parseInt(document.getElementById('finderIncome').value, 10) || 120000,
+    dwellingType: document.getElementById('finderDwelling').value || 'Kutcha',
+    hasLpgConnection: document.getElementById('finderLpg').value === 'true'
+  };
+
+  const loadingEl = document.getElementById('finderLoading');
+  const resultsArea = document.getElementById('finderResultsArea');
+  const resultsList = document.getElementById('finderResultsList');
+  const badgeEl = document.getElementById('finderSummaryBadge');
+
+  loadingEl.style.display = 'block';
+  resultsArea.style.display = 'none';
+
+  try {
+    const res = await api.evaluateEligibilityFinder(criteria);
+    loadingEl.style.display = 'none';
+    resultsArea.style.display = 'block';
+
+    const evaluations = res.evaluations || [];
+    const eligibleCount = evaluations.filter(ev => ev.status === 'Potentially Eligible').length;
+    badgeEl.textContent = `${eligibleCount} of ${evaluations.length} Potentially Eligible`;
+
+    if (evaluations.length === 0) {
+      resultsList.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted);">No schemes evaluated.</div>`;
+      return;
     }
-  });
+
+    resultsList.innerHTML = evaluations.map(ev => {
+      let cardClass = 'ineligible';
+      let icon = 'alert-circle';
+      let statusColor = '#64748b';
+
+      if (ev.status === 'Potentially Eligible') {
+        cardClass = 'eligible';
+        icon = 'check-circle-2';
+        statusColor = '#16a34a';
+      } else if (ev.status === 'Data or Documents Required') {
+        cardClass = 'data-required';
+        icon = 'help-circle';
+        statusColor = '#d97706';
+      }
+
+      const passedList = (ev.passedConditions || []).map(c => `<li><span style="color:#16a34a;">✔</span> ${c}</li>`).join('');
+      const unmetList = (ev.unmetConditions || []).map(c => `<li><span style="color:#dc2626;">✖</span> ${c}</li>`).join('');
+      const unknownList = (ev.unknownConditions || []).map(c => `<li><span style="color:#d97706;">❓</span> ${c}</li>`).join('');
+
+      return `
+        <div class="finder-result-card ${cardClass}">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
+            <div>
+              <h5 style="margin:0; font-size:0.95rem; color:var(--primary); font-weight:700;">${ev.schemeName}</h5>
+              <div style="font-size:0.75rem; color:#64748b; font-weight:500;">${ev.ministry || ''} • ${ev.benefitType} Entitlement</div>
+            </div>
+            <div style="display:inline-flex; align-items:center; gap:5px; font-weight:700; font-size:0.8rem; color:${statusColor};">
+              <i data-lucide="${icon}" style="width:14px; height:14px;"></i>
+              <span>${ev.status}</span>
+            </div>
+          </div>
+          <p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0 8px;">${ev.explanation || ''}</p>
+          
+          <div style="font-size:0.78rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:8px; background:rgba(255,255,255,0.7); padding:8px 10px; border-radius:6px; border:1px solid #e2e8f0; margin-bottom:8px;">
+            <div>
+              <strong style="color:#334155;">Evaluated Conditions:</strong>
+              <ul style="list-style:none; padding-left:0; margin:4px 0 0; line-height:1.45;">
+                ${passedList}
+                ${unmetList}
+                ${unknownList}
+              </ul>
+            </div>
+            <div>
+              <strong style="color:#334155;">Benefit & Official Channel:</strong>
+              <div style="margin-top:4px; color:#475569;">
+                Benefit: <strong>${ev.benefitAmount || 'Financial Support'}</strong><br>
+                Mode: ${ev.applicationProcess || 'Official Portal'}<br>
+                Coverage: <strong>${ev.stateCoverage || 'Pan-India'}</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:8px;">
+            <a href="${ev.officialUrl || '#'}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-official-link" title="Open Official Portal">
+              <i data-lucide="external-link" style="width:12px; height:12px;"></i> Official Application Portal
+            </a>
+            <button onclick="closeModal('eligibilityFinderModal'); openSchemeDetailsModal('${ev.schemeId}')" class="btn btn-secondary btn-sm">
+              <i data-lucide="info" style="width:12px; height:12px;"></i> View Scheme Details
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (window.lucide && typeof lucide.createIcons === 'function') {
+      lucide.createIcons();
+    }
+  } catch (err) {
+    loadingEl.style.display = 'none';
+    showToast('Failed to evaluate eligibility: ' + err.message, 'error');
+  }
 }
 
 // Live Eligibility & Duplicate Check

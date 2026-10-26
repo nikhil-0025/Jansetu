@@ -10,36 +10,80 @@ const isMongoReady = () => mongoose.connection && mongoose.connection.readyState
 
 // GET /api/admin/dashboard - High-level metrics for government verification dashboard
 router.get('/dashboard', requireAuth, requireRole(['officer', 'admin']), async (req, res) => {
-  const households = dataStore.getAllHouseholds();
-  const citizens = dataStore.getAllCitizens();
-  const applications = dataStore.getAllApplications();
-  const separationRequests = dataStore.getAllSeparationRequests();
-  const documents = dataStore.getDocuments();
-  const auditLogs = dataStore.getAuditLogs();
-  const corrections = dataStore.getAllProfileCorrections();
-
-  // Metrics calculation
-  const totalHouseholds = households.length;
-  const totalCitizens = citizens.length;
-  const pendingApplications = applications.filter(a => ['Submitted', 'Pending Verification', 'Additional Information Required'].includes(a.status)).length;
-  const approvedApplications = applications.filter(a => a.status === 'Approved').length;
-  const pendingSeparations = separationRequests.filter(s => s.status === 'Pending Verification').length;
-  const pendingDocuments = documents.filter(d => d.verificationStatus === 'Pending Verification').length;
-  const pendingCorrections = corrections.filter(c => c.status === 'Pending Verification' || c.status === 'Pending').length;
-
+  let totalHouseholds = 0;
+  let totalCitizens = 0;
+  let pendingApplications = 0;
+  let approvedApplications = 0;
+  let pendingSeparations = 0;
+  let pendingDocuments = 0;
+  let pendingCorrections = 0;
   let pendingRegistrations = 0;
+  let duplicateAlerts = 0;
+
+  let recentApplications = [];
+  let recentSeparations = [];
+  let recentDocuments = [];
+  let recentAuditLogs = [];
+
   if (isMongoReady()) {
     try {
+      const {
+        Application,
+        HouseholdSeparationRequest,
+        Document,
+        ProfileCorrectionRequest
+      } = require('../models/schemaDefinitions');
+
+      totalHouseholds = await Household.countDocuments();
+      totalCitizens = await Citizen.countDocuments({ status: { $ne: 'inactive' } });
+      pendingApplications = await Application.countDocuments({
+        status: { $in: ['Submitted', 'Pending Verification', 'Additional Information Required'] }
+      });
+      approvedApplications = await Application.countDocuments({ status: 'Approved' });
+      pendingSeparations = await HouseholdSeparationRequest.countDocuments({ status: 'Pending Verification' });
+      pendingDocuments = await Document.countDocuments({ verificationStatus: 'Pending Verification' });
+      pendingCorrections = await ProfileCorrectionRequest.countDocuments({
+        status: { $in: ['Pending Verification', 'Pending'] }
+      });
       pendingRegistrations = await UserAccount.countDocuments({ status: 'pending' });
-    } catch (e) {
-      pendingRegistrations = (dataStore.getAllUsers ? dataStore.getAllUsers() : []).filter(u => u.status === 'pending').length;
+      duplicateAlerts = await Application.countDocuments({
+        'duplicateCheckResult.isPotentialDuplicate': true
+      });
+
+      recentApplications = await Application.find().sort({ submittedAt: -1 }).limit(5).lean();
+      recentSeparations = await HouseholdSeparationRequest.find().sort({ requestedAt: -1 }).limit(5).lean();
+      recentDocuments = await Document.find({ verificationStatus: 'Pending Verification' }).sort({ uploadDate: -1 }).limit(5).lean();
+      recentAuditLogs = await AuditLog.find().sort({ timestamp: -1 }).limit(10).lean();
+    } catch (dbErr) {
+      console.warn('[OfficerRoutes] Mongo dashboard metrics error, falling back:', dbErr.message);
     }
-  } else {
-    pendingRegistrations = (dataStore.getAllUsers ? dataStore.getAllUsers() : []).filter(u => u.status === 'pending').length;
   }
-  
-  // Potential duplicate alerts
-  const duplicateAlerts = applications.filter(a => a.duplicateCheckResult && a.duplicateCheckResult.isPotentialDuplicate).length;
+
+  // Fallback to in-memory dataStore if MongoDB returned 0 or wasn't ready
+  if (totalHouseholds === 0) {
+    const households = dataStore.getAllHouseholds();
+    const citizens = dataStore.getAllCitizens();
+    const applications = dataStore.getAllApplications();
+    const separationRequests = dataStore.getAllSeparationRequests();
+    const documents = dataStore.getDocuments();
+    const auditLogs = dataStore.getAuditLogs();
+    const corrections = dataStore.getAllProfileCorrections();
+
+    totalHouseholds = households.length;
+    totalCitizens = citizens.length;
+    pendingApplications = applications.filter(a => ['Submitted', 'Pending Verification', 'Additional Information Required'].includes(a.status)).length;
+    approvedApplications = applications.filter(a => a.status === 'Approved').length;
+    pendingSeparations = separationRequests.filter(s => s.status === 'Pending Verification').length;
+    pendingDocuments = documents.filter(d => d.verificationStatus === 'Pending Verification').length;
+    pendingCorrections = corrections.filter(c => c.status === 'Pending Verification' || c.status === 'Pending').length;
+    pendingRegistrations = (dataStore.getAllUsers ? dataStore.getAllUsers() : []).filter(u => u.status === 'pending').length;
+    duplicateAlerts = applications.filter(a => a.duplicateCheckResult && a.duplicateCheckResult.isPotentialDuplicate).length;
+
+    recentApplications = applications.slice(0, 5);
+    recentSeparations = separationRequests.slice(0, 5);
+    recentDocuments = documents.filter(d => d.verificationStatus === 'Pending Verification').slice(0, 5);
+    recentAuditLogs = auditLogs.slice(0, 10);
+  }
 
   res.json({
     success: true,
@@ -54,10 +98,10 @@ router.get('/dashboard', requireAuth, requireRole(['officer', 'admin']), async (
       pendingRegistrations,
       duplicateAlerts
     },
-    recentApplications: applications.slice(0, 5),
-    recentSeparations: separationRequests.slice(0, 5),
-    recentDocuments: documents.filter(d => d.verificationStatus === 'Pending Verification').slice(0, 5),
-    recentAuditLogs: auditLogs.slice(0, 10)
+    recentApplications,
+    recentSeparations,
+    recentDocuments,
+    recentAuditLogs
   });
 });
 

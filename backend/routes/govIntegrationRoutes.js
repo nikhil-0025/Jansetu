@@ -5,9 +5,9 @@ const { requireAuth, requireRole } = require('../middleware/auth');
 const dataStore = require('../models/dataStore');
 
 // GET /api/government-services/status - Overall gateway status, connection states, and masked config
-router.get('/status', (req, res) => {
+router.get('/status', async (req, res) => {
   try {
-    const report = govIntegration.getStatusReport();
+    const report = await govIntegration.getStatusReport();
     res.json(report);
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -125,6 +125,9 @@ router.post('/digilocker/pull-doc', requireAuth, async (req, res) => {
     const targetFamilyId = req.user.role === 'citizen' ? req.user.familyId : (familyId || 'FAM-1001');
     const newDocId = `DOC-DL-${Date.now().toString().slice(-4)}`;
 
+    const rawRef = result.referenceNumber || referenceNo || 'REF-998811';
+    const maskedRef = rawRef.length > 6 ? `${rawRef.substring(0, 2)}****${rawRef.slice(-4)}` : rawRef;
+
     const vaultDoc = {
       documentId: newDocId,
       title: result.documentTitle,
@@ -136,7 +139,7 @@ router.post('/digilocker/pull-doc', requireAuth, async (req, res) => {
       originalFilename: `digilocker_${docType}_${Date.now()}.pdf`,
       fileSize: '0.85 MB',
       issuingAuthority: result.issuingAuthority,
-      maskedReferenceNo: result.referenceNumber,
+      maskedReferenceNo: maskedRef,
       verificationStatus: result.metadata.isAuthoritative 
         ? 'Authoritative Government Verified' 
         : 'Simulated Demonstration Record (Non-Authoritative)',
@@ -162,6 +165,65 @@ router.post('/digilocker/pull-doc', requireAuth, async (req, res) => {
     });
   } catch (err) {
     console.error('DigiLocker pull error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// GET /api/government-services/digilocker/auth-url - Generate OAuth 2.0 Authorization URL with CSRF nonce
+router.get('/digilocker/auth-url', requireAuth, (req, res) => {
+  try {
+    const { docType, redirectUri } = req.query;
+    const result = govIntegration.generateDigiLockerAuthUrl({
+      citizenId: req.user.headCitizenId || req.user.userId,
+      docType: docType || 'ratcr',
+      redirectUri
+    });
+    res.json(result);
+  } catch (err) {
+    console.error('DigiLocker auth-url error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// GET & POST /api/government-services/digilocker/callback - OAuth 2.0 callback handling
+const handleCallback = async (req, res) => {
+  try {
+    const code = req.query.code || req.body?.code;
+    const state = req.query.state || req.body?.state;
+    const actorId = req.user?.userId || 'CITIZEN_OAUTH';
+
+    const result = await govIntegration.handleDigiLockerCallback({
+      code,
+      state,
+      actorId
+    });
+
+    const statusCode = result.statusCode || (result.success ? 200 : 400);
+    res.status(statusCode).json(result);
+  } catch (err) {
+    console.error('DigiLocker callback error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+router.get('/digilocker/callback', handleCallback);
+router.post('/digilocker/callback', handleCallback);
+
+// GET /api/government-services/ogd/scheme-metrics - Public welfare scheme statistical aggregates under NDSAP
+router.get('/ogd/scheme-metrics', async (req, res) => {
+  try {
+    const { schemeType, resourceId, limit } = req.query;
+    const result = await govIntegration.fetchOgdSchemeMetrics({
+      schemeType: schemeType || 'ALL',
+      resourceId,
+      limit: parseInt(limit || '5', 10),
+      actorId: req.user?.userId || 'PUBLIC_USER',
+      actorRole: req.user?.role || 'public'
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error('OGD scheme metrics error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 });

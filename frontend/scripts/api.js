@@ -85,6 +85,7 @@ const api = {
   getSchemes: (params = '') => api.request(`/schemes${params ? '?' + params : ''}`),
   getScheme: (schemeId) => api.request(`/schemes/${schemeId}`),
   checkEligibility: (schemeId, data) => api.request(`/schemes/${schemeId}/check-eligibility`, { method: 'POST', body: JSON.stringify(data) }),
+  evaluateEligibilityFinder: (criteria) => api.request('/schemes/finder/evaluate', { method: 'POST', body: JSON.stringify(criteria) }),
 
   // Applications
   getApplications: (params = '') => api.request(`/applications${params ? '?' + params : ''}`),

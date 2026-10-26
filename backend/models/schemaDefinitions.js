@@ -152,12 +152,14 @@ const DocumentSchema = new mongoose.Schema({
   uploadedAt: { type: Date, default: Date.now }
 });
 
-// 7. Scheme
+// 7. Scheme (Verified National Government Scheme Schema)
 const SchemeSchema = new mongoose.Schema({
-  schemeId: { type: String, required: true, unique: true }, // e.g. SCH-PMAY
+  schemeId: { type: String, required: true, unique: true }, // e.g. SCH-PMAY-G
   name: { type: String, required: true },
   nameHindi: { type: String },
-  category: { type: String, required: true }, // Housing, Agriculture, Healthcare, Food Security, etc.
+  category: { type: String, required: true }, // Housing, Agriculture, Healthcare, Food Security, Energy & Clean Fuel, Skill Development, Social Security, Education, Financial Inclusion
+  department: { type: String }, // e.g. 'Ministry of Rural Development'
+  ministry: { type: String }, // Central/State Ministry
   description: { type: String, required: true },
   benefitType: { type: String, enum: ['Household', 'Individual'], required: true },
   benefitAmount: { type: String },
@@ -165,6 +167,18 @@ const SchemeSchema = new mongoose.Schema({
   imageUrl: { type: String },
   imageAlt: { type: String },
   eligibilityPreview: { type: String },
+  stateCoverage: { type: String, default: 'All India (National)' }, // 'All India (National)' or state code/name
+  targetBeneficiaries: { type: String },
+  applicationProcess: { type: String },
+  officialUrl: { type: String }, // Official application or portal link
+  sourceUrl: { type: String }, // Verified Government Source (e.g. myscheme.gov.in)
+  lastVerifiedDate: { type: String, default: '2026-03-15' },
+  verificationStatus: { 
+    type: String, 
+    enum: ['Verified Official', 'Department Verified', 'Under Review'], 
+    default: 'Verified Official' 
+  },
+  unverifiedFields: [{ type: String }], // Explicitly lists any field remaining unverified
   rules: {
     maxIncome: { type: Number },
     minAge: { type: Number },
@@ -172,7 +186,8 @@ const SchemeSchema = new mongoose.Schema({
     requiredDwellingType: [{ type: String }],
     requiresFarmer: { type: Boolean, default: false },
     genderRequirement: { type: String },
-    maxBenefitsPerHousehold: { type: Number, default: 1 }
+    maxBenefitsPerHousehold: { type: Number, default: 1 },
+    eligibleCategories: [{ type: String }] // e.g. ['SC', 'ST', 'OBC', 'General']
   },
   isActive: { type: Boolean, default: true }
 });

@@ -1,27 +1,54 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const dataStore = require('../models/dataStore');
 const { requireAuth, requireRole } = require('../middleware/auth');
 const { evaluateEligibility } = require('../services/eligibilityEngine');
 const { detectDuplicateBenefit } = require('../services/duplicateDetectionService');
+const {
+  Application,
+  BenefitRecord,
+  AuditLog,
+  Notification,
+  Citizen,
+  Household,
+  Scheme
+} = require('../models/schemaDefinitions');
+
+const isMongoReady = () => mongoose.connection && mongoose.connection.readyState === 1;
 
 // GET /api/applications - Get applications
-router.get('/', requireAuth, (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   const { familyId, citizenId, status } = req.query;
+  let apps = [];
 
-  let apps = dataStore.getAllApplications();
-
-  // If citizen, only their household's applications
-  if (req.user.role === 'citizen') {
-    apps = apps.filter(a => a.familyId === req.user.familyId);
-  } else {
-    if (familyId) apps = apps.filter(a => a.familyId === familyId);
-    if (citizenId) apps = apps.filter(a => a.applicantCitizenId === citizenId);
-    if (status) apps = apps.filter(a => a.status === status);
+  if (isMongoReady()) {
+    try {
+      const query = {};
+      if (req.user.role === 'citizen') {
+        query.familyId = req.user.familyId;
+      } else {
+        if (familyId) query.familyId = familyId;
+        if (citizenId) query.applicantCitizenId = citizenId;
+        if (status) query.status = status;
+      }
+      apps = await Application.find(query).sort({ submittedAt: -1 }).lean();
+    } catch (dbErr) {
+      console.warn('[Applications] Mongo query warning:', dbErr.message);
+    }
   }
 
-  // Sort descending by submission date
-  apps.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  if (apps.length === 0) {
+    apps = dataStore.getAllApplications();
+    if (req.user.role === 'citizen') {
+      apps = apps.filter(a => a.familyId === req.user.familyId);
+    } else {
+      if (familyId) apps = apps.filter(a => a.familyId === familyId);
+      if (citizenId) apps = apps.filter(a => a.applicantCitizenId === citizenId);
+      if (status) apps = apps.filter(a => a.status === status);
+    }
+    apps.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  }
 
   res.json({
     success: true,
@@ -31,9 +58,21 @@ router.get('/', requireAuth, (req, res) => {
 });
 
 // GET /api/applications/:applicationId
-router.get('/:applicationId', requireAuth, (req, res) => {
+router.get('/:applicationId', requireAuth, async (req, res) => {
   const { applicationId } = req.params;
-  const app = dataStore.findApplication(applicationId);
+  let app = null;
+
+  if (isMongoReady()) {
+    try {
+      app = await Application.findOne({ applicationId }).lean();
+    } catch (dbErr) {
+      console.warn('[Applications] Mongo fetch warning:', dbErr.message);
+    }
+  }
+
+  if (!app) {
+    app = dataStore.findApplication(applicationId);
+  }
 
   if (!app) {
     return res.status(404).json({ success: false, message: `Application ${applicationId} not found.` });
@@ -50,7 +89,7 @@ router.get('/:applicationId', requireAuth, (req, res) => {
 });
 
 // POST /api/applications - Submit new scheme application (Scenario B, C, E)
-router.post('/', requireAuth, (req, res) => {
+router.post('/', requireAuth, async (req, res) => {
   try {
     const { schemeId, applicantCitizenId } = req.body;
 
@@ -61,19 +100,35 @@ router.post('/', requireAuth, (req, res) => {
       });
     }
 
-    const scheme = dataStore.findScheme(schemeId);
+    let scheme = null;
+    let citizen = null;
+
+    if (isMongoReady()) {
+      try {
+        scheme = await Scheme.findOne({ schemeId }).lean();
+        citizen = await Citizen.findOne({ citizenId: applicantCitizenId }).lean();
+      } catch (e) {}
+    }
+
+    if (!scheme) scheme = dataStore.findScheme(schemeId);
     if (!scheme) {
       return res.status(404).json({ success: false, message: `Scheme ${schemeId} not found.` });
     }
 
-    const citizen = dataStore.findCitizen(applicantCitizenId);
+    if (!citizen) citizen = dataStore.findCitizen(applicantCitizenId);
     if (!citizen) {
       return res.status(404).json({ success: false, message: `Citizen ${applicantCitizenId} not found.` });
     }
 
     // Household at time of application
     const familyId = citizen.currentFamilyId;
-    const household = dataStore.findHousehold(familyId);
+    let household = null;
+    if (isMongoReady()) {
+      try {
+        household = await Household.findOne({ familyId }).lean();
+      } catch (e) {}
+    }
+    if (!household) household = dataStore.findHousehold(familyId);
 
     // 1. Run Eligibility Evaluation
     const eligibilityAssessment = evaluateEligibility(schemeId, applicantCitizenId, familyId);
@@ -112,7 +167,7 @@ router.post('/', requireAuth, (req, res) => {
     dataStore.createApplication(newApp);
 
     // Create Audit Log
-    dataStore.createAuditLog({
+    const auditData = {
       logId: `AUD-${Date.now()}`,
       actorId: req.user.userId,
       actorRole: req.user.role,
@@ -121,10 +176,11 @@ router.post('/', requireAuth, (req, res) => {
       targetEntityId: appId,
       details: `Submitted application for ${scheme.name}. Duplicate flag: ${duplicateCheckResult.isPotentialDuplicate}.`,
       timestamp: new Date()
-    });
+    };
+    dataStore.createAuditLog(auditData);
 
     // Create Notification
-    dataStore.createNotification({
+    const notifData = {
       notificationId: `NOTIF-${Date.now()}-1`,
       recipientType: 'Household',
       recipientId: familyId,
@@ -134,10 +190,12 @@ router.post('/', requireAuth, (req, res) => {
       relatedEntityId: appId,
       isRead: false,
       createdAt: new Date()
-    });
+    };
+    dataStore.createNotification(notifData);
 
+    let dupNotifData = null;
     if (duplicateCheckResult.isPotentialDuplicate) {
-      dataStore.createNotification({
+      dupNotifData = {
         notificationId: `NOTIF-${Date.now()}-2`,
         recipientType: 'Officer',
         recipientId: 'ALL_OFFICERS',
@@ -147,7 +205,19 @@ router.post('/', requireAuth, (req, res) => {
         relatedEntityId: appId,
         isRead: false,
         createdAt: new Date()
-      });
+      };
+      dataStore.createNotification(dupNotifData);
+    }
+
+    if (isMongoReady()) {
+      try {
+        await Application.create(newApp);
+        await AuditLog.create(auditData);
+        await Notification.create(notifData);
+        if (dupNotifData) await Notification.create(dupNotifData);
+      } catch (dbErr) {
+        console.warn('[Applications] Mongo persistence warning:', dbErr.message);
+      }
     }
 
     res.json({
@@ -162,7 +232,7 @@ router.post('/', requireAuth, (req, res) => {
 });
 
 // POST /api/applications/:applicationId/review - Officer reviews application (Scenario E)
-router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admin']), (req, res) => {
+router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admin']), async (req, res) => {
   const { applicationId } = req.params;
   const { decision, remarks } = req.body;
 
@@ -174,7 +244,16 @@ router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admi
     return res.status(400).json({ success: false, message: 'Mandatory officer review remarks are required.' });
   }
 
-  const app = dataStore.findApplication(applicationId);
+  let app = null;
+  if (isMongoReady()) {
+    try {
+      app = await Application.findOne({ applicationId }).lean();
+    } catch (e) {}
+  }
+  if (!app) {
+    app = dataStore.findApplication(applicationId);
+  }
+
   if (!app) {
     return res.status(404).json({ success: false, message: `Application ${applicationId} not found.` });
   }
@@ -190,7 +269,7 @@ router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admi
     }
   ];
 
-  const updated = dataStore.updateApplication(applicationId, {
+  const updateFields = {
     status: decision,
     officerReview: {
       officerId: req.user.userId,
@@ -199,13 +278,24 @@ router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admi
       remarks,
       reviewedAt: new Date()
     },
-    statusHistory: updatedStatusHistory
-  });
+    statusHistory: updatedStatusHistory,
+    updatedAt: new Date()
+  };
+
+  const updated = dataStore.updateApplication(applicationId, updateFields);
 
   // If approved, create BenefitRecord
+  let newBenefit = null;
   if (decision === 'Approved') {
-    const scheme = dataStore.findScheme(app.schemeId);
-    dataStore.createBenefitRecord({
+    let scheme = null;
+    if (isMongoReady()) {
+      try {
+        scheme = await Scheme.findOne({ schemeId: app.schemeId }).lean();
+      } catch (e) {}
+    }
+    if (!scheme) scheme = dataStore.findScheme(app.schemeId);
+
+    newBenefit = {
       benefitRecordId: `BEN-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
       schemeId: app.schemeId,
       schemeName: app.schemeName,
@@ -217,11 +307,12 @@ router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admi
       financialYear: '2025-26',
       disbursedDate: new Date(),
       status: 'Approved / Pending Disbursement'
-    });
+    };
+    dataStore.createBenefitRecord(newBenefit);
   }
 
   // Notify Citizen Family
-  dataStore.createNotification({
+  const reviewNotif = {
     notificationId: `NOTIF-${Date.now()}`,
     recipientType: 'Household',
     recipientId: app.familyId,
@@ -231,10 +322,11 @@ router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admi
     relatedEntityId: applicationId,
     isRead: false,
     createdAt: new Date()
-  });
+  };
+  dataStore.createNotification(reviewNotif);
 
   // Create Audit Log
-  dataStore.createAuditLog({
+  const reviewAudit = {
     logId: `AUD-${Date.now()}`,
     actorId: req.user.userId,
     actorRole: req.user.role,
@@ -243,12 +335,24 @@ router.post('/:applicationId/review', requireAuth, requireRole(['officer', 'admi
     targetEntityId: applicationId,
     details: `Officer reviewed application ${applicationId}: Decision ${decision}. Remarks: ${remarks}`,
     timestamp: new Date()
-  });
+  };
+  dataStore.createAuditLog(reviewAudit);
+
+  if (isMongoReady()) {
+    try {
+      await Application.updateOne({ applicationId }, { $set: updateFields });
+      if (newBenefit) await BenefitRecord.create(newBenefit);
+      await Notification.create(reviewNotif);
+      await AuditLog.create(reviewAudit);
+    } catch (dbErr) {
+      console.warn('[Applications] Mongo review persistence warning:', dbErr.message);
+    }
+  }
 
   res.json({
     success: true,
     message: `Application ${applicationId} has been ${decision}.`,
-    application: updated
+    application: updated || { ...app, ...updateFields }
   });
 });
 

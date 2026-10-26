@@ -52,7 +52,10 @@ async function runTests() {
     await UserAccount.deleteMany({
       'verificationDetails.certificateId': { $in: ['1259954764', '6900642755'] }
     });
-    await fetch(`${BASE_URL}/auth/reset-demo`, { method: 'POST' });
+    await fetch(`${BASE_URL}/auth/reset-demo`, {
+      method: 'POST',
+      headers: { 'x-reset-key': process.env.RESET_DEMO_KEY || 'jansetu-test-reset-key' }
+    });
 
     // -------------------------------------------------------------------------
     // TEST 1: Matching record and certificate reference (Valid)

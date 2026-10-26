@@ -251,12 +251,22 @@
     <!-- TAB 1: DASHBOARD OVERVIEW (SmartSeva Reference Layout) -->
     <div id="viewOverview" class="tab-view active">
       <!-- Search & Filters -->
-      <div class="search-filter-bar">
-        <div class="search-input-wrapper">
+      <div class="search-filter-bar" style="flex-wrap: wrap; gap: 10px;">
+        <div class="search-input-wrapper" style="flex: 1; min-width: 260px;">
           <i data-lucide="search" class="search-icon"></i>
-          <input type="text" id="schemeSearchInput" placeholder="Search welfare schemes (e.g. Housing, Kisan, Ayushman)..." oninput="filterSchemesLive()">
+          <input type="text" id="schemeSearchInput" placeholder="Search welfare schemes (e.g. Housing, Kisan, Ayushman, Pension)..." oninput="filterSchemesLive()">
         </div>
-        <div class="category-chips">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <select id="schemeLocationFilter" onchange="filterSchemesLive()" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.82rem; background: #ffffff; color: var(--text-main); font-weight: 500; cursor: pointer;">
+            <option value="all">🌐 All Coverage (Pan-India)</option>
+            <option value="Rural">🌾 Rural Coverage</option>
+            <option value="Urban">🏙️ Urban Coverage</option>
+          </select>
+          <button type="button" onclick="openEligibilityFinderModal()" class="btn btn-secondary btn-sm" style="border-color: #0284c7; color: #0284c7; background: #f0f9ff; font-weight: 600; white-space: nowrap;">
+            <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Eligibility Finder
+          </button>
+        </div>
+        <div class="category-chips" style="width: 100%; margin-top: 4px;">
           <button class="cat-chip active" onclick="filterSchemeCategory('all')">All Categories</button>
           <button class="cat-chip" onclick="filterSchemeCategory('Housing')">Housing</button>
           <button class="cat-chip" onclick="filterSchemeCategory('Agriculture')">Agriculture</button>
@@ -264,6 +274,8 @@
           <button class="cat-chip" onclick="filterSchemeCategory('Food Security')">Food Security</button>
           <button class="cat-chip" onclick="filterSchemeCategory('Energy & Clean Fuel')">Energy / LPG</button>
           <button class="cat-chip" onclick="filterSchemeCategory('Skill Development')">Skill Development</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Social Security')">Social Security</button>
+          <button class="cat-chip" onclick="filterSchemeCategory('Financial Inclusion')">Financial Inclusion</button>
         </div>
       </div>
 
@@ -481,12 +493,22 @@
           </button>
         </div>
         <div class="card-body" style="padding-bottom: 0;">
-          <div class="search-filter-bar" style="margin-bottom: 0;">
-            <div class="search-input-wrapper">
+          <div class="search-filter-bar" style="margin-bottom: 0; flex-wrap: wrap; gap: 10px;">
+            <div class="search-input-wrapper" style="flex: 1; min-width: 260px;">
               <i data-lucide="search" class="search-icon"></i>
               <input type="text" id="catalogueSearchInput" placeholder="Filter catalogue by scheme name or keyword..." oninput="filterCatalogueLive()">
             </div>
-            <div class="category-chips">
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <select id="catalogueLocationFilter" onchange="filterCatalogueLive()" style="padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.82rem; background: #ffffff; color: var(--text-main); font-weight: 500; cursor: pointer;">
+                <option value="all">🌐 All Coverage (Pan-India)</option>
+                <option value="Rural">🌾 Rural Coverage</option>
+                <option value="Urban">🏙️ Urban Coverage</option>
+              </select>
+              <button type="button" onclick="openEligibilityFinderModal()" class="btn btn-secondary btn-sm" style="border-color: #0284c7; color: #0284c7; background: #f0f9ff; font-weight: 600; white-space: nowrap;">
+                <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Eligibility Finder
+              </button>
+            </div>
+            <div class="category-chips" style="width: 100%; margin-top: 4px;">
               <button class="cat-chip-cat active" onclick="filterCatalogueCategory('all', this)">All Categories</button>
               <button class="cat-chip-cat" onclick="filterCatalogueCategory('Housing', this)">Housing</button>
               <button class="cat-chip-cat" onclick="filterCatalogueCategory('Agriculture', this)">Agriculture</button>
@@ -494,6 +516,8 @@
               <button class="cat-chip-cat" onclick="filterCatalogueCategory('Food Security', this)">Food Security</button>
               <button class="cat-chip-cat" onclick="filterCatalogueCategory('Energy & Clean Fuel', this)">Energy / LPG</button>
               <button class="cat-chip-cat" onclick="filterCatalogueCategory('Skill Development', this)">Skill Development</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Social Security', this)">Social Security</button>
+              <button class="cat-chip-cat" onclick="filterCatalogueCategory('Financial Inclusion', this)">Financial Inclusion</button>
             </div>
           </div>
         </div>
@@ -799,7 +823,7 @@
 
   <!-- MODAL 1B: Complete Scheme Details & Entitlement Modal -->
   <div class="modal-overlay" id="schemeDetailsModal">
-    <div class="modal-dialog" style="max-width: 620px;">
+    <div class="modal-dialog" style="max-width: 640px;">
       <div class="modal-header">
         <div class="modal-title">
           <i data-lucide="info" style="color: var(--secondary);"></i>
@@ -813,26 +837,34 @@
           <img id="detailModalImg" src="/assets/schemes/fallback.svg" alt="Scheme preview" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='/assets/schemes/fallback.svg';">
         </div>
 
-        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px; flex-wrap: wrap;">
           <span class="badge badge-saffron" id="detailModalCategory">Category</span>
           <span class="badge badge-info" id="detailModalBenefitType">Household</span>
+          <span class="badge badge-secondary" id="detailModalCoverageBadge" style="font-size: 0.7rem;">Pan-India</span>
         </div>
 
         <h3 id="detailModalSchemeName" style="color: var(--primary); font-size: 1.2rem; margin-bottom: 2px;"></h3>
-        <div id="detailModalSchemeHindi" style="color: var(--accent-saffron); font-weight: 600; font-size: 0.9rem; margin-bottom: 12px;"></div>
+        <div id="detailModalSchemeHindi" style="color: var(--accent-saffron); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px;"></div>
+        <div id="detailModalMinistry" style="font-size: 0.78rem; color: #64748b; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 4px;"></div>
 
         <p id="detailModalDesc" style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.55; margin-bottom: 16px;"></p>
 
         <!-- Benefit & Scope Highlights -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
-          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Financial Benefit:</div>
-            <div id="detailModalBenefitAmount" style="font-size: 0.95rem; font-weight: 700; color: var(--primary); margin-top: 4px;"></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px;">
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Financial Benefit:</div>
+            <div id="detailModalBenefitAmount" style="font-size: 0.92rem; font-weight: 700; color: var(--primary); margin-top: 3px;"></div>
           </div>
-          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
-            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Beneficiary Scope:</div>
-            <div id="detailModalScope" style="font-size: 0.95rem; font-weight: 700; color: #16a34a; margin-top: 4px;"></div>
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;">
+            <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Target Beneficiaries:</div>
+            <div id="detailModalBeneficiaries" style="font-size: 0.85rem; font-weight: 600; color: #16a34a; margin-top: 3px;"></div>
           </div>
+        </div>
+
+        <!-- Application Mode & Coverage Details -->
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.8rem; line-height: 1.5; color: var(--text-main);">
+          <div><strong>Application Mode:</strong> <span id="detailModalAppProcess" style="color: var(--text-muted);">Online / Panchayat</span></div>
+          <div><strong>Geographic Coverage:</strong> <span id="detailModalCoverage" style="color: var(--text-muted);">Pan-India</span></div>
         </div>
 
         <!-- Eligibility Criteria Summary -->
@@ -844,12 +876,23 @@
         </div>
 
         <!-- Required Documents Checklist -->
-        <div>
+        <div style="margin-bottom: 16px;">
           <h5 style="font-size: 0.825rem; text-transform: uppercase; color: var(--text-main); margin-bottom: 8px;">
             Mandatory Documents Checklist:
           </h5>
           <ul id="detailModalDocsList" style="list-style: none; font-size: 0.85rem; line-height: 1.6; color: var(--text-muted);">
           </ul>
+        </div>
+
+        <!-- Official Source Attribution Box -->
+        <div style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; font-size: 0.78rem; color: #475569; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div><strong>Source:</strong> <a id="detailModalSourceLink" href="#" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: underline;">myScheme Official Portal</a></div>
+            <div style="margin-top: 2px;"><strong>Last Verified:</strong> <span id="detailModalLastVerified">2026-10-24</span> • <span class="badge badge-verified" style="font-size: 0.65rem;">Official Record</span></div>
+          </div>
+          <a id="detailModalOfficialExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-official-link" title="Open Official Portal">
+            <i data-lucide="external-link" style="width: 12px; height: 12px;"></i> Official Application Portal
+          </a>
         </div>
       </div>
       <div class="modal-footer">
@@ -858,8 +901,97 @@
           <i data-lucide="check-circle"></i> Check Eligibility
         </button>
         <button id="detailModalBtnApply" onclick="" class="btn btn-primary">
-          <i data-lucide="send"></i> Apply Now
+          <i data-lucide="send"></i> Record Claim
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 1C: Interactive Non-PII Scheme Eligibility Finder -->
+  <div class="modal-overlay" id="eligibilityFinderModal">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="sparkles" style="color: #0284c7;"></i>
+          <span>Scheme Eligibility Finder</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('eligibilityFinderModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="finder-disclaimer-banner">
+          <i data-lucide="shield-alert" style="width: 18px; height: 18px; color: #2563eb; flex-shrink: 0; margin-top: 2px;"></i>
+          <div>
+            <strong>Preliminary Advisory Guidance Only:</strong> This rule-based evaluator matches criteria against verified government scheme rules. Final eligibility is determined solely by the competent administrative department upon formal scrutiny of documents. No citizen data is recorded or stored by this tool.
+          </div>
+        </div>
+
+        <form id="finderForm" onsubmit="handleRunFinder(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px;">
+          <div class="form-group">
+            <label for="finderAge">Age (Years)</label>
+            <input type="number" id="finderAge" min="14" max="100" value="32" required>
+          </div>
+          <div class="form-group">
+            <label for="finderGender">Gender</label>
+            <select id="finderGender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="finderOccupation">Occupation / Category</label>
+            <select id="finderOccupation">
+              <option value="Small & Marginal Farmer">Small & Marginal Farmer</option>
+              <option value="Urban Street Vendor / Informal">Urban Street Vendor / Informal</option>
+              <option value="Unorganized Worker">Unorganized Worker / Artisan</option>
+              <option value="General / Salaried">General Citizen / Salaried</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="finderIncome">Annual Household Income (₹)</label>
+            <input type="number" id="finderIncome" min="0" max="10000000" step="10000" value="120000" required>
+          </div>
+          <div class="form-group">
+            <label for="finderDwelling">Dwelling / House Type</label>
+            <select id="finderDwelling">
+              <option value="Kutcha">Kutcha (Thatched / Mud / Tin)</option>
+              <option value="Semi-Pucca">Semi-Pucca</option>
+              <option value="Pucca">Pucca (Permanent Concrete)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="finderLpg">LPG Cooking Gas Connection</label>
+            <select id="finderLpg">
+              <option value="false">No LPG Connection</option>
+              <option value="true">Has Existing LPG Connection</option>
+            </select>
+          </div>
+          <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap;">
+            <button type="button" onclick="prefillFinderFromHousehold()" class="btn btn-secondary btn-sm">
+              <i data-lucide="user-check"></i> Fill From Current Household
+            </button>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i data-lucide="search"></i> Evaluate All Schemes
+            </button>
+          </div>
+        </form>
+
+        <div id="finderLoading" style="display: none; text-align: center; padding: 24px; color: var(--text-muted);">
+          <i data-lucide="loader" class="spin"></i> Evaluating verified scheme rules...
+        </div>
+
+        <div id="finderResultsArea" style="display: none;">
+          <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: var(--primary); display: flex; justify-content: space-between; align-items: center;">
+            <span>Evaluation Results</span>
+            <span id="finderSummaryBadge" class="badge badge-info">0 Schemes Evaluated</span>
+          </h4>
+          <div id="finderResultsList" style="max-height: 380px; overflow-y: auto; padding-right: 4px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('eligibilityFinderModal')" class="btn btn-secondary">Close</button>
       </div>
     </div>
   </div>

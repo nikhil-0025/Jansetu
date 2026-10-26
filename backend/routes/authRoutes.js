@@ -316,10 +316,27 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+// In-memory sliding window rate limiter for login attempts
+const ipLoginTracker = new Map();
+const LOGIN_RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const MAX_LOGIN_ATTEMPTS = 15;
+
+function checkLoginRateLimit(key) {
+  const now = Date.now();
+  const timestamps = (ipLoginTracker.get(key) || []).filter(t => now - t < LOGIN_RATE_LIMIT_WINDOW_MS);
+  if (timestamps.length >= MAX_LOGIN_ATTEMPTS) {
+    return false;
+  }
+  timestamps.push(now);
+  ipLoginTracker.set(key, timestamps);
+  return true;
+}
+
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
     const { userId, password, expectedRole } = req.body;
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
 
     if (!userId || !password) {
       return res.status(400).json({
@@ -328,12 +345,23 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    const rateKey = `${clientIp}_${String(userId).trim().toLowerCase()}`;
+    if (!checkLoginRateLimit(rateKey)) {
+      return res.status(429).json({
+        success: false,
+        message: 'Too many login attempts. Please wait 10 minutes before trying again.'
+      });
+    }
+
+    // Escape regex characters to prevent regex injection
+    const escapedUserId = String(userId).trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
     // Look up user from MongoDB Atlas first if connected, then dataStore
     let user = null;
     if (isMongoReady()) {
       try {
         user = await UserAccount.findOne({
-          userId: { $regex: new RegExp(`^${userId.trim()}$`, 'i') }
+          userId: { $regex: new RegExp(`^${escapedUserId}$`, 'i') }
         }).lean();
       } catch (dbErr) {
         console.warn('[Auth] Mongo lookup failed, checking in-memory store:', dbErr.message);
@@ -397,9 +425,19 @@ router.post('/login', async (req, res) => {
     let citizenInfo = null;
     let householdInfo = null;
     if (user.role === 'citizen' && user.familyId) {
-      householdInfo = dataStore.findHousehold(user.familyId);
-      if (householdInfo) {
-        citizenInfo = dataStore.findCitizen(householdInfo.headCitizenId);
+      if (isMongoReady()) {
+        try {
+          householdInfo = await Household.findOne({ familyId: user.familyId }).lean();
+          if (householdInfo) {
+            citizenInfo = await Citizen.findOne({ citizenId: householdInfo.headCitizenId }).lean();
+          }
+        } catch (e) {}
+      }
+      if (!householdInfo) {
+        householdInfo = dataStore.findHousehold(user.familyId);
+        if (householdInfo) {
+          citizenInfo = dataStore.findCitizen(householdInfo.headCitizenId);
+        }
       }
     }
 
@@ -446,9 +484,19 @@ router.get('/me', requireAuth, async (req, res) => {
   let citizenInfo = null;
   let householdInfo = null;
   if (user.role === 'citizen' && user.familyId) {
-    householdInfo = dataStore.findHousehold(user.familyId);
-    if (householdInfo) {
-      citizenInfo = dataStore.findCitizen(householdInfo.headCitizenId);
+    if (isMongoReady()) {
+      try {
+        householdInfo = await Household.findOne({ familyId: user.familyId }).lean();
+        if (householdInfo) {
+          citizenInfo = await Citizen.findOne({ citizenId: householdInfo.headCitizenId }).lean();
+        }
+      } catch (e) {}
+    }
+    if (!householdInfo) {
+      householdInfo = dataStore.findHousehold(user.familyId);
+      if (householdInfo) {
+        citizenInfo = dataStore.findCitizen(householdInfo.headCitizenId);
+      }
     }
   }
 
@@ -470,17 +518,81 @@ router.get('/me', requireAuth, async (req, res) => {
   });
 });
 
-// POST /api/auth/reset-demo
-router.post('/reset-demo', async (req, res) => {
+// /api/auth/reset-demo - Demo State Reset (Strictly disabled in production)
+router.all('/reset-demo', async (req, res) => {
+  // CRITICAL SECURITY ENFORCEMENT:
+  // 1. Permanently disabled in production across ALL HTTP methods
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({
+      success: false,
+      message: 'Demo reset operations are permanently disabled in production environments.'
+    });
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({
+      success: false,
+      message: `Method ${req.method} not allowed. Demo reset only accepts POST requests.`
+    });
+  }
+
+  // 2. Requires secret key or admin authorization in non-production
+  const resetKey = req.headers['x-reset-key'] || req.body?.resetKey;
+  const configuredResetKey = process.env.RESET_DEMO_KEY || 'jansetu-test-reset-key';
+
+  let isAuthorized = (resetKey === configuredResetKey);
+
+  if (!isAuthorized && req.headers.authorization) {
+    try {
+      const jwt = require('jsonwebtoken');
+      const token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'jansetu-secure-jwt-secret-key-2026');
+      if (decoded && decoded.role === 'admin') {
+        isAuthorized = true;
+      }
+    } catch (e) {}
+  }
+
+  if (!isAuthorized) {
+    return res.status(401).json({
+      success: false,
+      message: 'Unauthorized: Demo reset requires valid administrator credentials or x-reset-key header.'
+    });
+  }
+
   const result = dataStore.resetToInitialDemo();
   if (isMongoReady()) {
     try {
-      const { FamilyRelationship, HouseholdSeparationRequest } = require('../models/schemaDefinitions');
+      const { FamilyRelationship, HouseholdSeparationRequest, ProfileCorrectionRequest } = require('../models/schemaDefinitions');
+      // Clean up dynamic records while strictly preserving baseline entities
       await Citizen.deleteMany({ citizenId: { $nin: ['CIT-1001', 'CIT-1002', 'CIT-1003', 'CIT-1004', 'CIT-2001'] } });
       await Household.deleteMany({ familyId: { $nin: ['FAM-1001', 'FAM-2001'] } });
       await UserAccount.deleteMany({ userId: { $nin: ['FAM-1001', 'FAM-2001', 'OFFICER-01', 'ADMIN-01'] } });
-      await FamilyRelationship.deleteMany({ relationshipId: { $nin: ['REL-001', 'REL-002', 'REL-003'] } });
+      await FamilyRelationship.deleteMany({ relationshipId: { $nin: ['REL-001', 'REL-002', 'REL-003', 'REL-004', 'REL-005'] } });
       await HouseholdSeparationRequest.deleteMany({});
+      await ProfileCorrectionRequest.deleteMany({});
+
+      // Restore baseline state of seed citizens in MongoDB
+      await Citizen.updateOne(
+        { citizenId: 'CIT-1001' },
+        { currentFamilyId: 'FAM-1001', fullName: 'Rahul Sharma', status: 'active', isHeadOfFamily: true }
+      );
+      await Citizen.updateOne(
+        { citizenId: 'CIT-1002' },
+        { currentFamilyId: 'FAM-1001', fullName: 'Amit Sharma', status: 'active', isHeadOfFamily: false, occupation: 'Certified Electrician' }
+      );
+      await Citizen.updateOne(
+        { citizenId: 'CIT-1003' },
+        { currentFamilyId: 'FAM-1001', fullName: 'Sunita Sharma', status: 'active', isHeadOfFamily: false }
+      );
+      await Citizen.updateOne(
+        { citizenId: 'CIT-1004' },
+        { currentFamilyId: 'FAM-1001', fullName: 'Aarav Sharma', status: 'active', isHeadOfFamily: false }
+      );
+      await Citizen.updateOne(
+        { citizenId: 'CIT-2001' },
+        { currentFamilyId: 'FAM-2001', fullName: 'Rajesh Verma', status: 'active', isHeadOfFamily: true }
+      );
     } catch (dbErr) {
       console.warn('[reset-demo] MongoDB cleanup notice:', dbErr.message);
     }
@@ -490,20 +602,28 @@ router.post('/reset-demo', async (req, res) => {
 
 // GET /api/auth/system-status
 router.get('/system-status', (req, res) => {
-  res.json({
+  const isProduction = process.env.NODE_ENV === 'production';
+  const exposeDemoCreds = !isProduction && (process.env.EXPOSE_DEMO_CREDENTIALS !== 'false');
+
+  const payload = {
     success: true,
     platform: 'JanSetu (जनसेतु)',
     tagline: 'Har Parivaar, Har Haq, Ek Setu.',
     edition: 'National Citizen Welfare Platform',
     dbStatus: getMongoStatus(),
-    verificationMode: process.env.IDENTITY_VERIFICATION_MODE || 'synthetic',
-    demoCredentials: {
+    verificationMode: process.env.IDENTITY_VERIFICATION_MODE || 'synthetic'
+  };
+
+  if (exposeDemoCreds) {
+    payload.demoCredentials = {
       citizenFamily1: { id: 'FAM-1001', pass: 'citizen123', label: 'Rahul Sharma & Family (Initial Combined Household)' },
       citizenFamily2: { id: 'FAM-2001', pass: 'citizen123', label: 'Amit Sharma (Available post-separation)' },
       officer: { id: 'OFFICER-01', pass: 'officer123', label: 'Vikramaditya Verma (Verification Officer)' },
       admin: { id: 'ADMIN-01', pass: 'admin123', label: 'Sanjay Deshmukh (Portal Admin)' }
-    }
-  });
+    };
+  }
+
+  res.json(payload);
 });
 
 module.exports = router;

@@ -42,7 +42,10 @@ async function runHouseholdSeparationTests() {
   try {
     // 1. Reset demo environment to pristine state
     console.log('--- Setup: Initializing Environment & Authenticating Users ---');
-    const resetRes = await fetch(`${BASE_URL}/auth/reset-demo`, { method: 'POST' });
+    const resetRes = await fetch(`${BASE_URL}/auth/reset-demo`, {
+      method: 'POST',
+      headers: { 'x-reset-key': process.env.RESET_DEMO_KEY || 'jansetu-test-reset-key' }
+    });
     assert(resetRes.ok, 'Demo environment reset to pristine state.');
 
     // 2. Authenticate Citizen FAM-1001

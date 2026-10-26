@@ -19,6 +19,12 @@ async function runTests() {
 
   const BASE_URL = 'http://localhost:5000/api';
 
+  // Setup: Reset demo environment to pristine state
+  await fetch(`${BASE_URL}/auth/reset-demo`, {
+    method: 'POST',
+    headers: { 'x-reset-key': process.env.RESET_DEMO_KEY || 'jansetu-test-reset-key' }
+  });
+
   // 1. Authenticate Citizen FAM-1001
   console.log('Step 1: Authenticating Citizen (FAM-1001)...');
   const citizenLoginRes = await fetch(`${BASE_URL}/auth/login`, {

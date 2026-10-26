@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradPmsvanidhi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="60%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="cartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="200" fill="url(#bgGradPmsvanidhi)"/>
+  <circle cx="200" cy="85" r="70" fill="#34d399" opacity="0.2"/>
+  <!-- Street vendor cart icon -->
+  <path d="M140,75 L260,75 L245,115 L155,115 Z" fill="url(#cartGrad)"/>
+  <rect x="195" y="45" width="10" height="30" fill="#fef3c7"/>
+  <path d="M140,55 L260,55 L200,30 Z" fill="#ef4444"/>
+  <!-- Wheels -->
+  <circle cx="170" cy="125" r="14" fill="#1f2937" stroke="#fbbf24" stroke-width="3"/>
+  <circle cx="230" cy="125" r="14" fill="#1f2937" stroke="#fbbf24" stroke-width="3"/>
+  <!-- Base ground & label -->
+  <rect y="160" width="400" height="40" fill="#064e3b"/>
+  <text x="200" y="185" font-family="Arial, sans-serif" font-size="12" font-weight="600" fill="#a7f3d0" text-anchor="middle" letter-spacing="1.5">PM SVANIDHI STREET VENDOR CREDIT</text>
+</svg>

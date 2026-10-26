@@ -105,6 +105,14 @@ class GovIntegrationManager {
   }
 
   // Service Methods
+  generateDigiLockerAuthUrl(params) {
+    return digilockerClient.generateOAuthUrl(params);
+  }
+
+  async handleDigiLockerCallback(params) {
+    return await digilockerClient.handleOAuthCallback(params);
+  }
+
   async verifyRationCard(params) {
     return await epdsRationClient.verifyRationCard(params);
   }
@@ -119,6 +127,10 @@ class GovIntegrationManager {
 
   async fetchOgdStats(params) {
     return await ogdDataGovClient.fetchResource(params);
+  }
+
+  async fetchOgdSchemeMetrics(params) {
+    return await ogdDataGovClient.fetchSchemeMetrics(params);
   }
 
   async fetchMySchemeCatalog(params) {

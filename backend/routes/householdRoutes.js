@@ -30,15 +30,33 @@ function calculateAge(dobString) {
 }
 
 // GET /api/households/:familyId
-router.get('/:familyId', requireAuth, requireHouseholdAccess, (req, res) => {
+router.get('/:familyId', requireAuth, requireHouseholdAccess, async (req, res) => {
   const { familyId } = req.params;
-  const household = dataStore.findHousehold(familyId);
+  let household = null;
+  let members = [];
+
+  if (isMongoReady()) {
+    try {
+      household = await Household.findOne({ familyId }).lean();
+      if (household) {
+        members = await Citizen.find({ currentFamilyId: familyId, status: { $ne: 'inactive' } }).lean();
+      }
+    } catch (dbErr) {
+      console.warn('[Household] Mongo lookup warning:', dbErr.message);
+    }
+  }
+
+  if (!household) {
+    household = dataStore.findHousehold(familyId);
+    if (household) {
+      members = dataStore.getCitizensByFamilyId(familyId);
+    }
+  }
 
   if (!household) {
     return res.status(404).json({ success: false, message: `Household ${familyId} not found.` });
   }
 
-  const members = dataStore.getCitizensByFamilyId(familyId);
   const headCitizen = members.find(m => m.citizenId === household.headCitizenId) || members[0];
 
   res.json({
@@ -53,13 +71,32 @@ router.get('/:familyId', requireAuth, requireHouseholdAccess, (req, res) => {
 });
 
 // GET /api/households/:familyId/members
-router.get('/:familyId/members', requireAuth, requireHouseholdAccess, (req, res) => {
+router.get('/:familyId/members', requireAuth, requireHouseholdAccess, async (req, res) => {
   const { familyId } = req.params;
-  const members = dataStore.getCitizensByFamilyId(familyId);
-  const memberCitizenIds = members.map(m => m.citizenId);
+  let members = [];
+  let relationships = [];
 
-  // Retrieve relationships among members
-  const relationships = dataStore.getRelationshipsForCitizens(memberCitizenIds);
+  if (isMongoReady()) {
+    try {
+      members = await Citizen.find({ currentFamilyId: familyId, status: { $ne: 'inactive' } }).lean();
+      const memberCitizenIds = members.map(m => m.citizenId);
+      relationships = await FamilyRelationship.find({
+        $or: [
+          { citizenId1: { $in: memberCitizenIds } },
+          { citizenId2: { $in: memberCitizenIds } }
+        ],
+        isActive: { $ne: false }
+      }).lean();
+    } catch (dbErr) {
+      console.warn('[Household] Mongo members lookup warning:', dbErr.message);
+    }
+  }
+
+  if (members.length === 0) {
+    members = dataStore.getCitizensByFamilyId(familyId);
+    const memberCitizenIds = members.map(m => m.citizenId);
+    relationships = dataStore.getRelationshipsForCitizens(memberCitizenIds);
+  }
 
   res.json({
     success: true,
@@ -72,18 +109,40 @@ router.get('/:familyId/members', requireAuth, requireHouseholdAccess, (req, res)
 });
 
 // GET /api/households/:familyId/members/:citizenId
-router.get('/:familyId/members/:citizenId', requireAuth, requireHouseholdAccess, (req, res) => {
+router.get('/:familyId/members/:citizenId', requireAuth, requireHouseholdAccess, async (req, res) => {
   const { familyId, citizenId } = req.params;
-  const citizen = dataStore.findCitizen(citizenId);
+  let citizen = null;
+  let household = null;
+  let relationships = [];
+  let history = [];
+  let auditLogs = [];
+
+  if (isMongoReady()) {
+    try {
+      citizen = await Citizen.findOne({ citizenId }).lean();
+      household = await Household.findOne({ familyId }).lean();
+      relationships = await FamilyRelationship.find({
+        $or: [{ citizenId1: citizenId }, { citizenId2: citizenId }],
+        isActive: { $ne: false }
+      }).lean();
+      history = await HouseholdMembershipHistory.find({ citizenId }).lean();
+      auditLogs = await AuditLog.find({ targetEntityId: citizenId }).sort({ timestamp: -1 }).lean();
+    } catch (dbErr) {
+      console.warn('[Household] Mongo member detail lookup warning:', dbErr.message);
+    }
+  }
+
+  if (!citizen) {
+    citizen = dataStore.findCitizen(citizenId);
+    household = dataStore.findHousehold(familyId);
+    relationships = dataStore.getRelationshipsForCitizens([citizenId]);
+    history = dataStore.getMembershipHistory(null, citizenId);
+    auditLogs = dataStore.getAuditLogs().filter(l => l.targetEntityId === citizenId);
+  }
 
   if (!citizen || (citizen.currentFamilyId !== familyId && citizen.status !== 'inactive')) {
     return res.status(404).json({ success: false, message: `Member ${citizenId} not found in household ${familyId}.` });
   }
-
-  const household = dataStore.findHousehold(familyId);
-  const relationships = dataStore.getRelationshipsForCitizens([citizenId]);
-  const history = dataStore.getMembershipHistory(null, citizenId);
-  const auditLogs = dataStore.getAuditLogs().filter(l => l.targetEntityId === citizenId);
 
   res.json({
     success: true,
@@ -605,19 +664,43 @@ router.delete('/:familyId/members/:citizenId', requireAuth, requireHouseholdAcce
 });
 
 // GET /api/households/:familyId/history
-router.get('/:familyId/history', requireAuth, requireHouseholdAccess, (req, res) => {
+router.get('/:familyId/history', requireAuth, requireHouseholdAccess, async (req, res) => {
   const { familyId } = req.params;
-  const history = dataStore.getMembershipHistory(familyId, null);
-  const separationRequests = dataStore.getSeparationRequestsByFamily(familyId);
+  let history = [];
+  let separationRequests = [];
+
+  if (isMongoReady()) {
+    try {
+      history = await HouseholdMembershipHistory.find({ familyId }).lean();
+      separationRequests = await require('../models/schemaDefinitions').HouseholdSeparationRequest.find({
+        $or: [{ originalFamilyId: familyId }, { generatedNewFamilyId: familyId }]
+      }).lean();
+    } catch (dbErr) {
+      console.warn('[Household] Mongo history query warning:', dbErr.message);
+    }
+  }
+
+  if (history.length === 0) {
+    history = dataStore.getMembershipHistory(familyId, null);
+    separationRequests = dataStore.getSeparationRequestsByFamily(familyId);
+  }
 
   // Enrich with citizen names
-  const enrichedHistory = history.map(h => {
-    const citizen = dataStore.findCitizen(h.citizenId);
+  const enrichedHistory = await Promise.all(history.map(async h => {
+    let citizen = null;
+    if (isMongoReady()) {
+      try {
+        citizen = await Citizen.findOne({ citizenId: h.citizenId }).lean();
+      } catch (e) {}
+    }
+    if (!citizen) {
+      citizen = dataStore.findCitizen(h.citizenId);
+    }
     return {
       ...h,
       citizenName: citizen ? citizen.fullName : h.citizenId
     };
-  });
+  }));
 
   res.json({
     success: true,
@@ -628,9 +711,21 @@ router.get('/:familyId/history', requireAuth, requireHouseholdAccess, (req, res)
 });
 
 // GET /api/households/:familyId/benefits
-router.get('/:familyId/benefits', requireAuth, requireHouseholdAccess, (req, res) => {
+router.get('/:familyId/benefits', requireAuth, requireHouseholdAccess, async (req, res) => {
   const { familyId } = req.params;
-  const benefits = dataStore.getBenefitsByFamily(familyId);
+  let benefits = [];
+
+  if (isMongoReady()) {
+    try {
+      benefits = await require('../models/schemaDefinitions').BenefitRecord.find({ familyId }).lean();
+    } catch (dbErr) {
+      console.warn('[Household] Mongo benefits query warning:', dbErr.message);
+    }
+  }
+
+  if (benefits.length === 0) {
+    benefits = dataStore.getBenefitsByFamily(familyId);
+  }
 
   res.json({
     success: true,

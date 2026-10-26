@@ -27,10 +27,21 @@ async function verifySchemes() {
     'requiredDocuments',
     'imageUrl',
     'imageAlt',
-    'eligibilityPreview'
+    'eligibilityPreview',
+    'ministry',
+    'officialUrl',
+    'sourceUrl',
+    'lastVerifiedDate',
+    'verificationStatus',
+    'stateCoverage'
   ];
 
   let allChecksPassed = true;
+
+  if (schemes.length < 8) {
+    console.error(`[FAIL] Expected at least 8 verified schemes, but got ${schemes.length}`);
+    allChecksPassed = false;
+  }
 
   for (const s of schemes) {
     for (const f of requiredFields) {
